@@ -1,0 +1,156 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "id": "20261009-demo-tool-explainer",
+ "slug": "demo-tool-explainer",
+ "kind": "draft",
+ "status": "draft",
+ "title": "demo tool explainer",
+ "updated": "2026-10-09",
+ "checked": "2026-10-09",
+ "stale": null,
+ "est_s": 31.2,
+ "target_s": 30.0,
+ "length_text": "about 31 s read aloud · target 30 s",
+ "badges": [
+  {
+   "name": "Copy check",
+   "state": "fix",
+   "text": "1 shared 6-word run, 0 em dashes: rewrite them"
+  },
+  {
+   "name": "Voice",
+   "state": "ok",
+   "text": "ok · 1 to look at"
+  },
+  {
+   "name": "Rules",
+   "state": "ok",
+   "text": "ok"
+  },
+  {
+   "name": "Length",
+   "state": "ok",
+   "text": "about 31 s of 30 s"
+  }
+ ],
+ "beats": [
+  {
+   "kind": "hook",
+   "name": "cold open question",
+   "chip": "0:00-0:03",
+   "start": 0.0,
+   "end": 3.4,
+   "say": "Ever wondered what a sandwich timer would say about your week?",
+   "on_screen": "a sandwich timer?",
+   "slot": "[A question the viewer has asked themself this week]",
+   "notes": [
+    {
+     "n": 1,
+     "text": "Test: say the question inside the first second of your draft."
+    }
+   ]
+  },
+  {
+   "kind": "setup",
+   "name": "whiteboard sketch",
+   "chip": "0:03-0:11",
+   "start": 3.4,
+   "end": 11.0,
+   "say": "I drew the whole thing on a whiteboard first. Three boxes, two arrows.",
+   "on_screen": "",
+   "slot": "names the topic, the tool or the pain",
+   "notes": []
+  },
+  {
+   "kind": "demo",
+   "name": "two-step walkthrough",
+   "chip": "0:11-0:26",
+   "start": 11.0,
+   "end": 26.2,
+   "say": "Step one, the timer starts when the bread lands. Step two, it pings when lunch is done.",
+   "on_screen": "step 1 · step 2",
+   "slot": "the thing shown working, or the method in steps",
+   "notes": [
+    {
+     "n": 2,
+     "text": "Test: cut one of the two steps in your draft and time it again."
+    }
+   ]
+  },
+  {
+   "kind": "cta",
+   "name": "follow ask",
+   "chip": "0:26-0:31",
+   "start": 26.2,
+   "end": 31.2,
+   "say": "Follow for the next silly tool.",
+   "on_screen": "",
+   "slot": "Follow for [more of this topic]",
+   "notes": []
+  }
+ ],
+ "variants": [
+  {
+   "id": "v1",
+   "shape": "cold open question",
+   "family": "Irony / confession / question",
+   "pattern": "cold open question · outliers 3/4 vs normal 5/31",
+   "pattern_id": "hook.caption.cold-open-question",
+   "line": "What would a sandwich timer say about your week?",
+   "why": "Same question shape, shorter.",
+   "cmd": "/script 20261009-demo-tool-explainer variant v1 this but "
+  },
+  {
+   "id": "v2",
+   "shape": "list tease",
+   "family": "Tease / open loop",
+   "pattern": "not in the swipe patterns yet",
+   "pattern_id": null,
+   "line": "Two steps, one sandwich, zero cold lunches.",
+   "why": "A list opener to test.",
+   "cmd": "/script 20261009-demo-tool-explainer variant v2 this but "
+  }
+ ],
+ "patterns": [
+  {
+   "id": "hook.caption.cold-open-question",
+   "kind": "Hook",
+   "line": "cold open question · outliers 3/4 vs normal 5/31",
+   "known": true
+  }
+ ],
+ "proof": [
+  {
+   "row": "A9",
+   "numbers": "3 boxes",
+   "fact": "A made-up proof row for the fixture",
+   "caveat": null
+  }
+ ],
+ "issues": [
+  {
+   "check": "voice",
+   "level": "warning",
+   "where": "beats[3].say",
+   "message": "beats[3].say: a follow ask with no reason to follow"
+  }
+ ],
+ "hits": [
+  {
+   "kind": "copy",
+   "where": "beats[2].say",
+   "span": [
+    10,
+    47
+   ],
+   "count": null
+  }
+ ],
+ "commands": {
+  "this_but": "/script 20261009-demo-tool-explainer this but ",
+  "replace": "/script 20261009-demo-tool-explainer replace ",
+  "check": "python -m strategist.lab check 20261009-demo-tool-explainer",
+  "render": "python -m strategist.render lab 20261009-demo-tool-explainer"
+ }
+}

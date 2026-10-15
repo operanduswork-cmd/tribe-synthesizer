@@ -1,0 +1,298 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "stamp": [
+  "3 creators · 3 reels",
+  "counts as of 2026-09-30 to 2026-10-01, refreshed by hand"
+ ],
+ "sorts": [
+  {
+   "key": "-x",
+   "field": "x",
+   "desc": true,
+   "label": "x vs own median, largest first"
+  },
+  {
+   "key": "-plays",
+   "field": "plays",
+   "desc": true,
+   "label": "plays, most first"
+  },
+  {
+   "key": "-posted",
+   "field": "posted",
+   "desc": true,
+   "label": "posted, newest first"
+  },
+  {
+   "key": "-duration",
+   "field": "duration",
+   "desc": true,
+   "label": "length, longest first"
+  },
+  {
+   "key": "handle",
+   "field": "handle",
+   "desc": false,
+   "label": "handle, A to Z"
+  }
+ ],
+ "default_sort": "-x",
+ "options": {
+  "hook": [
+   "cold open question",
+   "list tease"
+  ],
+  "format": [
+   "talking head + whiteboard",
+   "screen walkthrough"
+  ],
+  "length": [
+   "under 30 s",
+   "30-60 s"
+  ],
+  "flags": [
+   {
+    "key": "thin_baseline",
+    "label": "thin baseline"
+   },
+   {
+    "key": "gated_cta",
+    "label": "gated CTA"
+   },
+   {
+    "key": "discounted",
+    "label": "discounted"
+   },
+   {
+    "key": "under_2x",
+    "label": "under 2x · taste, not proof"
+   },
+   {
+    "key": "fresh",
+    "label": "fresh when pulled: counts still settling"
+   }
+  ]
+ },
+ "reels": [
+  {
+   "sc": "DEMO0000001",
+   "handle": "@demo_creator_a",
+   "url": "https://www.instagram.com/reel/DEMO0000001/",
+   "meta": "0:42 · posted 2026-09-20",
+   "counts": "61,200 plays · 4.9x own median (18 reels)",
+   "as_of": "as of 2026-10-01",
+   "peer": {
+    "ticks": [
+     0.12,
+     0.2,
+     0.25,
+     0.31,
+     0.33,
+     0.4,
+     0.44,
+     0.52
+    ],
+    "median": 0.33,
+    "me": 0.88,
+    "label": "dot: this reel · tall tick: own median · short ticks: 18 own reels · log scale"
+   },
+   "shape": "hook: cold open question · format: talking head + whiteboard · CTA: follow ask",
+   "badges": [
+    {
+     "key": "thin_baseline",
+     "label": "thin baseline"
+    }
+   ],
+   "discount": null,
+   "recreate": "/script new from-DEMO0000001",
+   "sort": {
+    "x": 4.935,
+    "plays": 61200,
+    "posted": 1758355200.0,
+    "duration": 42.3,
+    "handle": "demo_creator_a"
+   },
+   "filter": {
+    "two_x": true,
+    "hook": "cold open question",
+    "format": "talking head + whiteboard",
+    "length": "30-60 s",
+    "flags": [
+     "thin_baseline"
+    ],
+    "tribe": true
+   },
+   "cells": {
+    "length": "0:42",
+    "posted": "2026-09-20",
+    "plays": "61,200",
+    "x": "4.9x (18 reels)",
+    "hook": "cold open question",
+    "format": "talking head + whiteboard",
+    "cta": "follow ask",
+    "flags": "thin baseline",
+    "tribe": "yes"
+   }
+  },
+  {
+   "sc": "DEMO0000003",
+   "handle": "@demo_creator_c",
+   "url": "https://www.instagram.com/reel/DEMO0000003/",
+   "meta": "0:55 · posted 2026-09-12",
+   "counts": "19,800 plays · 1.6x own median (12 reels)",
+   "as_of": "as of 2026-09-30",
+   "peer": null,
+   "shape": "hook: list tease (suggested) · format: screen walkthrough (suggested) · CTA: link in bio (suggested)",
+   "badges": [
+    {
+     "key": "thin_baseline",
+     "label": "thin baseline"
+    },
+    {
+     "key": "discounted",
+     "label": "discounted"
+    },
+    {
+     "key": "under_2x",
+     "label": "under 2x · taste, not proof"
+    }
+   ],
+   "discount": "discount: made-up reason for the fixture, a partner tag in the caption",
+   "recreate": "/script new from-DEMO0000003",
+   "sort": {
+    "x": 1.6,
+    "plays": 19800,
+    "posted": 1757635200.0,
+    "duration": 55.0,
+    "handle": "demo_creator_c"
+   },
+   "filter": {
+    "two_x": false,
+    "hook": "list tease",
+    "format": "screen walkthrough",
+    "length": "30-60 s",
+    "flags": [
+     "thin_baseline",
+     "discounted",
+     "under_2x"
+    ],
+    "tribe": false
+   },
+   "cells": {
+    "length": "0:55",
+    "posted": "2026-09-12",
+    "plays": "19,800",
+    "x": "1.6x (12 reels)",
+    "hook": "list tease (suggested)",
+    "format": "screen walkthrough (suggested)",
+    "cta": "link in bio (suggested)",
+    "flags": "thin baseline; discounted; under 2x · taste, not proof",
+    "tribe": "no"
+   }
+  },
+  {
+   "sc": "DEMO0000002",
+   "handle": "@demo_creator_b",
+   "url": "https://www.instagram.com/reel/DEMO0000002/",
+   "meta": "0:27 · posted 2026-09-29",
+   "counts": "6,900 plays · 0.8x own median (22 reels)",
+   "as_of": "as of 2026-09-30",
+   "peer": {
+    "ticks": [
+     0.1,
+     0.3,
+     0.42,
+     0.47,
+     0.5,
+     0.61
+    ],
+    "median": 0.47,
+    "me": 0.4,
+    "label": "dot: this reel · tall tick: own median · short ticks: 22 own reels · log scale"
+   },
+   "shape": "hook: not tagged · format: not tagged · CTA: comment keyword",
+   "badges": [
+    {
+     "key": "gated_cta",
+     "label": "gated CTA, guessed from comments"
+    },
+    {
+     "key": "under_2x",
+     "label": "under 2x · taste, not proof"
+    },
+    {
+     "key": "fresh",
+     "label": "fresh when pulled: counts still settling"
+    }
+   ],
+   "discount": null,
+   "recreate": "/script new from-DEMO0000002",
+   "sort": {
+    "x": 0.847,
+    "plays": 6900,
+    "posted": 1759104000.0,
+    "duration": 27.4,
+    "handle": "demo_creator_b"
+   },
+   "filter": {
+    "two_x": false,
+    "hook": "",
+    "format": "",
+    "length": "under 30 s",
+    "flags": [
+     "gated_cta",
+     "under_2x",
+     "fresh"
+    ],
+    "tribe": false
+   },
+   "cells": {
+    "length": "0:27",
+    "posted": "2026-09-29",
+    "plays": "6,900",
+    "x": "0.8x (22 reels)",
+    "hook": "not tagged",
+    "format": "not tagged",
+    "cta": "comment keyword",
+    "flags": "gated CTA, guessed from comments; under 2x · taste, not proof; fresh when pulled: counts still settling",
+    "tribe": "no"
+   }
+  }
+ ],
+ "creators": [
+  {
+   "handle": "@demo_creator_a",
+   "items": [
+    "baseline: 18 reels (reels only, thin: under 20)",
+    "median plays 12,400",
+    "left out: pinned 1, paid 0, under 48 h 0, the swipe reel itself 1, not a reel 3",
+    "window 2026-07-01 to 2026-09-28",
+    "pulled 2026-10-01",
+    "source: Apify public post pull"
+   ]
+  },
+  {
+   "handle": "@demo_creator_b",
+   "items": [
+    "baseline: 22 reels (reels only)",
+    "median plays 8,150",
+    "left out: pinned 0, paid 1, under 48 h 1, the swipe reel itself 1, not a reel 0",
+    "window 2026-06-15 to 2026-09-27",
+    "pulled 2026-09-30",
+    "source: Apify public post pull"
+   ]
+  },
+  {
+   "handle": "@demo_creator_c",
+   "items": [
+    "baseline: 12 reels (reels only, thin: under 20)",
+    "median plays 12,375",
+    "left out: pinned 0, paid 0, under 48 h 0, the swipe reel itself 1, not a reel 2",
+    "window 2026-07-20 to 2026-09-25",
+    "pulled 2026-09-30",
+    "source: Apify public post pull"
+   ]
+  }
+ ]
+}

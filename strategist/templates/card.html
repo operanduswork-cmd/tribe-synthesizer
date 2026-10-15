@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: file:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Reel card</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f3f3f0;
+  --surface: #fcfcfb;
+  --surface-2: #f4f3ef;
+  --border: rgba(11, 11, 11, 0.09);
+  --ink: #141413;
+  --ink-2: #4e4d49;
+  --muted: #6f6d67;
+  --hair: #e3e2db;
+  --axis: #c3c2b7;
+  --chip: #ecebe6;
+  --chip-ink: #3c3b37;
+  --focus: #2a6fc4;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0e0e0d;
+    --surface: #191918;
+    --surface-2: #20201e;
+    --border: rgba(255, 255, 255, 0.09);
+    --ink: #f2f1ec;
+    --ink-2: #c6c5bc;
+    --muted: #9b998f;
+    --hair: #2d2d2a;
+    --axis: #4a4944;
+    --chip: #2a2a27;
+    --chip-ink: #d8d7cf;
+    --focus: #5b9be8;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e0d;
+  --surface: #191918;
+  --surface-2: #20201e;
+  --border: rgba(255, 255, 255, 0.09);
+  --ink: #f2f1ec;
+  --ink-2: #c6c5bc;
+  --muted: #9b998f;
+  --hair: #2d2d2a;
+  --axis: #4a4944;
+  --chip: #2a2a27;
+  --chip-ink: #d8d7cf;
+  --focus: #5b9be8;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+h1 { font-size: 22px; font-weight: 650; overflow-wrap: anywhere; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+code { font: 12.5px/1.4 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+.nw { white-space: nowrap; }
+.small { font-size: 12.5px; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0;
+}
+
+/* Header */
+.head { padding: 4px 4px 0; }
+.eyebrow { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.eyebrow a { text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+.meta { margin-top: 6px; color: var(--ink-2); font-size: 13.5px; overflow-wrap: anywhere; }
+.meta span + span::before { content: "\00b7"; margin: 0 8px; color: var(--axis); }
+
+/* Counts strip: public counts in their own element, never inside the card */
+.counts {
+  margin: 14px 0 0; padding: 8px 12px; border: 1px dashed var(--axis); border-radius: 8px;
+  font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+.private { margin-top: 8px; display: inline-block; font-size: 12px; font-weight: 650; padding: 1px 10px; border-radius: 999px; border: 1px dashed var(--axis); color: var(--ink-2); }
+.snip-key { margin-top: 4px; font-size: 12px; color: var(--muted); }
+.discount { margin-top: 6px; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Snippet card: the claim, then its time chip */
+.snippet { margin-top: 12px; }
+.snip { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.snip li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.snip-tag { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.snip-text { font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+.snip-text .chip { margin-left: 6px; }
+.snip-foot { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+.chip {
+  display: inline-block; border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px;
+  padding: 0 9px; font-variant-numeric: tabular-nums; font-size: 12.5px; font-weight: 600; line-height: 22px;
+  white-space: nowrap; vertical-align: baseline;
+}
+button.chip { appearance: none; cursor: pointer; }
+button.chip:hover { background: var(--chip); }
+
+/* Recreate: copy a command for the script lab */
+.recreate {
+  margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
+  padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border);
+}
+.recreate-k { font-weight: 650; font-size: 13.5px; }
+.recreate code { flex: 1 1 220px; min-width: 0; color: var(--ink-2); }
+.btn {
+  appearance: none; border: 1px solid var(--border); background: var(--surface); border-radius: 8px;
+  padding: 5px 12px; cursor: pointer; font-size: 13px; font-weight: 600; min-height: 32px;
+}
+.btn:hover { background: var(--chip); }
+
+/* Folds */
+.folds { margin-top: 14px; display: grid; gap: 8px; }
+details.fold { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+details.fold > summary {
+  cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 650; font-size: 15px;
+  display: flex; align-items: center; gap: 8px; border-radius: 12px;
+}
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "\25B8"; color: var(--muted); font-size: 13px; width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\25BE"; }
+details.fold > summary:hover { background: var(--surface-2); }
+.fold-body { padding: 0 16px 16px; min-width: 0; }
+.fold-body > p + p, .fold-body > p + ol, .fold-body > p + ul, .fold-body > ol + p { margin-top: 10px; }
+.rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rows li { display: grid; grid-template-columns: 100px minmax(0, 1fr); align-items: baseline; gap: 4px 10px; font-size: 14px; overflow-wrap: anywhere; }
+.rows li > .chip { justify-self: start; }
+.rows li > span:last-child { min-width: 0; }
+.kind { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; margin-right: 8px; }
+.quote { font-style: italic; }
+.opening { font-size: 14.5px; font-style: italic; color: var(--ink-2); max-width: 72ch; overflow-wrap: anywhere; }
+.note { font-size: 12.5px; color: var(--muted); max-width: 72ch; }
+
+/* Stills */
+.stills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 12px; margin-top: 10px; }
+.still { margin: 0; border-radius: 10px; padding: 6px; border: 2px solid transparent; min-width: 0; }
+.still.now { border-color: var(--ink-2); }
+.still img { display: block; width: 100%; max-height: 280px; object-fit: contain; border-radius: 6px; background: #000; }
+.still figcaption { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+
+/* About */
+.about p { max-width: 72ch; font-size: 14px; color: var(--ink-2); }
+.about p + p, .about .facts { margin-top: 10px; }
+.framing { font-size: 15px !important; line-height: 1.45; font-weight: 600; color: var(--ink) !important; }
+.stamps { font-size: 12.5px !important; color: var(--muted) !important; padding-top: 10px; border-top: 1px solid var(--hair); }
+.facts { margin: 0; display: grid; gap: 6px; }
+.facts div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px; font-size: 13.5px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* Footer */
+.foot { margin-top: 24px; padding: 16px 4px 0; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+.foot p + p { margin-top: 6px; }
+.foot .credit { color: var(--ink-2); font-size: 13px; }
+.error-box { padding: 16px; border: 1px solid var(--axis); border-radius: 8px; background: var(--surface); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header class="head">
+    <p class="eyebrow"><a id="h-board" href="../index.html">Swipe file</a> · reel card</p>
+    <h1 id="h-title">Reel</h1>
+    <p class="meta" id="h-meta"></p>
+    <p class="private">Private page: another creator's words. Don't share this file.</p>
+  </header>
+
+  <p class="counts" id="counts" aria-label="Public counts" hidden></p>
+  <p class="discount" id="discount" hidden></p>
+
+  <section class="card snippet" id="snippet" aria-label="Snippet card">
+    <ul class="snip" id="snip-lines"></ul>
+    <p class="snip-foot" id="snip-foot"></p>
+    <p class="snip-key" id="snip-key" hidden>The four lines: seeing, hearing, language and attention (predicted visual, auditory, language and attention-network response).</p>
+  </section>
+
+  <div class="recreate" id="recreate">
+    <span class="recreate-k">Recreate for your own</span>
+    <code id="recreate-cmd"></code>
+    <button class="btn" type="button" id="recreate-copy">Copy</button>
+  </div>
+
+  <div class="folds">
+    <details class="fold" id="fold-beats">
+      <summary>Beats</summary>
+      <div class="fold-body"><ol class="rows" id="beats"></ol></div>
+    </details>
+
+    <details class="fold" id="fold-transcript">
+      <summary id="transcript-h">Transcript</summary>
+      <div class="fold-body" id="transcript"></div>
+    </details>
+
+    <details class="fold" id="fold-stills">
+      <summary>Stills</summary>
+      <div class="fold-body">
+        <p class="note">Private stills, at most 4 per reel. They load from the private folder by file path: this page holds no copy, so shared alone it shows none.</p>
+        <div class="stills" id="stills"></div>
+      </div>
+    </details>
+
+    <details class="fold" id="fold-lanes">
+      <summary>Full lanes</summary>
+      <div class="fold-body" id="lanes"></div>
+    </details>
+
+    <details class="fold" id="fold-about">
+      <summary>About this data</summary>
+      <div class="fold-body about" id="about"></div>
+    </details>
+  </div>
+
+  <footer class="foot">
+    <p class="credit">Predicted average-brain response from <a href="https://github.com/facebookresearch/tribev2" target="_blank" rel="noopener noreferrer">TRIBE v2</a> (Meta FAIR, <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>). <a href="https://www.llama.com/llama3_2/license/" target="_blank" rel="noopener noreferrer">Built with Llama</a>. Non-commercial use only. Not a view forecast.</p>
+    <p>Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright &copy; Meta Platforms, Inc. All Rights Reserved. This report is not made, endorsed or supported by Meta.</p>
+  </footer>
+</div>
+
+<script type="application/json" id="data-page">__PAGE_JSON__</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function readJSON(id) {
+    var el = $(id);
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); } catch (e) { return null; }
+  }
+  function H(tag, cls, text, parent) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  /* Text with every yyyy-mm-dd date kept on one line. */
+  function dated(el, text) {
+    String(text).split(/(\d{4}-\d{2}-\d{2})/).forEach(function (part, i) {
+      if (i % 2) H('span', 'nw', part, el); else if (part) el.appendChild(document.createTextNode(part));
+    });
+    return el;
+  }
+  function chip(text, parent) { return H('span', 'chip', text, parent); }
+  function link(text, href, parent, external) {
+    var a = H('a', '', text, parent);
+    a.href = href;
+    if (external) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    return a;
+  }
+
+  var P = readJSON('data-page');
+  if (!P || !P.card) {
+    var app = $('app');
+    app.textContent = '';
+    H('p', 'error-box', 'This page could not read its data.', app);
+    return;
+  }
+
+  /* ---------- header ---------- */
+  var who = P.owner ? '@' + P.owner : 'Reel';
+  $('h-title').textContent = who + ' · ' + P.shortcode;
+  document.title = who + ' · ' + P.shortcode + ' · Reel card';
+  $('h-board').href = P.board_href || '../index.html';
+  var meta = $('h-meta');
+  dated(H('span', '', null, meta), 'posted ' + P.posted);
+  if (/^https:\/\//i.test(P.url || '')) {
+    var sp = H('span', '', null, meta);
+    link('original ↗', P.url, sp, true);
+  }
+  dated(H('span', '', null, meta), 'rendered ' + P.rendered);
+
+  /* ---------- counts strip (its own element, above the card) ---------- */
+  var C = P.card;
+  if (C.counts && C.counts.text) { dated($('counts'), C.counts.text); $('counts').hidden = false; }
+  if (P.discount) { dated($('discount'), P.discount); $('discount').hidden = false; }
+
+  /* ---------- the card: tag, claim, then its time chip ---------- */
+  var stillEls = [];
+  function openStill(i) {
+    var fold = $('fold-stills');
+    fold.open = true;
+    stillEls.forEach(function (el, j) { el.classList.toggle('now', j === i); });
+    var el = stillEls[i];
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  var box = $('snip-lines');
+  (C.lines || []).forEach(function (ln) {
+    var li = H('li', '', null, box);
+    li.setAttribute('data-tag', ln.tag);
+    H('span', 'snip-tag', ln.tag, li);
+    var body = H('p', 'snip-text', ln.text, li);
+    if (ln.time) {
+      if (typeof ln.still === 'number') {
+        var b = H('button', 'chip', ln.time, body);
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Show the still near ' + ln.time);
+        b.addEventListener('click', function () { openStill(ln.still); });
+      } else {
+        chip(ln.time, body);
+      }
+    }
+  });
+  if (C.footnote) { $('snip-foot').textContent = C.footnote; $('snip-key').hidden = false; } else $('snip-foot').hidden = true;
+
+  /* ---------- recreate ---------- */
+  $('recreate-cmd').textContent = P.recreate;
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyText(text, btn) {
+    function done(ok) {
+      btn.textContent = ok ? 'Copied' : 'Select and copy';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+    }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+        return;
+      }
+    } catch (e) { /* use the fallback */ }
+    done(fallbackCopy(text));
+  }
+  $('recreate-copy').addEventListener('click', function () { copyText(P.recreate, $('recreate-copy')); });
+
+  /* ---------- beats ---------- */
+  var beats = $('beats');
+  (P.beats || []).forEach(function (b) {
+    var li = H('li', '', null, beats);
+    chip(b.chip, li);
+    var bt = H('span', '', null, li);
+    if (b.kind) H('span', 'kind', b.kind, bt);
+    bt.appendChild(document.createTextNode(b.name + (b.suggested ? ' (suggested)' : '')));
+  });
+  if (!beats.children.length) {
+    beats.hidden = true;
+    H('p', 'note', P.beats_empty, beats.parentNode);
+  }
+
+  /* ---------- transcript ---------- */
+  var T = P.transcript || {};
+  var tb = $('transcript');
+  $('transcript-h').textContent = 'Transcript (hits only)';
+  H('p', 'note', T.note, tb);
+  var ol = H('ol', 'rows', null, tb);
+  (T.items || []).forEach(function (h) {
+    var li = H('li', '', null, ol);
+    chip(h.chip, li);
+    H('span', 'quote', '“' + h.text + '”', li);
+  });
+  if (!ol.children.length) { ol.hidden = true; H('p', 'note', T.empty, tb); }
+
+  /* ---------- stills ---------- */
+  var sbox = $('stills');
+  (P.stills || []).forEach(function (s, i) {
+    var fig = H('figure', 'still', null, sbox);
+    fig.id = 'still-' + i;
+    var img = H('img', '', null, fig);
+    img.src = s.src;
+    img.addEventListener('error', function () { fig.hidden = true; });
+    img.alt = 'Still at ' + (s.chip || 'an unknown time') + ' (' + s.caption + ')';
+    img.loading = 'lazy';
+    var cap = H('figcaption', '', null, fig);
+    if (s.chip) chip(s.chip, cap);
+    H('span', '', s.caption, cap);
+    stillEls.push(fig);
+  });
+  if (!sbox.children.length) H('p', 'note', 'No stills kept for this reel.', sbox.parentNode);
+
+  /* ---------- full lanes ---------- */
+  var L = P.lanes || {};
+  var lb = $('lanes');
+  var lp = H('p', '', null, lb);
+  if (L.href) link(L.text + ' →', L.href, lp, false); else lp.textContent = L.text;
+  if (L.note) H('p', 'note', L.note, lb);
+
+  /* ---------- about this data ---------- */
+  var A = P.about || {};
+  var ab = $('about');
+  if (A.framing) H('p', 'framing', A.framing, ab);
+  (A.lines || []).forEach(function (t) { H('p', '', t, ab); });
+  var dl = H('dl', 'facts', null, ab);
+  (A.facts || []).forEach(function (row) {
+    var d = H('div', '', null, dl);
+    H('dt', '', row[0], d);
+    H('dd', '', row[1], d);
+  });
+  dated(H('p', 'stamps', null, ab), A.stamps);
+
+  document.documentElement.setAttribute('data-rendered', 'ok');
+})();
+</script>
+</body>
+</html>

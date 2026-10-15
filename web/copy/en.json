@@ -1,0 +1,847 @@
+{
+  "app": {
+    "name": "Tribe",
+    "title": "Tribe dashboard",
+    "description": "A private reel strategist for one person.",
+    "private": "private",
+    "skip": "Skip to content"
+  },
+  "ui": {
+    "close": "Close",
+    "open": "Open",
+    "more": "More",
+    "hint": "More about this",
+    "hintAbout": "About {topic}"
+  },
+  "nav": {
+    "label": "Main",
+    "board": "Board",
+    "patterns": "Patterns",
+    "export": "Export",
+    "settings": "Settings",
+    "jobs": "Jobs",
+    "crumbs": "Breadcrumb",
+    "find": "Find…",
+    "findKey": "F"
+  },
+  "palette": {
+    "title": "Find",
+    "description": "Jump to a page or a reel.",
+    "placeholder": "Find a page or reel…",
+    "empty": "Nothing found.",
+    "groups": {
+      "pages": "Pages",
+      "reels": "Reels",
+      "actions": "Actions"
+    },
+    "actions": {
+      "refresh": "Refresh data",
+      "light": "Use the light theme",
+      "dark": "Use the dark theme",
+      "system": "Follow the system theme"
+    },
+    "keys": {
+      "palette": "⌘K",
+      "navigate": "↑↓",
+      "open": "↵",
+      "close": "Esc"
+    },
+    "hints": {
+      "navigate": "Navigate",
+      "open": "Open",
+      "close": "Close"
+    }
+  },
+  "topbar": {
+    "refresh": "Refresh",
+    "freshness": "Data freshness",
+    "sep": "·",
+    "menu": "Account and theme",
+    "back": "Back to {page}"
+  },
+  "freshness": {
+    "counts": "Counts not pulled yet",
+    "facts": "Facts not built yet",
+    "shape": "No shape labels yet",
+    "brain": "No TRIBE run yet",
+    "short": "Data · {date}",
+    "none": "Data"
+  },
+  "runner": {
+    "label": "Runner",
+    "online": "online",
+    "offline": "offline",
+    "paused": "paused",
+    "unknown": "not connected",
+    "fixtures": "fixtures",
+    "lastSeen": "last seen {when}",
+    "never": "never seen",
+    "help": "Jobs wait in the queue while the laptop runner is off."
+  },
+  "menu": {
+    "owner": "Owner",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "sourceFixtures": "Fixtures mode: synthetic data",
+    "sourceDb": "Live data from the laptop"
+  },
+  "footer": {
+    "text": "Built on {tribe} by Meta FAIR, licensed {licence} (non-commercial). {llama}. Free, not affiliated with Meta. Shows a predicted average-brain response, not a view forecast.",
+    "short": "{tribe} · Meta FAIR · {licence} · {llama}",
+    "hint": "Licence and credits",
+    "tribe": "TRIBE v2",
+    "licence": "CC BY-NC 4.0",
+    "llama": "Built with Llama",
+    "tribeUrl": "https://github.com/facebookresearch/tribev2",
+    "licenceUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "llamaUrl": "https://www.llama.com/llama3_2/license/"
+  },
+  "pages": {
+    "board": {
+      "title": "Board"
+    },
+    "reel": {
+      "title": "Reel"
+    },
+    "patterns": {
+      "title": "Patterns"
+    },
+    "export": {
+      "title": "Export"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "jobs": {
+      "title": "Jobs"
+    }
+  },
+  "layers": {
+    "counts": "Counts",
+    "facts": "Facts",
+    "shape": "Shape",
+    "brain": "Brain",
+    "tags": {
+      "counts": "COUNT",
+      "facts": "FACT",
+      "shape": "SHAPE",
+      "brain": "BRAIN"
+    }
+  },
+  "shape": {
+    "suggested": "Claude suggested",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "suggestedHint": "Suggested by Claude, not accepted yet",
+    "acceptedHint": "Accepted by hand",
+    "measuredHint": "Measured from the caption or post data"
+  },
+  "status": {
+    "queued": "queued",
+    "running": "running",
+    "done": "done",
+    "failed": "failed",
+    "interrupted": "interrupted",
+    "refused": "refused",
+    "cancelled": "cancelled"
+  },
+  "copyCommand": {
+    "copy": "Copy command",
+    "copied": "Copied",
+    "failed": "Copy failed: select the text instead",
+    "label": "Run on the laptop"
+  },
+  "jobs": {
+    "fixturesMode": "Fixtures mode: nothing was queued. Jobs run only with TRIBE_DATA_SOURCE=db.",
+    "queued": "Queued. The runner picks it up next.",
+    "queuedOffline": "Queued. It waits until the runner is online.",
+    "duplicate": "Already in the queue.",
+    "disabled": "Not available yet: stage {stage}.",
+    "stage": "Stage {stage}",
+    "invalid": "Those details were refused: {problem}",
+    "unknownKind": "Not an allowed job.",
+    "failed": "The queue did not answer. Try again.",
+    "paused": "Paused.",
+    "resumed": "Resumed.",
+    "confirmed": "Confirmed. The runner checks the limits again before it starts.",
+    "cancelRequested": "Cancel requested.",
+    "notWaiting": "That job is no longer waiting.",
+    "working": "Sending…",
+    "free": "Free",
+    "claudePlan": "Claude plan",
+    "estimate": "about ${usd}",
+    "confirm": {
+      "title": "Run this paid job?",
+      "body": "{label}. Estimate: about ${usd}.",
+      "limits": "The runner checks the caps and daily limits first, and refuses if its own estimate comes out higher.",
+      "expires": "This confirm expires after {min} min.",
+      "go": "Confirm, about ${usd}",
+      "cancel": "Not now"
+    }
+  },
+  "jobKinds": {
+    "reel_accept": "Accept label",
+    "reel_reject": "Reject label",
+    "reel_discount": "Discount counts",
+    "patterns_build": "Rebuild patterns",
+    "lab_check": "Check draft",
+    "sync_push": "Push pages",
+    "coach_new_draft": "New draft",
+    "coach_this_but": "This but…",
+    "coach_replace": "Replace X with Y",
+    "coach_tag_shapes": "Tag shapes",
+    "reel_add_link": "Add reel",
+    "reel_add_handle": "Add creator",
+    "tribe_lanes": "Run TRIBE deep read"
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{n} min ago",
+    "hoursAgo": "{n} h ago",
+    "daysAgo": "{n} d ago"
+  },
+  "empty": {
+    "progress": "{done} of {total} so far"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "back": "Back to the board",
+    "refused": "This page failed its contract check, so it is not shown.",
+    "retry": "Try again"
+  },
+  "loading": "Loading…",
+  "stub": {
+    "building": "This screen is being built."
+  },
+  "board": {
+    "controls": "Board controls",
+    "views": {
+      "label": "Saved view",
+      "menu": "Pick a saved view",
+      "all": "All reels",
+      "twoX": "2x+ own median",
+      "review": "Labels to review",
+      "custom": "Custom view"
+    },
+    "layout": {
+      "label": "Layout",
+      "table": "Table",
+      "grid": "Cards"
+    },
+    "filters": {
+      "button": "Filters",
+      "add": "Add filter",
+      "clear": "Clear",
+      "label": "Active filters",
+      "remove": "Remove filter {field}",
+      "eq": "=",
+      "fields": {
+        "hook": "Hook",
+        "format": "Format",
+        "length": "Length",
+        "flag": "Flag",
+        "twoX": "x own median",
+        "labels": "Labels",
+        "tribe": "TRIBE read"
+      },
+      "twoX": "2x or more",
+      "suggested": "Claude suggested",
+      "yes": "yes",
+      "no": "no",
+      "empty": "No values yet"
+    },
+    "fields": {
+      "button": "Fields",
+      "title": "Fields",
+      "reset": "Reset"
+    },
+    "sort": {
+      "button": "Sort",
+      "label": "Sorted by {label}",
+      "menu": "Sort by",
+      "header": "Sort by {label}"
+    },
+    "count": "{n} reels",
+    "countOne": "1 reel",
+    "countOf": "{shown} of {total} reels",
+    "columns": {
+      "handle": "Reel",
+      "length": "Length",
+      "posted": "Posted",
+      "plays": "Plays",
+      "x": "x own median",
+      "hook": "Hook",
+      "format": "Format",
+      "cta": "CTA",
+      "flags": "Flags",
+      "tribe": "TRIBE read"
+    },
+    "tribeTable": "TRIBE read, yes or no for each reel",
+    "tribeHint": "Whether a deep read exists. Its lines are on the reel page.",
+    "notTagged": "not tagged",
+    "noFlags": "none",
+    "moreFlags": "+{n}",
+    "peekAt": "Show details for {handle}",
+    "footnote": "Counts are scraped snapshots, not live.",
+    "card": {
+      "plays": "plays",
+      "posted": "posted {date}"
+    },
+    "peek": {
+      "label": "Reel details",
+      "close": "Close details",
+      "open": "Open",
+      "openKey": "⌘↵",
+      "closeKey": "Esc",
+      "baseline": "Own baseline",
+      "flags": "Flags",
+      "discount": "Discount",
+      "hook": "Hook",
+      "format": "Format",
+      "cta": "CTA",
+      "instagram": "Instagram",
+      "acceptAll": "Accept all labels",
+      "stripHint": "About this strip",
+      "prev": "Previous reel",
+      "next": "Next reel"
+    },
+    "creators": {
+      "title": "Creators",
+      "body": "Each creator's own reels: the median, the window and what was left out."
+    },
+    "empty": {
+      "title": "No reels yet",
+      "hint": "Run it on the laptop. It prints the Apify estimate first and runs only with --yes after a go. Then push the pages: python -m strategist.sync push",
+      "addCommand": "python -m strategist.reel add <reel-link>",
+      "noMatch": "No reels match"
+    }
+  },
+  "reel": {
+    "instagram": "Open on Instagram",
+    "posted": "posted {date}",
+    "notDated": "post date unknown",
+    "sep": "·",
+    "tabs": {
+      "label": "Reel details",
+      "card": "Card",
+      "beats": "Beats",
+      "areas": "Areas",
+      "facts": "Facts"
+    },
+    "card": {
+      "label": "Snippet card",
+      "edge": "edge, lower confidence",
+      "footnoteLabel": "About HIGH and FLAT"
+    },
+    "strip": {
+      "label": "Counts strip",
+      "none": "Not in the swipe file."
+    },
+    "counts": {
+      "title": "Counts",
+      "chartTitle": "Plays vs own reels",
+      "chartLabel": "Dot plot of plays on a log scale: the creator's own reels as small dots, the own median as a dashed line and this reel as a filled dot.",
+      "median": "own median",
+      "me": "this reel",
+      "own": "{n} own reels",
+      "noPeer": "No own reels kept.",
+      "flags": "Flags",
+      "footnote": "Plays on a log scale. Counts are scraped snapshots, not live.",
+      "footnoteLabel": "About these counts"
+    },
+    "discount": {
+      "open": "Discount",
+      "title": "Discount these counts",
+      "body": "Why are these counts not a fair picture? Nothing is discounted automatically.",
+      "reason": "Reason",
+      "placeholder": "a partner tag in the caption",
+      "send": "Discount counts",
+      "empty": "Write a reason first.",
+      "current": "Discounted by hand"
+    },
+    "private": {
+      "title": "Private details stay on this laptop",
+      "body": "Transcript, stills and quotes never leave the laptop. Open the full page there."
+    },
+    "actions": {
+      "tribeConfirm": "TRIBE deep read of {sc}"
+    },
+    "labels": {
+      "title": "Shape labels",
+      "hint": "Claude suggests, you accept or reject. Outlined means suggested, filled means accepted.",
+      "hintLabel": "How shape labels work",
+      "fields": {
+        "hook_shape": "Hook shape",
+        "format": "Format",
+        "cta": "Call to action"
+      },
+      "notTagged": "not tagged",
+      "accept": "Accept",
+      "reject": "Reject",
+      "acceptAll": "Accept all suggested",
+      "noBoard": "No board yet.",
+      "rebuild": "After accepting or rejecting labels, rebuild the patterns.",
+      "rebuildLabel": "When to rebuild the patterns"
+    },
+    "beats": {
+      "title": "Beats",
+      "acceptAll": "Accept all beats",
+      "rejectAll": "Reject all beats",
+      "groupHint": "Beats are accepted or rejected together from here. One beat at a time works on the laptop.",
+      "groupHintLabel": "How beats are accepted"
+    },
+    "facts": {
+      "title": "Facts",
+      "hint": "Worked out on the laptop from word times and the video.",
+      "none": "No facts yet.",
+      "about": "About this data",
+      "wall": "Public counts (plays, likes, comments) and the predicted average-brain response are separate layers: they never share a line, a sort or a chart."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "label": "Beats and predicted response lanes over time. Use the arrow keys to move the selected second.",
+      "labelNoBrain": "Beats over time. Use the arrow keys to move the selected second.",
+      "beats": "Beats",
+      "moments": "HIGH and FLAT",
+      "lanes": {
+        "seeing": "Seeing",
+        "hearing": "Hearing",
+        "language": "Language",
+        "attention": "Attention network"
+      },
+      "drift": "drift across reel: {trend}",
+      "at": "At {time}",
+      "bands": {
+        "wellAbove": "well above this reel's average",
+        "above": "above this reel's average",
+        "near": "near this reel's average",
+        "below": "below this reel's average",
+        "wellBelow": "well below this reel's average",
+        "none": "no value"
+      },
+      "bandShort": {
+        "wellAbove": "well above",
+        "above": "above",
+        "near": "near",
+        "below": "below",
+        "wellBelow": "well below",
+        "none": "no value"
+      },
+      "laneAt": "{lane}: {band}",
+      "beatAt": "{kind}: {name}",
+      "noBeat": "no beat tagged here",
+      "none": "none selected",
+      "inHigh": "HIGH",
+      "inFlat": "FLAT {time}",
+      "edge": "edge, lower confidence",
+      "legend": {
+        "label": "Legend",
+        "line": "predicted, dotted",
+        "high": "HIGH",
+        "flat": "FLAT",
+        "suggested": "beat, Claude suggested",
+        "accepted": "beat, accepted",
+        "playhead": "selected second",
+        "fill": "above or below average"
+      },
+      "momentsTitle": "Moments",
+      "drivenBy": "Driven by: {lines}",
+      "noMoments": "No HIGH or FLAT moments in this read.",
+      "notes": "Notes on this read",
+      "empty": {
+        "pill": "No TRIBE read yet",
+        "body": "Opt-in: one picked reel at a time, about ${usd} each, at most {n} a month. Never compared across reels.",
+        "hintLabel": "About TRIBE reads"
+      },
+      "missing": {
+        "pill": "TRIBE read not synced yet",
+        "body": "The read from {date} is on the laptop. Push the cleaned pages to show it here.",
+        "hintLabel": "About this read"
+      },
+      "peak": {
+        "title": "Brain at HIGH {time}",
+        "alt": "Map of the predicted average-brain response at {time}"
+      }
+    },
+    "brain": {
+      "title": "Predicted average-brain response",
+      "canvasLabel": "3D map of the predicted average-brain response at {time}, left and right sides, on one colour scale for this whole reel. Drag to turn it.",
+      "second": "Second on the brain map",
+      "timeOf": "{time} of {end}",
+      "timeSep": "/",
+      "play": "Play",
+      "pause": "Pause",
+      "angleLabel": "Angle",
+      "angleOutside": "Outside",
+      "angleInside": "Inside",
+      "reset": "Reset",
+      "loading": "Loading the brain map",
+      "noWebgl": "This browser cannot draw the 3D brain map.",
+      "lost": "The 3D brain map stopped drawing.",
+      "reload": "Reload the brain map",
+      "legend": {
+        "label": "Colour scale",
+        "lower": "lower",
+        "zero": "0",
+        "higher": "higher",
+        "near": "near 0",
+        "scale": "one colour scale for this whole reel",
+        "about": "Each surface point is coloured by the predicted average-brain response at the selected second. Points near 0 stay grey; colour is full from halfway up the scale."
+      },
+      "hover": {
+        "area": "{area}, {side}",
+        "network": "In {network}",
+        "feeds": "feeds {line}",
+        "noLine": "not part of the four lines",
+        "at": "At {time}: {band}"
+      },
+      "bands": {
+        "above": "above 0 on this reel's scale",
+        "near": "near 0",
+        "below": "below 0 on this reel's scale"
+      },
+      "hemi": {
+        "left": "left",
+        "right": "right"
+      },
+      "creditsLabel": "Credits",
+      "credit": {
+        "atlas": "Areas: HCP-MMP1 (Glasser et al., 2016) and Yeo-7 networks (Yeo et al., 2011).",
+        "hcp": "Data were provided in part by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University."
+      }
+    },
+    "areas": {
+      "title": "Areas",
+      "label": "Areas over time",
+      "hint": "The predicted average-brain response averaged over each atlas area, second by second, on one scale for this whole reel. Rows stay in atlas order (Yeo network, then HCP area) and never move.",
+      "marks": "A warm or cool mark: the area is coloured on the brain at the selected second.",
+      "expand": "Show the areas in {network}",
+      "collapse": "Hide the areas in {network}",
+      "showOnBrain": "Show on brain",
+      "atlasNames": "Atlas names mark places on the cortex, not feelings or functions.",
+      "loading": "Loading the areas",
+      "failed": "The areas did not load.",
+      "retry": "Try again",
+      "sideShort": {
+        "left": "L",
+        "right": "R"
+      }
+    },
+    "download": {
+      "label": "Download",
+      "areas": "Raw numbers (CSV)",
+      "surface": "Every surface point (CSV)",
+      "hint": "Values are stored at 255 levels on this reel's one colour scale, so each surface point is close to the model output, not exact. One reel only.",
+      "building": "Building the file",
+      "failed": "The file could not be built.",
+      "csv": {
+        "footer": "Predicted average-brain response from TRIBE v2 (Meta FAIR, CC BY-NC 4.0). Built with Llama. Non-commercial use only. Not a view forecast.",
+        "reel": "reel: {sc}",
+        "job": "job: {job}",
+        "runDate": "run date: {date}",
+        "precision": "precision: {precision}",
+        "precisionNone": "precision: not recorded",
+        "masks": "masks: {masks}",
+        "atlas": "atlas: {atlas}",
+        "units": "TRIBE v2 model output averaged over each area's vertices; relative only",
+        "surfaceUnits": "TRIBE v2 model output per surface point, stored at 255 levels on this reel's one colour scale; relative only",
+        "oneReel": "one reel only: never put two reels' numbers side by side",
+        "atlasNames": "atlas names mark places on the cortex, not feelings or functions",
+        "derived": "derived data shared only under the HCP Open Access terms",
+        "yeo": "Yeo BT, Krienen FM, Sepulcre J, Sabuncu MR, Lashkari D, Hollinshead M, Roffman JL, Smoller JW, Zollei L., Polimeni JR, Fischl B, Liu H, Buckner RL. The organization of the human cerebral cortex estimated by intrinsic functional connectivity. Journal of Neurophysiology 106(3):1125-1165, 2011. doi:10.1152/jn.00338.2011"
+      }
+    },
+    "video": {
+      "label": "Reel video",
+      "controls": "Video controls",
+      "play": "Play video",
+      "pause": "Pause video",
+      "soundOn": "Turn sound on",
+      "soundOff": "Turn sound off",
+      "loading": "Loading the video",
+      "failed": "The video did not load.",
+      "retry": "Try again"
+    }
+  },
+  "patterns": {
+    "rebuild": "Rebuild",
+    "outliersOnly": "outliers only",
+    "about": "Shapes and public post data only. Deep reads are never used here.",
+    "legend": {
+      "more": "About these groups",
+      "outliers": "Outliers",
+      "normal": "Normal",
+      "n": "(n={n})",
+      "outliersDef": "Reels at 2x or more the creator's own median plays.",
+      "normalDef": "The same creators' other reels in the same pull."
+    },
+    "catalog": {
+      "label": "Catalog",
+      "all": "All",
+      "new": "{n} new"
+    },
+    "labels": {
+      "label": "Labels",
+      "all": "All",
+      "accepted": "Accepted",
+      "suggested": "Suggested"
+    },
+    "columns": {
+      "pattern": "Pattern"
+    },
+    "noCompare": "outliers only, no comparison yet",
+    "share": "{k} of {n}",
+    "bar": "{group}: {k} of {n} reels",
+    "flags": {
+      "new": "NEW",
+      "few": "few"
+    },
+    "zero": {
+      "title": "Only in normal",
+      "body": "No counted outlier carries these."
+    },
+    "lead": {
+      "title": "Seen more in outliers",
+      "note": "A share of outliers at least 10 points above the share of normal reels. A shape to test in a draft, never proof that it works."
+    },
+    "showing": "{n} of {total} patterns",
+    "none": "No pattern here yet.",
+    "detail": {
+      "show": "Show the reels for {label}",
+      "slot": "Slot",
+      "byCreator": "By creator",
+      "sources": "Outlier reels with it",
+      "openReel": "Open the reel page",
+      "onInstagram": "Open on Instagram"
+    },
+    "empty": {
+      "title": "Patterns start at 10 reels",
+      "importCommand": "python -m strategist.reel import-ecc",
+      "buildCommand": "python -m strategist.patterns build"
+    }
+  },
+  "lab": {
+    "index": {
+      "draft": "Draft",
+      "example": "Example",
+      "updated": "updated {date}",
+      "emptyTitle": "No drafts yet",
+      "stepNewCommand": "python -m strategist.lab new <slug>",
+      "startNowBody": "The /script skill or this command starts a draft on the laptop."
+    },
+    "header": {
+      "sep": "·",
+      "notChecked": "not checked yet",
+      "example": "Example"
+    },
+    "draft": {
+      "label": "Script",
+      "summary": "{beats} beats · {words} words",
+      "onScreen": "On screen",
+      "slot": "Slot",
+      "emptySay": "Nothing to say here yet.",
+      "noBeats": "No beats yet.",
+      "variantsOne": "1 hook variant",
+      "variantsMany": "{n} hook variants",
+      "tick": "Margin note {n}",
+      "sharedRun": "Shared 6-word run. The words and their source stay on the laptop."
+    },
+    "tabs": {
+      "label": "Suggestions",
+      "facts": "Facts",
+      "shape": "Shape",
+      "brain": "Brain"
+    },
+    "notes": {
+      "title": "Margin notes",
+      "empty": "No margin notes.",
+      "dismiss": "Dismiss",
+      "dismissed": "{n} dismissed",
+      "restore": "Show again"
+    },
+    "proof": {
+      "title": "PROOF rows",
+      "empty": "No PROOF rows.",
+      "numbers": "numbers: {numbers}",
+      "caveat": "caveat: {caveat}"
+    },
+    "variants": {
+      "title": "Hook variants",
+      "unordered": "Unordered: each is a different shape to test, in no order.",
+      "empty": "No hook variants yet.",
+      "accept": "Accept variant",
+      "dismiss": "Dismiss",
+      "field": "hook"
+    },
+    "patterns": {
+      "title": "Patterns used",
+      "empty": "No patterns.",
+      "open": "Open in Patterns"
+    },
+    "brain": {
+      "title": "No brain read on drafts",
+      "body": "The hook pair test is not built yet: two voice memo takes of the opening, read on one scale.",
+      "note": "It would show the predicted average-brain response to each take: an average brain, not an audience, and never a pick between the takes.",
+      "later": "Later"
+    },
+    "checks": {
+      "title": "Checks",
+      "checked": "checked {date}",
+      "states": {
+        "ok": "ok",
+        "fix": "to fix",
+        "look": "to look at",
+        "unchecked": "not checked",
+        "stale": "changed since"
+      },
+      "copyHit": "Shared 6-word run",
+      "emDash": "Em dashes: {n}",
+      "span": "characters {start} to {end}",
+      "show": "Show",
+      "levels": {
+        "error": "to fix",
+        "warning": "to look at"
+      },
+      "private": "Only where a run sits is shown here. The words and their source stay on the laptop.",
+      "none": "Nothing to fix or look at.",
+      "showDetails": "Show check details",
+      "hideDetails": "Hide check details"
+    },
+    "where": {
+      "beat": "beat {n}",
+      "field": "beat {n}, {field}",
+      "fields": {
+        "say": "spoken line",
+        "on_screen": "on screen",
+        "name": "name",
+        "slot": "slot"
+      },
+      "variant": "variant {id}"
+    },
+    "length": {
+      "title": "Length",
+      "readAloud": "Read aloud",
+      "target": "Target",
+      "pace": "Pace",
+      "paceValue": "{n} words/s",
+      "seconds": "{n} s",
+      "none": "none",
+      "bar": "Beats over about {est} s, target {target} s",
+      "barNoTarget": "Beats over about {est} s",
+      "glance": "{est} s, target {target} s",
+      "glanceNoTarget": "{est} s read aloud"
+    },
+    "refine": {
+      "thisButBody": "Keeps every other line as it is.",
+      "thisButVariantBody": "Rewrites this variant only.",
+      "thisButPlaceholder": "shorter, and the number first",
+      "replaceBody": "Swaps one phrase for another wherever it sits.",
+      "replace": "Replace",
+      "with": "with",
+      "replacePlaceholder": "a phrase in the draft",
+      "withPlaceholder": "what to say instead",
+      "command": "Paste into Claude Code on the laptop",
+      "fromSite": "Or queue it from here:",
+      "yourChange": "<your change>",
+      "x": "X",
+      "y": "Y"
+    },
+    "laptop": {
+      "body": "Full details are on the laptop: the private page shows the shared runs, their sources and the PROOF file. It never leaves the laptop."
+    },
+    "hints": {
+      "brain": "About the hook pair test",
+      "laptop": "About the laptop page",
+      "private": "About what this check shows",
+      "startNow": "About starting a draft",
+      "variants": "About the order of the variants",
+      "variant": "About this variant",
+      "caveat": "Caveat on this row"
+    }
+  },
+  "export": {
+    "title": "Export",
+    "button": "Download JSON",
+    "framing": "predicted average-brain response",
+    "note": "Made {date} from the hosted pages. Counts, shape tags, patterns and brain output sit under separate keys. Brain numbers are one reel each, in fixed atlas order, never compared across reels.",
+    "licence": "TRIBE v2, CC BY-NC 4.0, Meta FAIR",
+    "hintLabel": "About the export",
+    "hint": "One file: the board's counts and shape tags, the patterns, and the predicted average-brain response per second for each reel with a read. Counts and brain numbers sit under separate keys. No words, captions, stills or video."
+  },
+  "settings": {
+    "runner": {
+      "title": "Runner",
+      "setupTitle": "Start the runner",
+      "setupBody": "Jobs run on the laptop. Keep the runner on.",
+      "stepStart": "Start it",
+      "stepStartBody": "Stop it with Ctrl+C.",
+      "stepStartCommand": "python -m strategist.runner",
+      "stepOnce": "Or run the queue once",
+      "stepOnceBody": "Runs the queue, then exits.",
+      "stepOnceCommand": "python -m strategist.runner --once",
+      "stepLogon": "Optional: start it at logon",
+      "stepLogonBody": "Prints a Task Scheduler entry.",
+      "stepLogonCommand": "python -m strategist.runner --print-task-xml",
+      "setupLabel": "About starting the runner",
+      "fixtures": "Fixtures mode: no runner, synthetic rows.",
+      "fixturesChip": "Fixtures mode",
+      "fixturesLabel": "About fixtures mode",
+      "helpLabel": "About the runner"
+    },
+    "spend": {
+      "modal": "Modal",
+      "apify": "Apify",
+      "usd": "${usd}",
+      "ofCap": "of ${cap} cap",
+      "apifyCap": "Stops at ${cap} of the $5.00 free credit.",
+      "notRead": "not read yet",
+      "modalSource": "Laptop ledger.",
+      "apifySource": "Apify meter, shared with ECC.",
+      "asOf": "Updated {when}.",
+      "sourceLabel": "Where the {service} number comes from"
+    },
+    "limits": {
+      "title": "Limits",
+      "body": "Set on the runner.",
+      "hintLabel": "About the limits",
+      "paidRunning": "Paid at once",
+      "paidUsdDay": "Spend / day",
+      "paidJobsDay": "Paid jobs / day",
+      "tribeMonth": "TRIBE reads / month",
+      "confirmExpires": "Confirm expires",
+      "minutes": "{n} min",
+      "usd": "${usd}"
+    },
+    "pause": {
+      "label": "Pause queue",
+      "body": "Queued jobs wait. A running job finishes.",
+      "hintLabel": "About pausing"
+    },
+    "queue": {
+      "title": "Queue",
+      "live": "Live",
+      "recent": "Recent",
+      "liveEmpty": "Nothing waiting.",
+      "emptyTitle": "No jobs yet",
+      "emptyBody": "Jobs queued from other pages show here.",
+      "emptyLabel": "About the queue",
+      "columns": {
+        "status": "Status",
+        "job": "Job",
+        "cost": "Cost",
+        "queued": "Queued"
+      },
+      "progress": "Progress",
+      "noProgress": "No progress yet.",
+      "code": "Code: {code}",
+      "refusal": "Refused: {reason}",
+      "confirmed": "Confirmed",
+      "waitingConfirm": "Not confirmed",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "cancelRequested": "Cancel requested"
+    }
+  }
+}

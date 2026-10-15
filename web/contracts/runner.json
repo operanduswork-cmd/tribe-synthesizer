@@ -1,0 +1,10 @@
+{
+ "v": 1,
+ "description": "The Upstash keys the site and the laptop runner share (D26). The site LPUSHes a job id onto wake_key after every insert, confirm or cancel, then trims the list to wake_max. The runner waits on wake_key (up to wait_s), sets heartbeat_key with a heartbeat_ttl_s expiry while it is up, and writes an ISO time to last_seen_key (no expiry) on every beat. The site shows online while heartbeat_key exists, else offline with last_seen_key.",
+ "wake_key": "tribe:wake",
+ "wake_max": 100,
+ "heartbeat_key": "tribe:runner:alive",
+ "heartbeat_ttl_s": 90,
+ "last_seen_key": "tribe:runner:last_seen",
+ "wait_s": 50
+}

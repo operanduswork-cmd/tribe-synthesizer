@@ -1,0 +1,30 @@
+{
+ "v": 1,
+ "rendered_at": "2026-10-09T10:15:00+00:00",
+ "layers": {
+  "counts": {
+   "as_of": "2026-10-01",
+   "text": "Counts as of 2026-09-30 to 2026-10-01, refreshed by hand"
+  },
+  "facts": {
+   "as_of": "2026-10-01T09:00:00+00:00",
+   "text": "Facts fixed at ingest"
+  },
+  "shape": {
+   "as_of": "2026-10-08T18:00:00+00:00",
+   "text": "Shape labels last changed 2026-10-08"
+  },
+  "brain": {
+   "as_of": "2026-10-01",
+   "text": "TRIBE run 2026-10-01, one reel"
+  }
+ },
+ "n": {
+  "reels": 3,
+  "creators": 3,
+  "patterns": 3,
+  "drafts": 1,
+  "tribe_reads": 1
+ },
+ "patterns_built_at": "2026-10-09T09:58:00+00:00"
+}

@@ -1,0 +1,101 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "shortcode": "DEMO0000003",
+ "owner": "demo_creator_c",
+ "url": "https://www.instagram.com/reel/DEMO0000003/",
+ "posted": "2026-09-12",
+ "card": {
+  "mode": "facts",
+  "counts": {
+   "text": "@demo_creator_c · 0:55 · 19,800 plays · 1.6x own median (12 reels) · thin baseline · discounted · under 2x: taste, not proof · as of 2026-09-30",
+   "shortcode": "DEMO0000003"
+  },
+  "lines": [
+   {
+    "tag": "HOOK",
+    "time": "0:00",
+    "t": 0,
+    "text": "list tease (suggested) · text on screen at start: yes · first word at"
+   },
+   {
+    "tag": "BEATS",
+    "time": null,
+    "t": null,
+    "text": "list tease → three tools on screen → link ask (suggested)"
+   },
+   {
+    "tag": "PACE",
+    "time": "0:51",
+    "t": 51,
+    "text": "about 2 words a second · call to action: link in bio"
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: open your draft with the same hook shape (list tease), in your own words."
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: in your draft, give the three tools on screen beat about 36 seconds, like this reel's walkthrough."
+   }
+  ],
+  "footnote": null
+ },
+ "discount": "Discounted by hand on 2026-10-02: made-up reason for the fixture, a partner tag in the caption",
+ "recreate": "/script new from-DEMO0000003",
+ "beats": [
+  {
+   "chip": "0:00-0:04",
+   "kind": "hook",
+   "name": "list tease",
+   "suggested": true
+  },
+  {
+   "chip": "0:05-0:44",
+   "kind": "demo",
+   "name": "three tools on screen",
+   "suggested": true
+  },
+  {
+   "chip": "0:45-0:54",
+   "kind": "cta",
+   "name": "link ask",
+   "suggested": true
+  }
+ ],
+ "beats_empty": "No beats tagged yet. Claude suggests them, and you accept them with python -m strategist.reel accept DEMO0000003 beats.",
+ "tribe": null,
+ "stamps": {
+  "counts": "counts from Apify, as of 2026-09-30",
+  "shape": "shape suggested by Claude, accepted by you: 0 of 6 labels",
+  "brain": "no TRIBE run",
+  "page": "page made by strategist.hosted on 2026-10-09"
+ },
+ "facts": [
+  {
+   "label": "Length",
+   "value": "0:55"
+  },
+  {
+   "label": "First word",
+   "value": "at 0:00"
+  },
+  {
+   "label": "Pace",
+   "value": "about 2 words a second"
+  },
+  {
+   "label": "Call to action",
+   "value": "link in bio at about 0:51"
+  },
+  {
+   "label": "Text at 0:00",
+   "value": "yes"
+  }
+ ],
+ "local_cmd": "python -m strategist.render reel DEMO0000003 --open"
+}

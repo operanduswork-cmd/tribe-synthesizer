@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Script lab</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f3f3f0;
+  --surface: #fcfcfb;
+  --surface-2: #f4f3ef;
+  --border: rgba(11, 11, 11, 0.09);
+  --ink: #141413;
+  --ink-2: #4e4d49;
+  --muted: #6f6d67;
+  --hair: #e3e2db;
+  --axis: #c3c2b7;
+  --chip: #ecebe6;
+  --chip-ink: #3c3b37;
+  --seg-1: #4e4d49;
+  --seg-2: #8c8a81;
+  --focus: #2a6fc4;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0e0e0d;
+    --surface: #191918;
+    --surface-2: #20201e;
+    --border: rgba(255, 255, 255, 0.09);
+    --ink: #f2f1ec;
+    --ink-2: #c6c5bc;
+    --muted: #9b998f;
+    --hair: #2d2d2a;
+    --axis: #4a4944;
+    --chip: #2a2a27;
+    --chip-ink: #d8d7cf;
+    --seg-1: #c6c5bc;
+    --seg-2: #7d7c74;
+    --focus: #5b9be8;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e0d;
+  --surface: #191918;
+  --surface-2: #20201e;
+  --border: rgba(255, 255, 255, 0.09);
+  --ink: #f2f1ec;
+  --ink-2: #c6c5bc;
+  --muted: #9b998f;
+  --hair: #2d2d2a;
+  --axis: #4a4944;
+  --chip: #2a2a27;
+  --chip-ink: #d8d7cf;
+  --seg-1: #c6c5bc;
+  --seg-2: #7d7c74;
+  --focus: #5b9be8;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+h1 { font-size: 22px; font-weight: 650; overflow-wrap: anywhere; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 650; }
+p { margin: 0; }
+button, input { font: inherit; color: inherit; }
+code { font: 12.5px/1.4 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+.nw { white-space: nowrap; }
+.muted { color: var(--muted); }
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 40px; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+section { margin-top: 18px; }
+section > h2 { margin: 0 4px 8px; }
+
+/* Header */
+.head { padding: 4px 4px 0; }
+.eyebrow { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.eyebrow a { text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+.meta { margin-top: 6px; color: var(--ink-2); font-size: 13.5px; overflow-wrap: anywhere; }
+.meta > span { display: inline-block; overflow-wrap: normal; }
+.meta span + span::before { content: "\00b7"; margin: 0 8px; color: var(--axis); }
+.stale { margin-top: 10px; padding: 8px 12px; border: 2px dashed var(--ink-2); border-radius: 8px; font-size: 13.5px; overflow-wrap: anywhere; }
+
+/* Check badges: words and border style carry the state, never a colour */
+.badges { margin-top: 14px; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+.badge { border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 8px 12px; min-width: 0; }
+.badge .bn { display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; color: var(--muted); }
+.badge .bt { display: block; margin-top: 2px; font-size: 13.5px; overflow-wrap: anywhere; }
+.badge .mark { font-size: 13px; color: var(--ink); }
+.badge[data-state="fix"], .badge[data-state="look"] { border: 2px dashed var(--ink-2); }
+.badge[data-state="fix"] .bt { font-weight: 650; }
+.badge[data-state="unchecked"], .badge[data-state="stale"] { border-style: dashed; border-color: var(--axis); }
+
+/* Length bar */
+.length { margin-top: 12px; }
+.length-t { font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.lbar { margin-top: 8px; }
+.lbar svg { display: block; width: 100%; height: 40px; overflow: visible; }
+.lbar .track { fill: var(--hair); }
+.lbar .s1 { fill: var(--seg-1); }
+.lbar .s2 { fill: var(--seg-2); }
+.lbar .target { stroke: var(--ink); stroke-width: 2; }
+.lbar .ax { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.legend { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.legend .s1 { background: var(--seg-1); }
+.legend .s2 { background: var(--seg-2); }
+
+/* Script: beats with numbered margin notes */
+.beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.beat {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 280px); gap: 10px 20px; min-width: 0;
+}
+@media (max-width: 720px) { .beat { grid-template-columns: minmax(0, 1fr); } }
+.beat-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.kind { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.bname { font-weight: 650; font-size: 14.5px; overflow-wrap: anywhere; }
+.chip {
+  display: inline-block; border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px;
+  padding: 0 9px; font-variant-numeric: tabular-nums; font-size: 12.5px; font-weight: 600; line-height: 22px; white-space: nowrap;
+}
+.marks { display: inline-flex; gap: 4px; }
+.say { margin-top: 6px; font-size: 16.5px; line-height: 1.55; overflow-wrap: anywhere; }
+.say .off { color: var(--muted); font-style: italic; }
+.say.empty { color: var(--muted); font-size: 14px; font-style: italic; }
+.screen { margin-top: 6px; font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.screen .k, .slotline .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 650; margin-right: 6px; }
+.slotline { margin-top: 6px; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.slot-fold { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.slot-fold > summary { cursor: pointer; font-weight: 650; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.slot-fold[open] > summary { margin-bottom: 4px; }
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; align-content: start; }
+.side { display: grid; gap: 8px; align-content: start; min-width: 0; }
+@media (min-width: 721px) { .side { border-left: 1px solid var(--hair); padding-left: 16px; } }
+.notes li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.num {
+  display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 999px;
+  background: var(--ink); color: var(--page); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.notes .none { display: block; font-size: 12.5px; color: var(--muted); }
+
+/* Variants: unordered, each with its own "This but..." */
+.vgrid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+.var { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.var-shape { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); overflow-wrap: anywhere; }
+.var-line { font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+.var-why { font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.var-pat { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.note-u { font-size: 12.5px; color: var(--muted); margin: 0 4px 8px; }
+
+/* Commands */
+.btn {
+  appearance: none; border: 1px solid var(--border); background: var(--surface-2); border-radius: 8px;
+  padding: 5px 12px; cursor: pointer; font-size: 13px; font-weight: 600; min-height: 32px; justify-self: start;
+}
+.btn:hover { background: var(--chip); }
+.cmd { display: grid; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); min-width: 0; }
+.cmd label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); font-weight: 600; min-width: 0; }
+.cmd input {
+  width: 100%; min-width: 0; border: 1px solid var(--border); background: var(--surface); border-radius: 8px;
+  padding: 6px 9px; font-size: 14px; color: var(--ink);
+}
+.cmd code { color: var(--ink-2); display: block; }
+.cmd-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.refine { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.refine .panel { display: grid; gap: 8px; align-content: start; }
+.refine h3 { font-size: 14.5px; font-weight: 650; }
+.refine p { font-size: 13px; color: var(--muted); }
+.pair { display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); }
+
+/* Folds */
+.folds { margin-top: 18px; display: grid; gap: 8px; }
+details.fold { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+details.fold > summary {
+  cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 650; font-size: 15px;
+  display: flex; align-items: center; gap: 8px; border-radius: 12px;
+}
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "\25B8"; color: var(--muted); font-size: 13px; width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\25BE"; }
+details.fold > summary:hover { background: var(--surface-2); }
+.fold-body { padding: 0 16px 16px; min-width: 0; }
+.rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.rows li { font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.rows .k { font-weight: 650; color: var(--ink); margin-right: 6px; }
+.rows .sub { display: block; color: var(--muted); font-size: 12.5px; }
+.about p { max-width: 72ch; font-size: 14px; color: var(--ink-2); }
+.about p + p { margin-top: 10px; }
+.empty { font-size: 13.5px; color: var(--muted); }
+
+/* Footer */
+.foot { margin-top: 24px; padding: 16px 4px 0; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+.foot p + p { margin-top: 6px; }
+.foot .credit { color: var(--ink-2); font-size: 13px; }
+.error-box { padding: 16px; border: 1px solid var(--axis); border-radius: 8px; background: var(--surface); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header class="head">
+    <p class="eyebrow"><a id="h-board" href="../index.html">Swipe file</a> · <a id="h-patterns" href="../patterns.html">patterns</a> · script lab</p>
+    <h1 id="h-title">Script lab</h1>
+    <p class="meta" id="h-meta"></p>
+    <p class="stale" id="stale" hidden></p>
+  </header>
+
+  <div class="badges" id="badges" aria-label="Checks"></div>
+
+  <div class="length panel" id="length">
+    <p class="length-t" id="length-t"></p>
+    <div class="lbar" id="lbar"></div>
+    <ul class="legend" id="legend"></ul>
+  </div>
+
+  <section aria-labelledby="h-script">
+    <h2 id="h-script">Script</h2>
+    <ol class="beats" id="beats"></ol>
+  </section>
+
+  <section aria-labelledby="h-variants">
+    <h2 id="h-variants">Hook variants</h2>
+    <p class="note-u">Unordered: each is a different shape to test, in no order.</p>
+    <div class="vgrid" id="variants"></div>
+  </section>
+
+  <section aria-labelledby="h-refine">
+    <h2 id="h-refine">Refine with Claude</h2>
+    <div class="refine">
+      <div class="panel">
+        <h3>This but…</h3>
+        <p>Keeps every other line as it is.</p>
+        <div class="cmd" id="this-but"></div>
+      </div>
+      <div class="panel">
+        <h3>Replace one thing</h3>
+        <p>Swaps X for Y wherever it sits.</p>
+        <div class="cmd" id="replace"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="folds">
+    <details class="fold" id="fold-patterns">
+      <summary>Patterns used</summary>
+      <div class="fold-body"><ul class="rows" id="patterns"></ul></div>
+    </details>
+    <details class="fold" id="fold-proof">
+      <summary>PROOF rows used</summary>
+      <div class="fold-body"><ul class="rows" id="proof"></ul></div>
+    </details>
+    <details class="fold" id="fold-checks">
+      <summary>Check details</summary>
+      <div class="fold-body"><ul class="rows" id="checks"></ul></div>
+    </details>
+    <details class="fold" id="fold-hookpair">
+      <summary>Hook pair test (later)</summary>
+      <div class="fold-body about" id="hookpair"></div>
+    </details>
+    <details class="fold" id="fold-about">
+      <summary>About this page</summary>
+      <div class="fold-body about" id="about"></div>
+    </details>
+  </div>
+
+  <footer class="foot">
+    <p class="credit">Predicted average-brain response from <a href="https://github.com/facebookresearch/tribev2" target="_blank" rel="noopener noreferrer">TRIBE v2</a> (Meta FAIR, <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>). <a href="https://www.llama.com/llama3_2/license/" target="_blank" rel="noopener noreferrer">Built with Llama</a>. Non-commercial use only. Not a view forecast.</p>
+    <p>Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright &copy; Meta Platforms, Inc. All Rights Reserved. This report is not made, endorsed or supported by Meta.</p>
+  </footer>
+</div>
+
+<script type="application/json" id="data-page">__PAGE_JSON__</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  var OFF = '(off camera)';
+  function readJSON(id) {
+    var el = $(id);
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); } catch (e) { return null; }
+  }
+  function H(tag, cls, text, parent) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function S(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) { if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]); }
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function dated(el, text) {
+    String(text).split(/(\d{4}-\d{2}-\d{2})/).forEach(function (part, i) {
+      if (i % 2) H('span', 'nw', part, el); else if (part) el.appendChild(document.createTextNode(part));
+    });
+    return el;
+  }
+  function clock(s) {
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyText(text, btn, label) {
+    function done(ok) {
+      btn.textContent = ok ? 'Copied' : 'Select and copy';
+      setTimeout(function () { btn.textContent = label; }, 1600);
+    }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+        return;
+      }
+    } catch (e) { /* use the fallback */ }
+    done(fallbackCopy(text));
+  }
+  function clean(text) { return String(text || '').replace(/["“”]/g, "'").replace(/\s+/g, ' ').trim(); }
+  /* A command box: inputs, the command it builds, and a Copy button. */
+  function commandBox(box, fields, build) {
+    var inputs = fields.map(function (f) {
+      var lab = H('label', '', f.label, f.parent || box);
+      var inp = H('input', '', null, lab);
+      inp.type = 'text';
+      inp.placeholder = f.placeholder;
+      inp.setAttribute('autocomplete', 'off');
+      return inp;
+    });
+    var code = H('code', '', null, box);
+    var row = H('div', 'cmd-row', null, box);
+    var btn = H('button', 'btn', 'Copy command', row);
+    btn.type = 'button';
+    function update() { code.textContent = build(inputs.map(function (i) { return clean(i.value); })); }
+    inputs.forEach(function (i) { i.addEventListener('input', update); });
+    btn.addEventListener('click', function () { update(); copyText(code.textContent, btn, 'Copy command'); });
+    update();
+  }
+
+  var P = readJSON('data-page');
+  if (!P || !P.beats) {
+    var app = $('app');
+    app.textContent = '';
+    H('p', 'error-box', 'This page could not read its data.', app);
+    return;
+  }
+
+  /* ---------- header ---------- */
+  $('h-title').textContent = P.title;
+  document.title = P.title + ' · Script lab';
+  $('h-board').href = P.board_href;
+  $('h-patterns').href = P.patterns_href;
+  var meta = $('h-meta');
+  H('span', '', P.status, meta);
+  H('code', 'nw', P.id, H('span', '', null, meta));
+  if (P.updated) dated(H('span', '', null, meta), 'updated ' + P.updated);
+  dated(H('span', '', null, meta), P.checked ? 'checked ' + P.checked : 'not checked');
+  dated(H('span', '', null, meta), 'rendered ' + P.rendered);
+  if (P.stale) { $('stale').textContent = P.stale; $('stale').hidden = false; }
+
+  /* ---------- badges ---------- */
+  var MARK = { ok: '✓', fix: '!', look: '~', unchecked: '?', stale: '?' };
+  P.badges.forEach(function (b) {
+    var d = H('div', 'badge', null, $('badges'));
+    d.setAttribute('data-state', b.state);
+    var n = H('span', 'bn', null, d);
+    H('span', 'mark', MARK[b.state] || '', n).setAttribute('aria-hidden', 'true');
+    n.appendChild(document.createTextNode(b.name));
+    H('span', 'bt', b.state === 'stale' ? b.text + ' (before the last edit)' : b.text, d);
+  });
+
+  /* ---------- length bar: beats as segments, target as a line ---------- */
+  $('length-t').textContent = P.length_text;
+  var top = Math.max(P.est_s || 0, P.target_s || 0, 1) * 1.08;
+  var svg = S('svg', { role: 'img', 'aria-label': P.length_text }, $('lbar'));
+  function px(t) { return (t / top * 100).toFixed(2) + '%'; }
+  S('rect', { 'class': 'track', x: 0, y: 4, width: '100%', height: 16, rx: 4 }, svg);
+  P.beats.forEach(function (b, i) {
+    if (b.end > b.start) {
+      var r = S('rect', { 'class': i % 2 ? 's2' : 's1', x: px(b.start), y: 4, width: px(b.end - b.start), height: 16 }, svg);
+      S('title', {}, r).textContent = b.kind + ' ' + (b.chip || '');
+    }
+  });
+  if (P.target_s) {
+    S('line', { 'class': 'target', x1: px(P.target_s), x2: px(P.target_s), y1: 0, y2: 24 }, svg);
+    var tl = S('text', { 'class': 'ax', x: px(P.target_s), y: 37, 'text-anchor': 'middle' }, svg);
+    tl.textContent = 'target ' + clock(P.target_s);
+  }
+  var t0 = S('text', { 'class': 'ax', x: 0, y: 37 }, svg);
+  t0.textContent = '0:00';
+  var lg = $('legend');
+  P.beats.forEach(function (b, i) {
+    var li = H('li', '', null, lg);
+    H('i', i % 2 ? 's2' : 's1', null, li).setAttribute('aria-hidden', 'true');
+    li.appendChild(document.createTextNode(b.kind + (b.chip ? ' ' + b.chip : '')));
+  });
+
+  /* ---------- script: beats, then numbered margin notes ---------- */
+  function sayText(el, text) {
+    /* An off-camera line is set apart from the lines you say. */
+    String(text).split(/(?<=[.!?])\s+/).forEach(function (s, i) {
+      if (i) el.appendChild(document.createTextNode(' '));
+      if (s.toLowerCase().indexOf(OFF) === 0) H('span', 'off', s, el); else el.appendChild(document.createTextNode(s));
+    });
+  }
+  P.beats.forEach(function (b) {
+    var li = H('li', 'beat', null, $('beats'));
+    var main = H('div', '', null, li);
+    var h = H('div', 'beat-h', null, main);
+    H('span', 'kind', b.kind || 'beat', h);
+    if (b.name && b.name !== b.kind) H('span', 'bname', b.name, h);
+    if (b.chip) H('span', 'chip', b.chip, h);
+    if (b.notes.length) {
+      var mk = H('span', 'marks', null, h);
+      mk.setAttribute('aria-hidden', 'true');
+      b.notes.forEach(function (n) { H('span', 'num', n.n, mk); });
+    }
+    var say = H('p', 'say' + (b.say ? '' : ' empty'), null, main);
+    if (b.say) sayText(say, b.say); else say.textContent = 'Nothing to say here yet.';
+    if (b.on_screen) {
+      var sc = H('p', 'screen', null, main);
+      H('span', 'k', 'On screen', sc);
+      sc.appendChild(document.createTextNode(b.on_screen));
+    }
+    var side = H('div', 'side', null, li);
+    var notes = H('ol', 'notes', null, side);
+    notes.setAttribute('aria-label', 'Margin notes');
+    b.notes.forEach(function (n) {
+      var nl = H('li', '', null, notes);
+      H('span', 'num', n.n, nl);
+      H('span', '', n.text, nl);
+    });
+    if (!b.notes.length) H('li', 'none', 'No margin notes on this beat.', notes);
+    /* The pattern slot this beat fills sits in the margin, folded. */
+    if (b.slot) {
+      var sf = H('details', 'slot-fold', null, side);
+      H('summary', '', 'Slot', sf);
+      H('p', '', b.slot, sf);
+    }
+  });
+  if (!P.beats.length) H('li', 'empty', 'No beats yet.', $('beats'));
+
+  /* ---------- variants (unordered) ---------- */
+  P.variants.forEach(function (v) {
+    var card = H('div', 'var', null, $('variants'));
+    H('p', 'var-shape', v.shape + (v.family ? ' · ' + v.family : ''), card);
+    var line = H('p', 'var-line', null, card);
+    sayText(line, v.line);
+    H('p', 'var-why', v.why, card);
+    var pat = H('p', 'var-pat', null, card);
+    if (v.pattern_href) { var a = H('a', '', v.pattern, pat); a.href = v.pattern_href; } else pat.textContent = v.pattern;
+    var btn = H('button', 'btn', 'This but…', card);
+    btn.type = 'button';
+    btn.setAttribute('aria-expanded', 'false');
+    var box = H('div', 'cmd', null, card);
+    box.hidden = true;
+    commandBox(box, [{ label: 'This but…', placeholder: 'shorter, and the number first' }], function (vals) {
+      return v.cmd + (vals[0] || '<your change>');
+    });
+    btn.addEventListener('click', function () {
+      box.hidden = !box.hidden;
+      btn.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
+      if (!box.hidden) box.querySelector('input').focus();
+    });
+  });
+  if (!P.variants.length) H('p', 'empty', 'No hook variants yet.', $('variants'));
+
+  /* ---------- refine: "This but..." and "Replace X with Y" ---------- */
+  commandBox($('this-but'), [{ label: 'This but…', placeholder: 'with the proof beat before the setup' }], function (vals) {
+    return P.commands.this_but + (vals[0] || '<your change>');
+  });
+  var pair = H('div', 'pair', null, $('replace'));
+  commandBox($('replace'), [
+    { label: 'Replace', placeholder: 'a phrase in the draft', parent: pair },
+    { label: 'with', placeholder: 'what to say instead', parent: pair }
+  ], function (vals) {
+    return P.commands.replace + '"' + (vals[0] || 'X') + '" with "' + (vals[1] || 'Y') + '"';
+  });
+
+  /* ---------- folds ---------- */
+  P.patterns.forEach(function (p) {
+    var li = H('li', '', null, $('patterns'));
+    H('span', 'k', p.kind, li);
+    if (p.href) { var a = H('a', '', p.line, li); a.href = p.href; } else li.appendChild(document.createTextNode(p.line));
+  });
+  if (!P.patterns.length) H('li', 'empty', 'No pattern ids on this draft.', $('patterns'));
+  P.proof.forEach(function (r) {
+    var li = H('li', '', null, $('proof'));
+    H('span', 'k', r.row, li);
+    li.appendChild(document.createTextNode(r.fact));
+    H('span', 'sub', 'numbers used: ' + r.numbers + (r.caveat ? ' · caveat: ' + r.caveat : ''), li);
+  });
+  if (!P.proof.length) H('li', 'empty', 'No PROOF rows: this draft says no numbers.', $('proof'));
+  var ck = $('checks');
+  P.hits.forEach(function (h) {
+    var li = H('li', '', null, ck);
+    H('span', 'k', 'copy', li);
+    li.appendChild(document.createTextNode((h.run ? '"' + h.run + '" ' : '') + 'in ' + h.where));
+    H('span', 'sub', h.source, li);
+  });
+  P.issues.forEach(function (it) {
+    var li = H('li', '', null, ck);
+    H('span', 'k', it.check + ' ' + (it.level === 'error' ? 'to fix' : 'to look at'), li);
+    li.appendChild(document.createTextNode(it.message));
+    H('span', 'sub', it.where, li);
+  });
+  if (!ck.children.length) H('li', 'empty', P.badges[0].state === 'unchecked' ? 'Not checked yet: ' + P.commands.check : 'Nothing to fix or look at.', ck);
+  H('p', 'empty', 'Run again after any edit: ' + P.commands.check + ', then ' + P.commands.render + '.', ck.parentNode);
+  P.hook_pair.forEach(function (t) { H('p', '', t, $('hookpair')); });
+  P.about.forEach(function (t) { H('p', '', t, $('about')); });
+
+  document.documentElement.setAttribute('data-rendered', 'ok');
+})();
+</script>
+</body>
+</html>

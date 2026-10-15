@@ -1,0 +1,177 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:tribe:hosted:spend:v1",
+ "title": "Tribe hosted page: spend",
+ "description": "This month's spend for the Jobs panel: Modal from backend/ledger.py, Apify from its usage API (null when it could not be read). Caps are the runner's, not the site's (D26).",
+ "x-kind": "spend",
+ "x-key": "^\\d{4}-(0[1-9]|1[0-2])$",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "v",
+  "month",
+  "modal_usd",
+  "modal_cap_usd",
+  "apify_usd",
+  "apify_cap_usd",
+  "as_of"
+ ],
+ "properties": {
+  "v": {
+   "type": "integer",
+   "const": 1
+  },
+  "month": {
+   "type": "string",
+   "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+  },
+  "modal_usd": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1000
+    }
+   ]
+  },
+  "modal_cap_usd": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 1000
+  },
+  "apify_usd": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1000
+    }
+   ]
+  },
+  "apify_cap_usd": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 1000
+  },
+  "as_of": {
+   "$ref": "#/$defs/datetime"
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 600,
+   "not": {
+    "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+   },
+   "description": "Display text: no laptop paths, file names, private folders or quoted speech."
+  },
+  "text_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/text"
+    }
+   ]
+  },
+  "date": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+  },
+  "date_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/date"
+    }
+   ]
+  },
+  "datetime": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+  },
+  "datetime_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/datetime"
+    }
+   ]
+  },
+  "shortcode": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{5,20}$"
+  },
+  "handle": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9._]{1,30}$"
+  },
+  "handle_at": {
+   "type": "string",
+   "pattern": "^@[A-Za-z0-9._]{1,30}$"
+  },
+  "ig_url": {
+   "type": "string",
+   "maxLength": 200,
+   "pattern": "^https://www\\.instagram\\.com/([A-Za-z0-9._]{1,30}/)?(reel|reels|p)/[A-Za-z0-9_-]{5,40}/?$"
+  },
+  "chip": {
+   "type": "string",
+   "pattern": "^\\d{1,2}:[0-5]\\d(-\\d{1,2}:[0-5]\\d)?$"
+  },
+  "chip_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/chip"
+    }
+   ]
+  },
+  "draft_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$"
+  },
+  "pattern_id": {
+   "type": "string",
+   "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+  },
+  "job_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-\\d{6}-[0-9a-f]{8}$"
+  },
+  "seconds": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 3600
+  },
+  "count": {
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 100000
+  },
+  "line_key": {
+   "type": "string",
+   "enum": [
+    "seeing",
+    "hearing",
+    "language",
+    "attention"
+   ]
+  }
+ }
+}

@@ -1,0 +1,397 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark mode follows the .dark class (next-themes, set before paint) and, before any class is
+   set, the system preference (see the tokens below). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ tokens
+   One neutral palette plus one indigo accent, used only for selection, focus and
+   "Claude suggested". 4px grid (Tailwind's default spacing step), rows 36px (44px on touch),
+   radius 6 on controls and 8 on cards, borders not shadows (shadows only on popovers and the
+   command palette).
+
+   Layer colours (round 2, checked with the dataviz palette validator): each layer gets one mark
+   colour for dots, lines and value fills. Text always stays ink, and no layer colour is ever a
+   status (teal is the counts layer, never "good") or a background fill behind text.
+   - brain: a diverging pair around the model's zero, cool blue "lower" and warm orange
+     "higher" (3D map, lane fills, sparklines, FLAT cool, HIGH warm); its identity mark is a
+     split cool/warm dot in a dotted ring. The four lines get icons, never their own hues.
+   - counts: teal (COUNT tag, "this reel" in the counts plot, the patterns outlier bar).
+   - shape: indigo (SHAPE tag, suggested chips); indigo also stays selection and focus.
+   - facts: ink. */
+:root {
+  --canvas: #fafafa;
+  --surface: #ffffff;
+  --subtle: #f4f4f5;
+  --line: #e4e4e7;
+  --text: #18181b;
+  --text-muted: #71717a;
+  --indigo: #4f5bd5;
+  --indigo-soft: color-mix(in srgb, var(--indigo) 10%, transparent);
+  --danger: #b42318;
+
+  /* shadcn names, mapped onto the tokens above */
+  --background: var(--canvas);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--text);
+  --primary-foreground: var(--surface);
+  --secondary: var(--subtle);
+  --secondary-foreground: var(--text);
+  --muted: var(--subtle);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--subtle);
+  --accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--indigo);
+  --chart-1: var(--text);
+  --chart-2: var(--text-muted);
+  --chart-3: var(--line);
+  --chart-4: var(--subtle);
+  --chart-5: var(--indigo);
+  --radius: 0.5rem;
+  --sidebar: var(--canvas);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--text);
+  --sidebar-primary-foreground: var(--surface);
+  --sidebar-accent: var(--subtle);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--indigo);
+
+  --brain-cool: #2a78d6;
+  --brain-warm: #eb6834;
+  --brain-cool-soft: color-mix(in srgb, var(--brain-cool) 22%, transparent);
+  --brain-warm-soft: color-mix(in srgb, var(--brain-warm) 22%, transparent);
+  /* "near 0": the grey of the brain below the colour threshold (legend swatch). */
+  --brain-near: #c4c4cc;
+  --counts: #1baf7a;
+  --shape: #4f5bd5;
+  --facts: var(--text);
+  /* The playhead's 2px halo, so it reads over warm and cool fills alike. */
+  --playhead-halo: var(--surface);
+
+  /* Motion: CSS, the browser animation API and React <ViewTransition>, no library. Counts never
+     animate; everything collapses under prefers-reduced-motion (block at the end of this file). */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 500ms;
+  --motion-play: 1000ms;
+  --motion-stagger: 60ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shell-sidebar: 232px;
+  --shell-topbar: 48px;
+  --shell-tabbar: 56px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --canvas: #0b0b0c;
+    --surface: #141416;
+    --subtle: #1c1c1f;
+    --line: #27272a;
+    --text: #ededed;
+    --text-muted: #a1a1aa;
+    --indigo: #7c86f0;
+    --danger: #f97066;
+    --brain-cool: #3987e5;
+    --brain-warm: #d95926;
+    --brain-near: #4a4a52;
+    --counts: #199e70;
+    --shape: #7c86f0;
+    color-scheme: dark;
+  }
+}
+
+.dark {
+  --canvas: #0b0b0c;
+  --surface: #141416;
+  --subtle: #1c1c1f;
+  --line: #27272a;
+  --text: #ededed;
+  --text-muted: #a1a1aa;
+  --indigo: #7c86f0;
+  --danger: #f97066;
+  --brain-cool: #3987e5;
+  --brain-warm: #d95926;
+  --brain-near: #4a4a52;
+  --counts: #199e70;
+  --shape: #7c86f0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Only our tokens: the default palette is cleared, so no red/green status fills can creep in. */
+  --color-*: initial;
+  --color-black: #000;
+  --color-white: #fff;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-fg: var(--text);
+  --color-indigo-accent: var(--indigo);
+  --color-indigo-soft: var(--indigo-soft);
+  /* Layer marks (dots, lines, value fills; never text, never a status). */
+  --color-brain-cool: var(--brain-cool);
+  --color-brain-warm: var(--brain-warm);
+  --color-brain-cool-soft: var(--brain-cool-soft);
+  --color-brain-warm-soft: var(--brain-warm-soft);
+  --color-brain-near: var(--brain-near);
+  --color-counts: var(--counts);
+  --color-shape: var(--shape);
+  --color-facts: var(--facts);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Geist 13-14px for UI, Geist Mono 12px for chips, commands and layer tags. */
+  --text-ui: 0.8125rem;
+  --text-ui--line-height: 1.25rem;
+  --text-mono: 0.75rem;
+  --text-mono--line-height: 1rem;
+
+  /* Controls 6px, cards 8px. */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 12px;
+  --radius-4xl: 9999px;
+
+  --animate-lane-reveal: lane-reveal var(--motion-slow) var(--motion-ease) both;
+  --animate-appear: appear var(--motion-base) var(--motion-ease) both;
+  --animate-brain-in: appear 400ms var(--motion-ease) both;
+  --animate-readout-in: readout-in var(--motion-base) var(--motion-ease) both;
+
+  --spacing-row: 36px;
+  --spacing-touch: 44px;
+  --spacing-sidebar: var(--shell-sidebar);
+  --spacing-topbar: var(--shell-topbar);
+  --spacing-tabbar: var(--shell-tabbar);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-sm text-foreground antialiased;
+    font-feature-settings: "tnum" 0;
+  }
+  ::selection {
+    background: var(--indigo-soft);
+  }
+  :focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 2px;
+  }
+}
+
+/* ------------------------------------------------------------------ layer encoding
+   counts = solid sans with tabular numbers, facts = Geist Mono, shape = chip (outlined while
+   suggested, filled once accepted), brain = dotted. Every rendered value carries data-layer. */
+@layer components {
+  [data-layer="counts"] {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+  [data-layer="facts"] {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    line-height: var(--text-mono--line-height);
+  }
+  [data-layer="brain"][data-encoding="text"] {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--text-muted);
+    text-underline-offset: 3px;
+  }
+  .brain-line {
+    stroke-dasharray: 1 3;
+    stroke-linecap: round;
+  }
+  .counts-line {
+    stroke-dasharray: none;
+  }
+  .median-line {
+    stroke-dasharray: 4 3;
+  }
+}
+
+/* ------------------------------------------------------------------ touch
+   A 44px hit area on touch (pointer: coarse) for small controls that keep their look: time
+   chips, margin-note ticks, inline links, segmented buttons. A transparent ::before, centred
+   on the control, at least 44px each way; the control itself does not move or grow. */
+@utility tap-target {
+  @variant pointer-coarse {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ motion
+   Keyframes and small helpers. Lanes draw in left to right with a clip-path reveal, staggered by
+   --lane-index (never a dash offset, so the dotted brain lines keep their dots). Bars grow in once
+   with @starting-style (never on elements a test measures). The playhead glides by what moved it
+   (data-glide = the ReelTime source): 1000 ms linear while playing, 120 ms on keys and chips,
+   nothing while dragging. Time readouts slide in when they change (key them on the second). */
+@keyframes lane-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes readout-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer components {
+  .lane-reveal {
+    animation: lane-reveal var(--motion-slow) var(--motion-ease) both;
+    animation-delay: calc(var(--lane-index, 0) * var(--motion-stagger));
+  }
+  .grow-x {
+    transform-origin: left center;
+    transition: transform var(--motion-slow) var(--motion-ease);
+  }
+  .glide {
+    transition-property: left, transform;
+    transition-duration: var(--glide-duration, 0ms);
+    transition-timing-function: var(--glide-ease, linear);
+  }
+  [data-glide="play"] {
+    --glide-duration: var(--motion-play);
+    --glide-ease: linear;
+  }
+  [data-glide="key"],
+  [data-glide="chip"] {
+    --glide-duration: var(--motion-fast);
+    --glide-ease: var(--motion-ease);
+  }
+  [data-glide="drag"] {
+    --glide-duration: 0ms;
+  }
+  .readout-in {
+    animation: readout-in var(--motion-base) var(--motion-ease) both;
+  }
+  /* Counts never animate: a count is a scraped snapshot, not a moving value. */
+  [data-layer="counts"],
+  [data-layer="counts"] * {
+    animation: none;
+    transition: none;
+  }
+}
+
+@starting-style {
+  .grow-x {
+    transform: scaleX(0);
+  }
+}
+
+/* Route changes and Suspense reveals crossfade through the unnamed <ViewTransition> in the app
+   shell. Clicks pass through to the live page while it runs. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 180ms;
+  animation-timing-function: var(--motion-ease);
+}
+
+/* ------------------------------------------------------------------ reduced motion
+   One switch for every CSS animation and transition (tw-animate-css, animate-pulse, the helpers
+   above) and the view transitions. JavaScript motion reads lib/use-reduced-motion.ts. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

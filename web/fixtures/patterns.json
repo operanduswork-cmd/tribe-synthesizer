@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "stamp": "3 patterns · from the swipe file as of 2026-10-09 · shapes and public post data only",
+ "since": "2026-10-02",
+ "notes": [
+  "Every pattern rests on few reels (under 5 on a side): shapes to test in your draft, not proof."
+ ],
+ "lead": [
+  {
+   "anchor": "p-hook-caption-cold-open-question",
+   "kind": "hook",
+   "text": "Hook: cold open question (caption line 1) · outliers 3/4 vs normal 5/31"
+  }
+ ],
+ "population": [
+  "Caption level: 4 outliers vs 31 normal reels from @demo_creator_a, @demo_creator_b, @demo_creator_c. Left out: pinned 1, paid 1.",
+  "Spoken level: 1 tagged outlier and 0 tagged normal reels. A comparison starts at 3 tagged normal reels of the same creators. Left out: discounted 1."
+ ],
+ "tabs": [
+  {
+   "key": "hook",
+   "label": "Hooks",
+   "n": 1,
+   "new": 0
+  },
+  {
+   "key": "structure",
+   "label": "Structures",
+   "n": 1,
+   "new": 0
+  },
+  {
+   "key": "cta",
+   "label": "CTAs",
+   "n": 1,
+   "new": 0
+  },
+  {
+   "key": "format",
+   "label": "Formats",
+   "n": 0,
+   "new": 0
+  }
+ ],
+ "patterns": [
+  {
+   "id": "hook.caption.cold-open-question",
+   "anchor": "p-hook-caption-cold-open-question",
+   "kind": "hook",
+   "level": "caption",
+   "label": "cold open question",
+   "family": "Irony / confession / question",
+   "level_tag": "caption line 1",
+   "slot": "[A question the viewer has asked themself this week]",
+   "contrast": "outliers 3/4 vs normal 5/31",
+   "by_creator": [
+    "@demo_creator_a outliers 2/2 vs normal 2/16",
+    "@demo_creator_b outliers 1/2 vs normal 3/15"
+   ],
+   "bars": {
+    "o": [
+     3,
+     4
+    ],
+    "m": [
+     5,
+     31
+    ]
+   },
+   "few": true,
+   "suggested": false,
+   "new": false,
+   "zero": false,
+   "lead": true,
+   "show_new": false,
+   "show_few": false,
+   "same": null,
+   "completeness": null,
+   "sources": [
+    {
+     "sc": "DEMO0000001",
+     "who": "@demo_creator_a",
+     "url": "https://www.instagram.com/reel/DEMO0000001/",
+     "in_swipe": true,
+     "counts": "61,200 plays · 4.9x own median (18 reels)"
+    },
+    {
+     "sc": "DEMO0000104",
+     "who": "@demo_creator_b",
+     "url": "https://www.instagram.com/reel/DEMO0000104/",
+     "in_swipe": false,
+     "counts": "17,300 plays · 2.1x own median (22 reels)"
+    }
+   ],
+   "sources_empty": "No outlier in the counted reels carries it. Only normal reels do.",
+   "uses": "you used it: 1 draft",
+   "use_links": [
+    {
+     "id": "20261009-demo-tool-explainer",
+     "known": true
+    }
+   ],
+   "seen": "seen 2026-08-02 to 2026-09-20",
+   "recreate": "/script new try-cold-open-question --pattern hook.caption.cold-open-question"
+  },
+  {
+   "id": "structure.spoken.hook-setup-demo-payoff-cta",
+   "anchor": "p-structure-spoken-hook-setup-demo-payoff-cta",
+   "kind": "structure",
+   "level": "spoken",
+   "label": "hook → setup → demo → payoff → cta",
+   "family": "Beat sequence",
+   "level_tag": "spoken, tagged",
+   "slot": "Hook, then setup, then demo, then payoff, then the ask",
+   "contrast": "1 of 1 tagged outliers · outliers only, no comparison yet",
+   "by_creator": [
+    "@demo_creator_a 1 of 1 tagged outliers · outliers only, no comparison yet"
+   ],
+   "bars": null,
+   "few": true,
+   "suggested": true,
+   "new": false,
+   "zero": false,
+   "lead": false,
+   "show_new": false,
+   "show_few": false,
+   "same": null,
+   "completeness": "completeness unknown: only the reels tagged so far",
+   "sources": [
+    {
+     "sc": "DEMO0000001",
+     "who": "@demo_creator_a",
+     "url": "https://www.instagram.com/reel/DEMO0000001/",
+     "in_swipe": true,
+     "counts": "61,200 plays · 4.9x own median (18 reels)"
+    }
+   ],
+   "sources_empty": "No outlier in the counted reels carries it.",
+   "uses": "you used it: never",
+   "use_links": [],
+   "seen": "seen 2026-09-20",
+   "recreate": "/script new try-hook-setup-demo-payoff-cta --pattern structure.spoken.hook-setup-demo-payoff-cta"
+  },
+  {
+   "id": "cta.caption.link-in-bio",
+   "anchor": "p-cta-caption-link-in-bio",
+   "kind": "cta",
+   "level": "caption",
+   "label": "link in bio",
+   "family": "CTA",
+   "level_tag": "caption",
+   "slot": "The [asset] sits behind the link in the bio",
+   "contrast": "outliers 0/4 vs normal 6/31",
+   "by_creator": [
+    "@demo_creator_c outliers 0/0 vs normal 6/12"
+   ],
+   "bars": {
+    "o": [
+     0,
+     4
+    ],
+    "m": [
+     6,
+     31
+    ]
+   },
+   "few": true,
+   "suggested": false,
+   "new": false,
+   "zero": true,
+   "lead": false,
+   "show_new": false,
+   "show_few": false,
+   "same": null,
+   "completeness": null,
+   "sources": [],
+   "sources_empty": "No outlier in the counted reels carries it. Only normal reels do.",
+   "uses": "you used it: never",
+   "use_links": [],
+   "seen": "seen 2026-07-21 to 2026-09-12",
+   "recreate": null
+  }
+ ]
+}

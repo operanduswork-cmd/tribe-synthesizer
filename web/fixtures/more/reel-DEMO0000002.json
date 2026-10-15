@@ -1,0 +1,82 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "shortcode": "DEMO0000002",
+ "owner": "demo_creator_b",
+ "url": "https://www.instagram.com/reel/DEMO0000002/",
+ "posted": "2026-09-29",
+ "card": {
+  "mode": "facts",
+  "counts": {
+   "text": "@demo_creator_b · 0:27 · 6,900 plays · 0.8x own median (22 reels) · gated call to action · under 2x: taste, not proof · fresh when pulled · as of 2026-09-30",
+   "shortcode": "DEMO0000002"
+  },
+  "lines": [
+   {
+    "tag": "HOOK",
+    "time": "0:01",
+    "t": 1,
+    "text": "hook shape not tagged yet · text on screen at start: no · first word at"
+   },
+   {
+    "tag": "BEATS",
+    "time": null,
+    "t": null,
+    "text": "beats: not tagged yet"
+   },
+   {
+    "tag": "PACE",
+    "time": "0:24",
+    "t": 24,
+    "text": "about 3 words a second · call to action: comment keyword"
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: end your draft on one call to action (comment keyword) and nothing after it."
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: in your draft, say the first word inside the first second, with no silent intro."
+   }
+  ],
+  "footnote": null
+ },
+ "discount": null,
+ "recreate": "/script new from-DEMO0000002",
+ "beats": [],
+ "beats_empty": "No beats tagged yet. Claude suggests them, and you accept them with python -m strategist.reel accept DEMO0000002 beats.",
+ "tribe": null,
+ "stamps": {
+  "counts": "counts from Apify, as of 2026-09-30",
+  "shape": "shape suggested by Claude, accepted by you: 1 of 1 labels",
+  "brain": "no TRIBE run",
+  "page": "page made by strategist.hosted on 2026-10-09"
+ },
+ "facts": [
+  {
+   "label": "Length",
+   "value": "0:27"
+  },
+  {
+   "label": "First word",
+   "value": "at 0:01"
+  },
+  {
+   "label": "Pace",
+   "value": "about 3 words a second"
+  },
+  {
+   "label": "Call to action",
+   "value": "comment keyword at about 0:24"
+  },
+  {
+   "label": "Text at 0:00",
+   "value": "no"
+  }
+ ],
+ "local_cmd": "python -m strategist.render reel DEMO0000002 --open"
+}

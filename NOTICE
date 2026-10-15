@@ -1,0 +1,16 @@
+This project uses third-party work:
+
+1. TRIBE v2 by Meta FAIR
+   Weights: https://huggingface.co/facebook/tribev2 (CC BY-NC 4.0)
+   Code: https://github.com/facebookresearch/tribev2 (CC BY-NC 4.0)
+   Changes: no changes to the weights. See docs/GOTCHAS.md for the version pins and the
+   WhisperX int8 setting used off-CUDA.
+
+2. Llama 3.2 3B by Meta
+   Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright (c) Meta Platforms, Inc.
+   All Rights Reserved. Built with Llama. Get the licence text from the official Meta/Hugging Face
+   page and keep a copy in LICENSES/.
+
+3. Other libraries and atlases: see LICENSES/CREDITS.md.
+
+Not affiliated with or endorsed by Meta.

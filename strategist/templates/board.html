@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Swipe file</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f3f3f0;
+  --surface: #fcfcfb;
+  --surface-2: #f4f3ef;
+  --border: rgba(11, 11, 11, 0.09);
+  --ink: #141413;
+  --ink-2: #4e4d49;
+  --muted: #6f6d67;
+  --hair: #e3e2db;
+  --axis: #c3c2b7;
+  --chip: #ecebe6;
+  --chip-ink: #3c3b37;
+  --bar: #4e4d49;
+  --focus: #2a6fc4;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0e0e0d;
+    --surface: #191918;
+    --surface-2: #20201e;
+    --border: rgba(255, 255, 255, 0.09);
+    --ink: #f2f1ec;
+    --ink-2: #c6c5bc;
+    --muted: #9b998f;
+    --hair: #2d2d2a;
+    --axis: #4a4944;
+    --chip: #2a2a27;
+    --chip-ink: #d8d7cf;
+    --bar: #c6c5bc;
+    --focus: #5b9be8;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e0d;
+  --surface: #191918;
+  --surface-2: #20201e;
+  --border: rgba(255, 255, 255, 0.09);
+  --ink: #f2f1ec;
+  --ink-2: #c6c5bc;
+  --muted: #9b998f;
+  --hair: #2d2d2a;
+  --axis: #4a4944;
+  --chip: #2a2a27;
+  --chip-ink: #d8d7cf;
+  --bar: #c6c5bc;
+  --focus: #5b9be8;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2 { margin: 0; line-height: 1.3; }
+p { margin: 0; }
+button, select, input { font: inherit; color: inherit; }
+code { font: 12.5px/1.4 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 40px; }
+
+/* Header and the manual-refresh stamp */
+.head { padding: 4px 4px 0; }
+.head h1 { font-size: 22px; font-weight: 650; overflow-wrap: anywhere; }
+.nav { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13.5px; font-weight: 600; }
+.stamp { margin-top: 6px; font-size: 13px; color: var(--ink-2); overflow-wrap: anywhere; }
+.stamp > span + span::before { content: "\00b7"; margin: 0 8px; color: var(--axis); }
+
+/* Toolbar: view toggle and sort, then filters */
+.toolbar { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: end; gap: 10px 16px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { appearance: none; border: 0; background: transparent; padding: 6px 14px; cursor: pointer; font-size: 13.5px; font-weight: 600; min-height: 34px; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
+.ctl { display: grid; gap: 3px; font-size: 12px; color: var(--muted); font-weight: 600; min-width: 0; }
+.ctl select {
+  appearance: auto; border: 1px solid var(--border); background: var(--surface); border-radius: 8px;
+  padding: 5px 8px; font-size: 13.5px; font-weight: 500; color: var(--ink); min-height: 34px; width: 100%; min-width: 0;
+}
+.sort { min-width: 0; flex: 1 1 200px; max-width: 280px; }
+.filters { margin-top: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.filters > summary { cursor: pointer; list-style: none; padding: 9px 12px; font-size: 13.5px; font-weight: 650; display: flex; gap: 8px; align-items: center; }
+.filters > summary::-webkit-details-marker { display: none; }
+.filters > summary::before { content: "\25B8"; color: var(--muted); font-size: 12px; width: 10px; flex: none; }
+.filters[open] > summary::before { content: "\25BE"; }
+.filter-grid {
+  display: grid; gap: 10px 12px; align-items: end; padding: 0 12px 12px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+}
+.nw { white-space: nowrap; }
+.chk { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; min-height: 34px; }
+.chk input { width: 16px; height: 16px; accent-color: var(--ink-2); }
+.linkbtn { appearance: none; border: 0; background: none; padding: 0; cursor: pointer; font-size: 13px; color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; justify-self: start; min-height: 34px; }
+.shown { margin: 12px 4px 0; font-size: 13px; color: var(--muted); }
+
+/* Cards */
+.cards { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.rc {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  display: grid; gap: 8px; align-content: start; min-width: 0;
+}
+.rc-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
+.rc-handle { font-weight: 700; font-size: 16px; text-decoration: none; overflow-wrap: anywhere; }
+.rc-handle:hover { text-decoration: underline; }
+.rc-meta { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rc-counts { font-size: 14.5px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.rc-asof { display: block; font-size: 12px; color: var(--muted); }
+.rc-shape { font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.rc-note { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.peer svg { display: block; width: 100%; height: 20px; overflow: visible; }
+.peer .track { stroke: var(--hair); stroke-width: 2; }
+.peer .tick { stroke: var(--bar); stroke-width: 1.5; opacity: 0.45; }
+.peer .mid { stroke: var(--bar); stroke-width: 2; }
+.peer .me { fill: var(--ink); stroke: var(--surface); stroke-width: 2; }
+.peer-cap { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.badges { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font-size: 12px; padding: 1px 9px; border-radius: 999px; background: var(--chip); color: var(--chip-ink); border: 1px solid var(--border); }
+.badge.read { background: transparent; }
+.rc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 2px; }
+.btn {
+  appearance: none; border: 1px solid var(--border); background: var(--surface-2); border-radius: 8px;
+  padding: 5px 12px; cursor: pointer; font-size: 13px; font-weight: 600; min-height: 32px; text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.btn:hover { background: var(--chip); }
+.btn.primary { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.ext { font-size: 13px; }
+.recreate { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
+.recreate code { flex: 1 1 200px; min-width: 0; color: var(--ink-2); }
+
+/* Table */
+.table-wrap { margin-top: 10px; overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 650; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; white-space: nowrap; }
+th.num { text-align: right; }
+td.wrapc { min-width: 140px; }
+td.date { white-space: nowrap; }
+@media (max-width: 640px) { .opt { display: none; } }
+
+/* Folds */
+.folds { margin-top: 18px; display: grid; gap: 8px; }
+details.fold { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+details.fold > summary {
+  cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 650; font-size: 15px;
+  display: flex; align-items: center; gap: 8px; border-radius: 12px;
+}
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "\25B8"; color: var(--muted); font-size: 13px; width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\25BE"; }
+details.fold > summary:hover { background: var(--surface-2); }
+.fold-body { padding: 0 16px 16px; min-width: 0; }
+.rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.rows li { font-size: 13.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.rows .k { font-weight: 650; color: var(--ink); }
+.rows .sub { display: block; color: var(--muted); font-size: 12.5px; }
+.creator { border-top: 1px solid var(--hair); padding-top: 10px; }
+.creator:first-child { border-top: 0; padding-top: 0; }
+.creator ul { margin: 4px 0 0; padding-left: 18px; }
+.about p { max-width: 72ch; font-size: 14px; color: var(--ink-2); }
+.about p + p { margin-top: 10px; }
+.note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+
+/* Footer */
+.foot { margin-top: 24px; padding: 16px 4px 0; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+.foot p + p { margin-top: 6px; }
+.foot .credit { color: var(--ink-2); font-size: 13px; }
+.error-box { padding: 16px; border: 1px solid var(--axis); border-radius: 8px; background: var(--surface); }
+.empty { padding: 16px; border: 1px dashed var(--axis); border-radius: 12px; color: var(--ink-2); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header class="head">
+    <h1 id="h-line">Swipe file</h1>
+    <p class="stamp" id="h-stamp"></p>
+    <nav class="nav" id="h-nav" aria-label="Swipe pages"></nav>
+  </header>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" id="v-cards" aria-pressed="true">Cards</button>
+      <button type="button" id="v-table" aria-pressed="false">Table</button>
+    </div>
+    <label class="ctl sort">Sort<select id="sort"></select></label>
+  </div>
+
+  <details class="filters" id="filters" open>
+    <summary id="f-sum">Filters</summary>
+    <div class="filter-grid" role="group" aria-label="Filters">
+    <label class="chk"><input type="checkbox" id="f-two">2x+ own median only</label>
+    <label class="ctl">Hook shape<select id="f-hook"></select></label>
+    <label class="ctl">Format<select id="f-format"></select></label>
+    <label class="ctl">Length<select id="f-length"></select></label>
+    <label class="ctl">Flag<select id="f-flag"></select></label>
+    <label class="ctl">TRIBE read<select id="f-tribe"></select></label>
+    <button type="button" class="linkbtn" id="f-clear">Clear filters</button>
+    </div>
+  </details>
+
+  <p class="shown" id="shown" aria-live="polite"></p>
+  <ul class="cards" id="cards"></ul>
+  <div class="table-wrap" id="table" hidden>
+    <table>
+      <thead>
+        <tr>
+          <th>Handle</th><th class="num opt">Length</th><th class="opt">Posted</th>
+          <th class="num">Plays</th><th class="num">x own median</th>
+          <th>Hook shape</th><th class="opt">Format</th><th class="opt">CTA</th><th>Flags</th>
+          <!-- whether a deep read exists, never its output -->
+          <th class="opt">TRIBE read</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="folds">
+    <details class="fold" id="fold-creators">
+      <summary>Creators</summary>
+      <div class="fold-body"><div class="rows" id="creators"></div></div>
+    </details>
+    <details class="fold" id="fold-fetch">
+      <summary>Fetch log</summary>
+      <div class="fold-body">
+        <ul class="rows" id="fetch"></ul>
+        <p class="note" id="fetch-total"></p>
+      </div>
+    </details>
+    <details class="fold" id="fold-about">
+      <summary>About this data</summary>
+      <div class="fold-body about" id="about"></div>
+    </details>
+  </div>
+
+  <footer class="foot">
+    <p class="credit">Predicted average-brain response from <a href="https://github.com/facebookresearch/tribev2" target="_blank" rel="noopener noreferrer">TRIBE v2</a> (Meta FAIR, <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>). <a href="https://www.llama.com/llama3_2/license/" target="_blank" rel="noopener noreferrer">Built with Llama</a>. Non-commercial use only. Not a view forecast.</p>
+    <p>Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright &copy; Meta Platforms, Inc. All Rights Reserved. This report is not made, endorsed or supported by Meta.</p>
+  </footer>
+</div>
+
+<script type="application/json" id="data-page">__PAGE_JSON__</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  function readJSON(id) {
+    var el = $(id);
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); } catch (e) { return null; }
+  }
+  function H(tag, cls, text, parent) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function S(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) { if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]); }
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  /* Text with every yyyy-mm-dd date kept on one line. */
+  function dated(el, text) {
+    String(text).split(/(\d{4}-\d{2}-\d{2})/).forEach(function (part, i) {
+      if (i % 2) H('span', 'nw', part, el); else if (part) el.appendChild(document.createTextNode(part));
+    });
+    return el;
+  }
+  function store(key, val) {
+    try { if (val === undefined) return window.localStorage.getItem(key); window.localStorage.setItem(key, val); } catch (e) { /* storage off */ }
+    return null;
+  }
+
+  var P = readJSON('data-page');
+  if (!P || !P.reels) {
+    var app = $('app');
+    app.textContent = '';
+    H('p', 'error-box', 'This page could not read its data.', app);
+    return;
+  }
+
+  /* ---------- header ---------- */
+  $('h-line').textContent = P.header;
+  var st = $('h-stamp');
+  P.stamp.forEach(function (t) { dated(H('span', '', null, st), t); });
+  dated(H('span', '', null, st), 'rendered ' + P.rendered);
+  (P.nav || []).forEach(function (n) { var a = H('a', '', n.text, $('h-nav')); a.href = n.href; });
+  if (window.matchMedia && window.matchMedia('(max-width: 640px)').matches) $('filters').open = false;
+
+  /* ---------- controls ---------- */
+  function fillSelect(sel, opts) {
+    opts.forEach(function (o) {
+      var op = H('option', '', o[1], sel);
+      op.value = o[0];
+    });
+  }
+  /* Sorts come from the page data: only keys render.py allowed (counts, dates, length, handle). */
+  var SORTS = {};
+  P.sorts.forEach(function (s) { SORTS[s.key] = s; });
+  fillSelect($('sort'), P.sorts.map(function (s) { return [s.key, s.label]; }));
+  var any = [['', 'any']];
+  fillSelect($('f-hook'), any.concat(P.options.hook.map(function (v) { return [v, v]; }), [['-', 'not tagged']]));
+  fillSelect($('f-format'), any.concat(P.options.format.map(function (v) { return [v, v]; }), [['-', 'not tagged']]));
+  fillSelect($('f-length'), any.concat(P.lengths.map(function (v) { return [v, v]; })));
+  fillSelect($('f-flag'), any.concat(P.options.flags.map(function (f) { return [f.key, f.label]; }), [['none', 'no flags']]));
+  fillSelect($('f-tribe'), [['', 'any'], ['yes', 'yes'], ['no', 'no']]);
+
+  var view = store('swipe.view') === 'table' ? 'table' : 'cards';
+  var sortKey = store('swipe.sort');
+  if (!SORTS[sortKey]) sortKey = SORTS[P.default_sort] ? P.default_sort : P.sorts[0].key;
+  $('sort').value = sortKey;
+
+  function compare(a, b) {
+    var s = SORTS[sortKey];
+    var va = a.sort[s.field], vb = b.sort[s.field];
+    if (va === null || va === undefined) return (vb === null || vb === undefined) ? 0 : 1;
+    if (vb === null || vb === undefined) return -1;
+    var c = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+    return s.desc ? -c : c;
+  }
+  function passes(r) {
+    var f = r.filter;
+    if ($('f-two').checked && !f.two_x) return false;
+    var hk = $('f-hook').value, fm = $('f-format').value, ln = $('f-length').value, fl = $('f-flag').value, tr = $('f-tribe').value;
+    if (hk && (hk === '-' ? f.hook !== '' : f.hook !== hk)) return false;
+    if (fm && (fm === '-' ? f.format !== '' : f.format !== fm)) return false;
+    if (ln && f.length !== ln) return false;
+    if (fl && (fl === 'none' ? f.flags.length > 0 : f.flags.indexOf(fl) < 0)) return false;
+    if (tr && (tr === 'yes') !== f.tribe) return false;
+    return true;
+  }
+
+  /* ---------- one card per reel, unnumbered ---------- */
+  function peerBar(p, parent) {
+    var wrap = H('div', 'peer', null, parent);
+    var svg = S('svg', { role: 'img', 'aria-label': p.caption }, wrap);
+    function px(v) { return (2 + v * 96).toFixed(2) + '%'; }
+    S('line', { 'class': 'track', x1: '1%', x2: '99%', y1: 10, y2: 10 }, svg);
+    p.ticks.forEach(function (v) { S('line', { 'class': 'tick', x1: px(v), x2: px(v), y1: 5, y2: 15 }, svg); });
+    S('line', { 'class': 'mid', x1: px(p.median), x2: px(p.median), y1: 1, y2: 19 }, svg);
+    S('circle', { 'class': 'me', cx: px(p.me), cy: 10, r: 5 }, svg);
+    S('title', {}, svg).textContent = p.caption;
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyText(text, btn) {
+    function done(ok) {
+      btn.textContent = ok ? 'Copied' : 'Select and copy';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+    }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+        return;
+      }
+    } catch (e) { /* use the fallback */ }
+    done(fallbackCopy(text));
+  }
+  function card(r, parent) {
+    var li = H('li', 'rc', null, parent);
+    li.setAttribute('data-sc', r.sc);
+    var top = H('div', 'rc-top', null, li);
+    var a = H('a', 'rc-handle', r.handle, top);
+    a.href = r.href;
+    dated(H('span', 'rc-meta', null, top), r.meta);
+    var cl = H('p', 'rc-counts', r.counts, li);
+    dated(H('span', 'rc-asof', null, cl), r.as_of);
+    if (r.peer) peerBar(r.peer, li);
+    H('p', 'rc-shape', r.shape, li);
+    if (r.badges.length || r.tribe) {
+      var ul = H('ul', 'badges', null, li);
+      r.badges.forEach(function (b) { H('li', 'badge', b.label, ul).setAttribute('data-flag', b.key); });
+      if (r.tribe) H('li', 'badge read', r.tribe, ul);
+    }
+    if (r.discount) H('p', 'rc-note', r.discount, li);
+    var act = H('div', 'rc-actions', null, li);
+    var open = H('a', 'btn primary', 'Open card', act);
+    open.href = r.href;
+    var rb = H('button', 'btn', 'Recreate for your own', act);
+    rb.type = 'button';
+    rb.setAttribute('aria-expanded', 'false');
+    if (/^https:\/\//i.test(r.url || '')) {
+      var ext = H('a', 'ext', 'Original ↗', act);
+      ext.href = r.url; ext.target = '_blank'; ext.rel = 'noopener noreferrer';
+    }
+    var rc = H('div', 'recreate', null, li);
+    rc.hidden = true;
+    H('code', '', r.recreate, rc);
+    var cb = H('button', 'btn', 'Copy', rc);
+    cb.type = 'button';
+    cb.addEventListener('click', function () { copyText(r.recreate, cb); });
+    rb.addEventListener('click', function () {
+      rc.hidden = !rc.hidden;
+      rb.setAttribute('aria-expanded', rc.hidden ? 'false' : 'true');
+    });
+  }
+  function row(r, parent) {
+    var tr = H('tr', '', null, parent);
+    var td = H('td', '', null, tr);
+    var a = H('a', '', r.handle, td);
+    a.href = r.href;
+    H('td', 'num opt', r.cells.length, tr);
+    H('td', 'date opt', r.cells.posted, tr);
+    H('td', 'num', r.cells.plays, tr);
+    H('td', 'num', r.cells.x, tr);
+    H('td', 'wrapc', r.cells.hook, tr);
+    H('td', 'opt', r.cells.format, tr);
+    H('td', 'opt', r.cells.cta, tr);
+    H('td', 'wrapc', r.cells.flags, tr);
+    H('td', 'opt', r.cells.tribe, tr);
+  }
+
+  function draw() {
+    var list = P.reels.filter(passes).sort(compare);
+    var cards = $('cards'), body = $('tbody');
+    cards.textContent = '';
+    body.textContent = '';
+    list.forEach(function (r) { card(r, cards); row(r, body); });
+    if (!list.length) H('li', 'empty', P.reels.length ? 'No reel matches these filters.' : 'No reels in the swipe file yet.', cards);
+    $('shown').textContent = list.length + ' of ' + P.reels.length + ' reels shown · ' + SORTS[sortKey].label;
+    var on = ($('f-two').checked ? 1 : 0) + ['f-hook', 'f-format', 'f-length', 'f-flag', 'f-tribe'].filter(function (id) { return $(id).value; }).length;
+    $('f-sum').textContent = on ? 'Filters · ' + on + ' on' : 'Filters';
+    $('cards').hidden = view !== 'cards';
+    $('table').hidden = view !== 'table';
+    $('v-cards').setAttribute('aria-pressed', view === 'cards' ? 'true' : 'false');
+    $('v-table').setAttribute('aria-pressed', view === 'table' ? 'true' : 'false');
+  }
+  $('v-cards').addEventListener('click', function () { view = 'cards'; store('swipe.view', view); draw(); });
+  $('v-table').addEventListener('click', function () { view = 'table'; store('swipe.view', view); draw(); });
+  $('sort').addEventListener('change', function () {
+    if (SORTS[$('sort').value]) { sortKey = $('sort').value; store('swipe.sort', sortKey); }
+    draw();
+  });
+  ['f-two', 'f-hook', 'f-format', 'f-length', 'f-flag', 'f-tribe'].forEach(function (id) { $(id).addEventListener('change', draw); });
+  $('f-clear').addEventListener('click', function () {
+    $('f-two').checked = false;
+    ['f-hook', 'f-format', 'f-length', 'f-flag', 'f-tribe'].forEach(function (id) { $(id).value = ''; });
+    draw();
+  });
+
+  /* ---------- creators, fetch log, about ---------- */
+  var cbox = $('creators');
+  P.creators.forEach(function (c) {
+    var d = H('div', 'creator', null, cbox);
+    H('span', 'k', c.handle, d);
+    var ul = H('ul', '', null, d);
+    c.items.forEach(function (t) { H('li', '', t, ul); });
+  });
+  var fbox = $('fetch');
+  P.fetch.forEach(function (f) {
+    var li = H('li', '', null, fbox);
+    H('span', 'k', f.at, li);
+    li.appendChild(document.createTextNode(' ' + f.what));
+    H('span', 'sub', f.detail, li);
+  });
+  if (!P.fetch.length) H('li', '', 'Nothing fetched yet.', fbox);
+  $('fetch-total').textContent = P.fetch_total;
+  var ab = $('about');
+  P.about.forEach(function (t) { H('p', '', t, ab); });
+
+  draw();
+  document.documentElement.setAttribute('data-rendered', 'ok');
+})();
+</script>
+</body>
+</html>

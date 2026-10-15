@@ -1,0 +1,19 @@
+{
+  "source": "https://modal.com/pricing",
+  "checked": "2026-10-08",
+  "note": "Per-second list prices read from modal.com/pricing on 8 Oct 2026. Re-check monthly (COSTS-AND-TIMES.md 8.3). The pricing page lists 'A10'; the A10G key carries the same price for the gpu string the code uses. Keys must match the gpu strings in tribe_app.py; an unknown GPU refuses to run.",
+  "gpu_usd_per_s": {
+    "T4": 0.000164,
+    "L4": 0.000222,
+    "A10G": 0.000306,
+    "A10": 0.000306,
+    "L40S": 0.000542,
+    "A100-40GB": 0.000583,
+    "A100-80GB": 0.000694,
+    "H100": 0.001097
+  },
+  "cpu_usd_per_core_s": 0.0000131,
+  "memory_usd_per_gib_s": 0.00000222,
+  "volume_usd_per_gib_month": 0.09,
+  "volume_free_gib_month": 1024
+}

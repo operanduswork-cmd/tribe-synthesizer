@@ -1,0 +1,491 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:tribe:hosted:patterns:v1",
+ "title": "Tribe hosted page: patterns",
+ "description": "Hooks, structures, CTAs and formats, each with its contrast (outliers k/n vs normal k/m, or outliers only). Plays and x show only in each pattern's source list. Never reads TRIBE. Built from strategist/render.py render_patterns and contrast_text.",
+ "x-kind": "patterns",
+ "x-key": "^index$",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "v",
+  "rendered",
+  "stamp",
+  "since",
+  "notes",
+  "lead",
+  "population",
+  "tabs",
+  "patterns"
+ ],
+ "properties": {
+  "v": {
+   "type": "integer",
+   "const": 1
+  },
+  "rendered": {
+   "$ref": "#/$defs/date"
+  },
+  "stamp": {
+   "$ref": "#/$defs/text",
+   "x-layer": "ui",
+   "maxLength": 200
+  },
+  "since": {
+   "$ref": "#/$defs/date"
+  },
+  "notes": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/text",
+    "x-layer": "ui",
+    "maxLength": 200
+   },
+   "maxItems": 5
+  },
+  "lead": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "anchor",
+     "kind",
+     "text"
+    ],
+    "properties": {
+     "anchor": {
+      "type": "string",
+      "pattern": "^p-[A-Za-z0-9-]{1,100}$"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "hook",
+       "structure",
+       "cta",
+       "format"
+      ]
+     },
+     "text": {
+      "$ref": "#/$defs/text",
+      "x-layer": "counts",
+      "maxLength": 300
+     }
+    }
+   },
+   "maxItems": 100
+  },
+  "population": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/text",
+    "x-layer": "counts",
+    "maxLength": 600
+   },
+   "maxItems": 5
+  },
+  "tabs": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "key",
+     "label",
+     "n",
+     "new"
+    ],
+    "properties": {
+     "key": {
+      "type": "string",
+      "enum": [
+       "hook",
+       "structure",
+       "cta",
+       "format"
+      ]
+     },
+     "label": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 20
+     },
+     "n": {
+      "$ref": "#/$defs/count"
+     },
+     "new": {
+      "$ref": "#/$defs/count"
+     }
+    }
+   },
+   "minItems": 4,
+   "maxItems": 4
+  },
+  "patterns": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "anchor",
+     "kind",
+     "level",
+     "label",
+     "family",
+     "level_tag",
+     "slot",
+     "contrast",
+     "by_creator",
+     "bars",
+     "few",
+     "suggested",
+     "new",
+     "zero",
+     "lead",
+     "show_new",
+     "show_few",
+     "same",
+     "completeness",
+     "sources",
+     "sources_empty",
+     "uses",
+     "use_links",
+     "seen",
+     "recreate"
+    ],
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/pattern_id"
+     },
+     "anchor": {
+      "type": "string",
+      "pattern": "^p-[A-Za-z0-9-]{1,100}$"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "hook",
+       "structure",
+       "cta",
+       "format"
+      ]
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "caption",
+       "spoken"
+      ]
+     },
+     "label": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 120
+     },
+     "family": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 80
+     },
+     "level_tag": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 40
+     },
+     "slot": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 200
+     },
+     "contrast": {
+      "$ref": "#/$defs/text",
+      "x-layer": "counts",
+      "maxLength": 160,
+      "pattern": "outliers \\d+/\\d+ vs normal \\d+/\\d+|outliers only, no comparison yet"
+     },
+     "by_creator": {
+      "type": "array",
+      "items": {
+       "$ref": "#/$defs/text",
+       "x-layer": "counts",
+       "maxLength": 200
+      },
+      "maxItems": 200
+     },
+     "bars": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "o",
+         "m"
+        ],
+        "properties": {
+         "o": {
+          "type": "array",
+          "prefixItems": [
+           {
+            "$ref": "#/$defs/count"
+           },
+           {
+            "$ref": "#/$defs/count"
+           }
+          ],
+          "items": false,
+          "minItems": 2
+         },
+         "m": {
+          "type": "array",
+          "prefixItems": [
+           {
+            "$ref": "#/$defs/count"
+           },
+           {
+            "$ref": "#/$defs/count"
+           }
+          ],
+          "items": false,
+          "minItems": 2
+         }
+        }
+       }
+      ]
+     },
+     "few": {
+      "type": "boolean"
+     },
+     "suggested": {
+      "type": "boolean"
+     },
+     "new": {
+      "type": "boolean"
+     },
+     "zero": {
+      "type": "boolean"
+     },
+     "lead": {
+      "type": "boolean"
+     },
+     "show_new": {
+      "type": "boolean"
+     },
+     "show_few": {
+      "type": "boolean"
+     },
+     "same": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "shape",
+      "maxLength": 240
+     },
+     "completeness": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "ui",
+      "maxLength": 120
+     },
+     "sources": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "sc",
+        "who",
+        "url",
+        "in_swipe",
+        "counts"
+       ],
+       "properties": {
+        "sc": {
+         "$ref": "#/$defs/shortcode",
+         "x-layer": "ui"
+        },
+        "who": {
+         "$ref": "#/$defs/handle_at",
+         "x-layer": "ui"
+        },
+        "url": {
+         "anyOf": [
+          {
+           "type": "null"
+          },
+          {
+           "$ref": "#/$defs/ig_url"
+          }
+         ]
+        },
+        "in_swipe": {
+         "type": "boolean"
+        },
+        "counts": {
+         "$ref": "#/$defs/text",
+         "x-layer": "counts",
+         "maxLength": 200
+        }
+       }
+      },
+      "maxItems": 500
+     },
+     "sources_empty": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 120
+     },
+     "uses": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "ui",
+      "maxLength": 60
+     },
+     "use_links": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "id",
+        "known"
+       ],
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/draft_id",
+         "x-layer": "ui"
+        },
+        "known": {
+         "type": "boolean"
+        }
+       }
+      },
+      "maxItems": 200
+     },
+     "seen": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "ui",
+      "maxLength": 60
+     },
+     "recreate": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "ui",
+      "maxLength": 200
+     }
+    }
+   },
+   "maxItems": 500
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 600,
+   "not": {
+    "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+   },
+   "description": "Display text: no laptop paths, file names, private folders or quoted speech."
+  },
+  "text_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/text"
+    }
+   ]
+  },
+  "date": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+  },
+  "date_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/date"
+    }
+   ]
+  },
+  "datetime": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+  },
+  "datetime_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/datetime"
+    }
+   ]
+  },
+  "shortcode": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{5,20}$"
+  },
+  "handle": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9._]{1,30}$"
+  },
+  "handle_at": {
+   "type": "string",
+   "pattern": "^@[A-Za-z0-9._]{1,30}$"
+  },
+  "ig_url": {
+   "type": "string",
+   "maxLength": 200,
+   "pattern": "^https://www\\.instagram\\.com/([A-Za-z0-9._]{1,30}/)?(reel|reels|p)/[A-Za-z0-9_-]{5,40}/?$"
+  },
+  "chip": {
+   "type": "string",
+   "pattern": "^\\d{1,2}:[0-5]\\d(-\\d{1,2}:[0-5]\\d)?$"
+  },
+  "chip_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/chip"
+    }
+   ]
+  },
+  "draft_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$"
+  },
+  "pattern_id": {
+   "type": "string",
+   "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+  },
+  "job_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-\\d{6}-[0-9a-f]{8}$"
+  },
+  "seconds": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 3600
+  },
+  "count": {
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 100000
+  },
+  "line_key": {
+   "type": "string",
+   "enum": [
+    "seeing",
+    "hearing",
+    "language",
+    "attention"
+   ]
+  }
+ }
+}

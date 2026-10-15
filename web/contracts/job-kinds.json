@@ -1,0 +1,427 @@
+{
+ "v": 1,
+ "description": "The allow-list of job kinds the site may queue and the laptop runner may run (D26). Instagram only. The runner re-checks every argument and every limit; the site only offers what is enabled here.",
+ "platform": "instagram",
+ "limits": {
+  "description": "Enforced by the runner (strategist/jobs.py), shown by the site. Never raised from the site.",
+  "paid_running_max": 1,
+  "paid_usd_per_day": 1.0,
+  "paid_jobs_per_day": 10,
+  "tribe_reads_per_month": 4,
+  "confirm_expires_min": 30,
+  "modal_cap_usd": 30.0,
+  "apify_cap_usd": 4.5
+ },
+ "defs": {
+  "shortcode": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{5,20}$",
+   "description": "An Instagram reel shortcode. The runner builds the URL itself."
+  },
+  "handle": {
+   "type": "string",
+   "pattern": "^@?[A-Za-z0-9._]{1,30}$",
+   "description": "An Instagram handle, as strategist.store.check_handle accepts it (one leading @ allowed)."
+  },
+  "draft_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+   "description": "A draft id, as strategist.lab ID_RE."
+  },
+  "slug": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+   "description": "A new draft's slug, as strategist.lab SLUG_RE."
+  },
+  "pattern_id": {
+   "type": "string",
+   "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+  },
+  "variant_id": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{1,20}$"
+  },
+  "field_accept": {
+   "type": "string",
+   "pattern": "^(all|(hook_shape|format|cta|beats)(\\.[0-9]{1,2})?)$",
+   "description": "A shape field, as strategist.reel FIELD_RE, or all."
+  },
+  "field_reject": {
+   "type": "string",
+   "pattern": "^(hook_shape|format|cta|beats)(\\.[0-9]{1,2})?$",
+   "description": "One shape field at a time (reject takes no all)."
+  },
+  "label_status": {
+   "type": "string",
+   "enum": [
+    "accepted",
+    "rejected"
+   ]
+  },
+  "reason": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 200,
+   "pattern": "^[^\\u0000-\\u001F\\u007F]+$",
+   "description": "A discount reason: one line, no control characters."
+  },
+  "coach_text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 500,
+   "pattern": "^[^\\u0000-\\u0009\\u000B-\\u001F\\u007F]+$",
+   "description": "Free text for the coach: newlines allowed, no other control characters. It is passed as data, never as a command."
+  }
+ },
+ "kinds": [
+  {
+   "kind": "reel.accept",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "sets_status": "accepted",
+   "label": "Accept a suggested shape label",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc",
+     "field"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     },
+     "field": {
+      "type": "string",
+      "pattern": "^(all|(hook_shape|format|cta|beats)(\\.[0-9]{1,2})?)$",
+      "description": "A shape field, as strategist.reel FIELD_RE, or all."
+     }
+    }
+   }
+  },
+  {
+   "kind": "reel.reject",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "sets_status": "rejected",
+   "label": "Reject a suggested shape label",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc",
+     "field"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     },
+     "field": {
+      "type": "string",
+      "pattern": "^(hook_shape|format|cta|beats)(\\.[0-9]{1,2})?$",
+      "description": "One shape field at a time (reject takes no all)."
+     }
+    }
+   }
+  },
+  {
+   "kind": "reel.discount",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "label": "Discount a reel's counts by hand, with a reason",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc",
+     "reason"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     },
+     "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$",
+      "description": "A discount reason: one line, no control characters."
+     }
+    }
+   }
+  },
+  {
+   "kind": "patterns.build",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "label": "Rebuild the patterns from the swipe file",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {}
+   }
+  },
+  {
+   "kind": "lab.check",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "label": "Check a draft: copy, voice, rules and length",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "draft_id"
+    ],
+    "properties": {
+     "draft_id": {
+      "type": "string",
+      "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+      "description": "A draft id, as strategist.lab ID_RE."
+     }
+    }
+   }
+  },
+  {
+   "kind": "sync.push",
+   "stage": 1,
+   "enabled": true,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "none",
+   "label": "Push the cleaned pages to the dashboard",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {}
+   }
+  },
+  {
+   "kind": "coach.new_draft",
+   "stage": 2,
+   "enabled": false,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "claude_plan",
+   "label": "New draft from a reel's shape or a pattern",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "slug"
+    ],
+    "properties": {
+     "slug": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+      "description": "A new draft's slug, as strategist.lab SLUG_RE."
+     },
+     "from_sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     },
+     "pattern_id": {
+      "type": "string",
+      "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+     },
+     "brief": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[^\\u0000-\\u0009\\u000B-\\u001F\\u007F]+$",
+      "description": "Free text for the coach: newlines allowed, no other control characters. It is passed as data, never as a command."
+     }
+    }
+   }
+  },
+  {
+   "kind": "coach.this_but",
+   "stage": 2,
+   "enabled": false,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "claude_plan",
+   "label": "This but: rewrite a draft or one variant",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "draft_id",
+     "text"
+    ],
+    "properties": {
+     "draft_id": {
+      "type": "string",
+      "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+      "description": "A draft id, as strategist.lab ID_RE."
+     },
+     "variant_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,20}$"
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[^\\u0000-\\u0009\\u000B-\\u001F\\u007F]+$",
+      "description": "Free text for the coach: newlines allowed, no other control characters. It is passed as data, never as a command."
+     }
+    }
+   }
+  },
+  {
+   "kind": "coach.replace",
+   "stage": 2,
+   "enabled": false,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "claude_plan",
+   "label": "Replace one thing in a draft with another",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "draft_id",
+     "replace",
+     "with"
+    ],
+    "properties": {
+     "draft_id": {
+      "type": "string",
+      "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+      "description": "A draft id, as strategist.lab ID_RE."
+     },
+     "replace": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[^\\u0000-\\u0009\\u000B-\\u001F\\u007F]+$",
+      "description": "Free text for the coach: newlines allowed, no other control characters. It is passed as data, never as a command."
+     },
+     "with": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^[^\\u0000-\\u0009\\u000B-\\u001F\\u007F]+$",
+      "description": "Free text for the coach: newlines allowed, no other control characters. It is passed as data, never as a command."
+     }
+    }
+   }
+  },
+  {
+   "kind": "coach.tag_shapes",
+   "stage": 2,
+   "enabled": false,
+   "paid": false,
+   "estimate_usd": 0,
+   "billing": "claude_plan",
+   "label": "Suggest shape labels for a reel",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     }
+    }
+   }
+  },
+  {
+   "kind": "reel.add_link",
+   "stage": 1,
+   "enabled": true,
+   "paid": true,
+   "estimate_usd": 0.006,
+   "billing": "apify",
+   "label": "Add one reel and its video from a link",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     }
+    }
+   }
+  },
+  {
+   "kind": "reel.add_handle",
+   "stage": 1,
+   "enabled": true,
+   "paid": true,
+   "estimate_usd": 0.1,
+   "billing": "apify",
+   "label": "Add a creator's last 30 posts and the new reels' videos",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "handle"
+    ],
+    "properties": {
+     "handle": {
+      "type": "string",
+      "pattern": "^@?[A-Za-z0-9._]{1,30}$",
+      "description": "An Instagram handle, as strategist.store.check_handle accepts it (one leading @ allowed)."
+     }
+    }
+   }
+  },
+  {
+   "kind": "tribe.lanes",
+   "stage": 3,
+   "enabled": false,
+   "paid": true,
+   "estimate_usd": 0.1,
+   "billing": "modal",
+   "label": "TRIBE deep read of one reel",
+   "args": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sc"
+    ],
+    "properties": {
+     "sc": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{5,20}$",
+      "description": "An Instagram reel shortcode. The runner builds the URL itself."
+     }
+    }
+   }
+  }
+ ]
+}

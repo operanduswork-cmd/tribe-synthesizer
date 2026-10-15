@@ -1,0 +1,599 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:tribe:hosted:lab:v1",
+ "title": "Tribe hosted page: lab",
+ "description": "One script draft: beats with numbered notes, unordered variants, length, check badges and PROOF row ids. Copy-check hits carry only where the shared run sits in his draft, never the run or its source. Built from strategist/render.py render_lab and check_badge.",
+ "x-kind": "lab",
+ "x-key": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "v",
+  "rendered",
+  "id",
+  "slug",
+  "kind",
+  "status",
+  "title",
+  "updated",
+  "checked",
+  "stale",
+  "est_s",
+  "target_s",
+  "length_text",
+  "badges",
+  "beats",
+  "variants",
+  "patterns",
+  "proof",
+  "issues",
+  "hits",
+  "commands"
+ ],
+ "properties": {
+  "v": {
+   "type": "integer",
+   "const": 1
+  },
+  "rendered": {
+   "$ref": "#/$defs/date"
+  },
+  "id": {
+   "$ref": "#/$defs/draft_id",
+   "x-layer": "ui"
+  },
+  "slug": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{1,60}$"
+  },
+  "kind": {
+   "type": "string",
+   "enum": [
+    "draft",
+    "example"
+   ]
+  },
+  "status": {
+   "$ref": "#/$defs/text",
+   "x-layer": "ui",
+   "maxLength": 120
+  },
+  "title": {
+   "$ref": "#/$defs/text",
+   "x-layer": "ui",
+   "maxLength": 80
+  },
+  "updated": {
+   "$ref": "#/$defs/date_or_null"
+  },
+  "checked": {
+   "$ref": "#/$defs/date_or_null"
+  },
+  "stale": {
+   "$ref": "#/$defs/text_or_null",
+   "x-layer": "ui",
+   "maxLength": 160
+  },
+  "est_s": {
+   "$ref": "#/$defs/seconds"
+  },
+  "target_s": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/seconds"
+    }
+   ]
+  },
+  "length_text": {
+   "$ref": "#/$defs/text",
+   "x-layer": "facts",
+   "maxLength": 160
+  },
+  "badges": {
+   "type": "array",
+   "minItems": 4,
+   "maxItems": 4,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "name",
+     "state",
+     "text"
+    ],
+    "properties": {
+     "name": {
+      "type": "string",
+      "enum": [
+       "Copy check",
+       "Voice",
+       "Rules",
+       "Length"
+      ],
+      "x-layer": "ui"
+     },
+     "state": {
+      "type": "string",
+      "enum": [
+       "unchecked",
+       "stale",
+       "ok",
+       "fix",
+       "look"
+      ]
+     },
+     "text": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 120
+     }
+    }
+   }
+  },
+  "beats": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "kind",
+     "name",
+     "chip",
+     "start",
+     "end",
+     "say",
+     "on_screen",
+     "slot",
+     "notes"
+    ],
+    "properties": {
+     "kind": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9 -]{0,30}$",
+      "x-layer": "shape"
+     },
+     "name": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 80
+     },
+     "chip": {
+      "$ref": "#/$defs/chip_or_null"
+     },
+     "start": {
+      "$ref": "#/$defs/seconds"
+     },
+     "end": {
+      "$ref": "#/$defs/seconds"
+     },
+     "say": {
+      "type": "string",
+      "maxLength": 1200,
+      "x-layer": "ui",
+      "not": {
+       "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+      }
+     },
+     "on_screen": {
+      "type": "string",
+      "maxLength": 400,
+      "x-layer": "ui",
+      "not": {
+       "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+      }
+     },
+     "slot": {
+      "type": "string",
+      "maxLength": 200,
+      "x-layer": "shape",
+      "not": {
+       "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+      }
+     },
+     "notes": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "n",
+        "text"
+       ],
+       "properties": {
+        "n": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 99
+        },
+        "text": {
+         "$ref": "#/$defs/text",
+         "x-layer": "ui",
+         "maxLength": 320
+        }
+       }
+      },
+      "maxItems": 20
+     }
+    }
+   },
+   "maxItems": 20
+  },
+  "variants": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "shape",
+     "family",
+     "pattern",
+     "pattern_id",
+     "line",
+     "why",
+     "cmd"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,20}$",
+      "x-layer": "ui"
+     },
+     "shape": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 80
+     },
+     "family": {
+      "type": "string",
+      "maxLength": 80,
+      "x-layer": "shape",
+      "not": {
+       "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+      }
+     },
+     "pattern": {
+      "$ref": "#/$defs/text",
+      "x-layer": "counts",
+      "maxLength": 240
+     },
+     "pattern_id": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "$ref": "#/$defs/pattern_id"
+       }
+      ]
+     },
+     "line": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 400
+     },
+     "why": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 400
+     },
+     "cmd": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 120
+     }
+    }
+   },
+   "maxItems": 20
+  },
+  "patterns": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "kind",
+     "line",
+     "known"
+    ],
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/pattern_id"
+     },
+     "kind": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 20
+     },
+     "line": {
+      "$ref": "#/$defs/text",
+      "x-layer": "counts",
+      "maxLength": 240
+     },
+     "known": {
+      "type": "boolean"
+     }
+    }
+   },
+   "maxItems": 20
+  },
+  "proof": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "row",
+     "numbers",
+     "fact",
+     "caveat"
+    ],
+    "properties": {
+     "row": {
+      "type": "string",
+      "pattern": "^[A-Z]\\d{1,3}$",
+      "x-layer": "ui"
+     },
+     "numbers": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 200
+     },
+     "fact": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 300
+     },
+     "caveat": {
+      "$ref": "#/$defs/text_or_null",
+      "x-layer": "ui",
+      "maxLength": 300
+     }
+    }
+   },
+   "maxItems": 30
+  },
+  "issues": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "check",
+     "level",
+     "where",
+     "message"
+    ],
+    "properties": {
+     "check": {
+      "type": "string",
+      "enum": [
+       "voice",
+       "rules"
+      ]
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "error",
+       "warning"
+      ]
+     },
+     "where": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.\\[\\]]{1,60}$",
+      "x-layer": "ui"
+     },
+     "message": {
+      "$ref": "#/$defs/text",
+      "x-layer": "ui",
+      "maxLength": 400
+     }
+    }
+   },
+   "maxItems": 100
+  },
+  "hits": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "kind",
+     "where",
+     "span",
+     "count"
+    ],
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "copy",
+       "em_dash"
+      ]
+     },
+     "where": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.\\[\\]]{1,60}$",
+      "x-layer": "ui"
+     },
+     "span": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "array",
+        "prefixItems": [
+         {
+          "$ref": "#/$defs/count"
+         },
+         {
+          "$ref": "#/$defs/count"
+         }
+        ],
+        "items": false,
+        "minItems": 2
+       }
+      ]
+     },
+     "count": {
+      "type": [
+       "integer",
+       "null"
+      ],
+      "minimum": 0
+     }
+    }
+   },
+   "maxItems": 100
+  },
+  "commands": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "this_but",
+    "replace",
+    "check",
+    "render"
+   ],
+   "properties": {
+    "this_but": {
+     "$ref": "#/$defs/text",
+     "x-layer": "ui",
+     "maxLength": 120
+    },
+    "replace": {
+     "$ref": "#/$defs/text",
+     "x-layer": "ui",
+     "maxLength": 120
+    },
+    "check": {
+     "$ref": "#/$defs/text",
+     "x-layer": "ui",
+     "maxLength": 120
+    },
+    "render": {
+     "$ref": "#/$defs/text",
+     "x-layer": "ui",
+     "maxLength": 120
+    }
+   }
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 600,
+   "not": {
+    "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+   },
+   "description": "Display text: no laptop paths, file names, private folders or quoted speech."
+  },
+  "text_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/text"
+    }
+   ]
+  },
+  "date": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+  },
+  "date_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/date"
+    }
+   ]
+  },
+  "datetime": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+  },
+  "datetime_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/datetime"
+    }
+   ]
+  },
+  "shortcode": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{5,20}$"
+  },
+  "handle": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9._]{1,30}$"
+  },
+  "handle_at": {
+   "type": "string",
+   "pattern": "^@[A-Za-z0-9._]{1,30}$"
+  },
+  "ig_url": {
+   "type": "string",
+   "maxLength": 200,
+   "pattern": "^https://www\\.instagram\\.com/([A-Za-z0-9._]{1,30}/)?(reel|reels|p)/[A-Za-z0-9_-]{5,40}/?$"
+  },
+  "chip": {
+   "type": "string",
+   "pattern": "^\\d{1,2}:[0-5]\\d(-\\d{1,2}:[0-5]\\d)?$"
+  },
+  "chip_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/chip"
+    }
+   ]
+  },
+  "draft_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$"
+  },
+  "pattern_id": {
+   "type": "string",
+   "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+  },
+  "job_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-\\d{6}-[0-9a-f]{8}$"
+  },
+  "seconds": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 3600
+  },
+  "count": {
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 100000
+  },
+  "line_key": {
+   "type": "string",
+   "enum": [
+    "seeing",
+    "hearing",
+    "language",
+    "attention"
+   ]
+  }
+ }
+}

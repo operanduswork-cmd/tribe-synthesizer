@@ -1,0 +1,729 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:tribe:hosted:reel:v1",
+ "title": "Tribe hosted page: reel",
+ "description": "One swipe reel: counts strip, snippet card, beats and facts. No transcript, word hits, stills or paths: those stay on the laptop (local_cmd opens the full private page there). Built from strategist/render.py render_reel.",
+ "x-kind": "reel",
+ "x-key": "^[A-Za-z0-9_-]{5,20}$",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "v",
+  "rendered",
+  "shortcode",
+  "owner",
+  "url",
+  "posted",
+  "card",
+  "discount",
+  "recreate",
+  "beats",
+  "beats_empty",
+  "tribe",
+  "stamps",
+  "facts",
+  "local_cmd"
+ ],
+ "properties": {
+  "v": {
+   "type": "integer",
+   "const": 1
+  },
+  "rendered": {
+   "$ref": "#/$defs/date"
+  },
+  "shortcode": {
+   "$ref": "#/$defs/shortcode",
+   "x-layer": "ui"
+  },
+  "owner": {
+   "$ref": "#/$defs/handle",
+   "x-layer": "ui"
+  },
+  "url": {
+   "$ref": "#/$defs/ig_url"
+  },
+  "posted": {
+   "$ref": "#/$defs/date_or_null"
+  },
+  "card": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "mode",
+      "counts",
+      "lines",
+      "footnote"
+     ],
+     "properties": {
+      "mode": {
+       "type": "string",
+       "const": "tribe"
+      },
+      "counts": {
+       "anyOf": [
+        {
+         "type": "null"
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "text",
+          "shortcode"
+         ],
+         "properties": {
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "counts",
+           "maxLength": 300
+          },
+          "shortcode": {
+           "$ref": "#/$defs/shortcode"
+          }
+         }
+        }
+       ]
+      },
+      "lines": {
+       "type": "array",
+       "prefixItems": [
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "HOOK"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "shape",
+           "maxLength": 140
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "HIGH"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "brain",
+           "maxLength": 140
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "FLAT"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "brain",
+           "maxLength": 140
+          },
+          "edge": {
+           "type": "boolean"
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "TRY"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "ui",
+           "maxLength": 140,
+           "pattern": "^Test: "
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "TRY"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "ui",
+           "maxLength": 140,
+           "pattern": "^Test: "
+          }
+         }
+        }
+       ],
+       "items": false,
+       "minItems": 5
+      },
+      "footnote": {
+       "type": "string",
+       "const": "HIGH/FLAT: predicted average-brain response, vs this reel's own average.",
+       "x-layer": "brain"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "mode",
+      "counts",
+      "lines",
+      "footnote"
+     ],
+     "properties": {
+      "mode": {
+       "type": "string",
+       "const": "facts"
+      },
+      "counts": {
+       "anyOf": [
+        {
+         "type": "null"
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "text",
+          "shortcode"
+         ],
+         "properties": {
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "counts",
+           "maxLength": 300
+          },
+          "shortcode": {
+           "$ref": "#/$defs/shortcode"
+          }
+         }
+        }
+       ]
+      },
+      "lines": {
+       "type": "array",
+       "prefixItems": [
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "HOOK"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "shape",
+           "maxLength": 140
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "BEATS"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "shape",
+           "maxLength": 140
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "PACE"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "facts",
+           "maxLength": 140
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "TRY"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "ui",
+           "maxLength": 140,
+           "pattern": "^Test: "
+          }
+         }
+        },
+        {
+         "type": "object",
+         "additionalProperties": false,
+         "required": [
+          "tag",
+          "time",
+          "t",
+          "text"
+         ],
+         "properties": {
+          "tag": {
+           "type": "string",
+           "const": "TRY"
+          },
+          "time": {
+           "$ref": "#/$defs/chip_or_null"
+          },
+          "t": {
+           "type": [
+            "integer",
+            "null"
+           ],
+           "minimum": 0
+          },
+          "text": {
+           "$ref": "#/$defs/text",
+           "x-layer": "ui",
+           "maxLength": 140,
+           "pattern": "^Test: "
+          }
+         }
+        }
+       ],
+       "items": false,
+       "minItems": 5
+      },
+      "footnote": {
+       "type": "null"
+      }
+     }
+    }
+   ],
+   "description": "The D18 snippet card (dashboard/render.py build_card). HIGH never carries a quote here."
+  },
+  "discount": {
+   "$ref": "#/$defs/text_or_null",
+   "x-layer": "counts",
+   "maxLength": 260
+  },
+  "recreate": {
+   "$ref": "#/$defs/text",
+   "x-layer": "ui",
+   "maxLength": 80,
+   "pattern": "^/script new from-[A-Za-z0-9_-]{5,20}$"
+  },
+  "beats": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "chip",
+     "kind",
+     "name",
+     "suggested"
+    ],
+    "properties": {
+     "chip": {
+      "$ref": "#/$defs/chip"
+     },
+     "kind": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9 -]{0,30}$",
+      "x-layer": "shape"
+     },
+     "name": {
+      "$ref": "#/$defs/text",
+      "x-layer": "shape",
+      "maxLength": 80
+     },
+     "suggested": {
+      "type": "boolean"
+     }
+    }
+   },
+   "maxItems": 30
+  },
+  "beats_empty": {
+   "$ref": "#/$defs/text",
+   "x-layer": "ui",
+   "maxLength": 300
+  },
+  "tribe": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "job_id",
+      "run_date",
+      "missing"
+     ],
+     "properties": {
+      "job_id": {
+       "$ref": "#/$defs/job_id"
+      },
+      "run_date": {
+       "$ref": "#/$defs/date"
+      },
+      "missing": {
+       "type": "boolean"
+      }
+     }
+    }
+   ]
+  },
+  "stamps": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "counts",
+    "shape",
+    "brain",
+    "page"
+   ],
+   "properties": {
+    "counts": {
+     "$ref": "#/$defs/text",
+     "x-layer": "counts",
+     "maxLength": 200
+    },
+    "shape": {
+     "$ref": "#/$defs/text",
+     "x-layer": "shape",
+     "maxLength": 200
+    },
+    "brain": {
+     "$ref": "#/$defs/text_or_null",
+     "x-layer": "brain",
+     "maxLength": 120
+    },
+    "page": {
+     "$ref": "#/$defs/text",
+     "x-layer": "ui",
+     "maxLength": 120
+    }
+   }
+  },
+  "facts": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "label",
+     "value"
+    ],
+    "properties": {
+     "label": {
+      "type": "string",
+      "enum": [
+       "Length",
+       "First word",
+       "Pace",
+       "Call to action",
+       "Text at 0:00"
+      ],
+      "x-layer": "ui"
+     },
+     "value": {
+      "$ref": "#/$defs/text",
+      "x-layer": "facts",
+      "maxLength": 160
+     }
+    }
+   },
+   "maxItems": 5
+  },
+  "local_cmd": {
+   "type": "string",
+   "x-layer": "ui",
+   "pattern": "^python -m strategist\\.render reel [A-Za-z0-9_-]{5,20} --open$"
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 600,
+   "not": {
+    "pattern": "\\\\|(^|[^A-Za-z])[A-Za-z]:/|/Users/|OneDrive|AppData|private/|\\.env\\b|\\.npy\\b|\\.jsonl?\\b|\\.txt\\b|\\.jpe?g\\b|\\.(mp4|mov|m4v|webm|mkv|avi|wav|m4a|mp3)\\b|said: [\\\"“]"
+   },
+   "description": "Display text: no laptop paths, file names, private folders or quoted speech."
+  },
+  "text_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/text"
+    }
+   ]
+  },
+  "date": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+  },
+  "date_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/date"
+    }
+   ]
+  },
+  "datetime": {
+   "type": "string",
+   "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})$"
+  },
+  "datetime_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/datetime"
+    }
+   ]
+  },
+  "shortcode": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9_-]{5,20}$"
+  },
+  "handle": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9._]{1,30}$"
+  },
+  "handle_at": {
+   "type": "string",
+   "pattern": "^@[A-Za-z0-9._]{1,30}$"
+  },
+  "ig_url": {
+   "type": "string",
+   "maxLength": 200,
+   "pattern": "^https://www\\.instagram\\.com/([A-Za-z0-9._]{1,30}/)?(reel|reels|p)/[A-Za-z0-9_-]{5,40}/?$"
+  },
+  "chip": {
+   "type": "string",
+   "pattern": "^\\d{1,2}:[0-5]\\d(-\\d{1,2}:[0-5]\\d)?$"
+  },
+  "chip_or_null": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "$ref": "#/$defs/chip"
+    }
+   ]
+  },
+  "draft_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-[A-Za-z0-9][A-Za-z0-9-]{1,60}$"
+  },
+  "pattern_id": {
+   "type": "string",
+   "pattern": "^(hook|structure|cta|format)\\.(caption|spoken)\\.[a-z0-9-]{1,80}$"
+  },
+  "job_id": {
+   "type": "string",
+   "pattern": "^\\d{8}-\\d{6}-[0-9a-f]{8}$"
+  },
+  "seconds": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 3600
+  },
+  "count": {
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 100000
+  },
+  "line_key": {
+   "type": "string",
+   "enum": [
+    "seeing",
+    "hearing",
+    "language",
+    "attention"
+   ]
+  }
+ }
+}

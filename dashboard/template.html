@@ -1,0 +1,1346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src file: data: blob:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Predicted response report</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f3f3f0;
+  --surface: #fcfcfb;
+  --surface-2: #f4f3ef;
+  --border: rgba(11, 11, 11, 0.09);
+  --ink: #141413;
+  --ink-2: #4e4d49;
+  --muted: #6f6d67;
+  --hair: #e3e2db;
+  --axis: #c3c2b7;
+  --line: #2e3d51;
+  --accent: #2a6fc4;
+  --flat: rgba(98, 122, 156, 0.20);
+  --flat-solid: #7d90a9;
+  --flag-black: #262625;
+  --flag-silent: #a6a49b;
+  --hatch: #8b8982;
+  --word: #d3d1c9;
+  --tint-0: #d3e3f6;
+  --tint-1: #aac8ee;
+  --tint-2: #7aa9e4;
+  --tint-3: #4386d8;
+  --tint-ink: #141413;
+  --playhead: rgba(20, 20, 19, 0.08);
+  --playhead-line: #141413;
+  --chip: #ecebe6;
+  --chip-ink: #3c3b37;
+  --badge: #e4e9f1;
+  --badge-ink: #26374d;
+  --focus: #2a6fc4;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0e0e0d;
+    --surface: #191918;
+    --surface-2: #20201e;
+    --border: rgba(255, 255, 255, 0.09);
+    --ink: #f2f1ec;
+    --ink-2: #c6c5bc;
+    --muted: #9b998f;
+    --hair: #2d2d2a;
+    --axis: #4a4944;
+    --line: #c9d4e2;
+    --accent: #5b9be8;
+    --flat: rgba(126, 150, 182, 0.22);
+    --flat-solid: #7f93ad;
+    --flag-black: #ecebe5;
+    --flag-silent: #6c6a63;
+    --hatch: #8a887f;
+    --word: #3b3a37;
+    --tint-0: #1f3a5c;
+    --tint-1: #27507f;
+    --tint-2: #2f66a6;
+    --tint-3: #3a7cc9;
+    --tint-ink: #f6f5f1;
+    --playhead: rgba(255, 255, 255, 0.09);
+    --playhead-line: #f2f1ec;
+    --chip: #2a2a27;
+    --chip-ink: #d8d7cf;
+    --badge: #233246;
+    --badge-ink: #d5e2f3;
+    --focus: #5b9be8;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e0d;
+  --surface: #191918;
+  --surface-2: #20201e;
+  --border: rgba(255, 255, 255, 0.09);
+  --ink: #f2f1ec;
+  --ink-2: #c6c5bc;
+  --muted: #9b998f;
+  --hair: #2d2d2a;
+  --axis: #4a4944;
+  --line: #c9d4e2;
+  --accent: #5b9be8;
+  --flat: rgba(126, 150, 182, 0.22);
+  --flat-solid: #7f93ad;
+  --flag-black: #ecebe5;
+  --flag-silent: #6c6a63;
+  --hatch: #8a887f;
+  --word: #3b3a37;
+  --tint-0: #1f3a5c;
+  --tint-1: #27507f;
+  --tint-2: #2f66a6;
+  --tint-3: #3a7cc9;
+  --tint-ink: #f6f5f1;
+  --playhead: rgba(255, 255, 255, 0.09);
+  --playhead-line: #f2f1ec;
+  --chip: #2a2a27;
+  --chip-ink: #d8d7cf;
+  --badge: #233246;
+  --badge-ink: #d5e2f3;
+  --focus: #5b9be8;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+h1 { font-size: 22px; font-weight: 650; overflow-wrap: anywhere; }
+h2 { font-size: 15px; font-weight: 650; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 40px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 0;
+}
+.stack { display: grid; gap: 16px; min-width: 0; }
+.grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); margin-top: 16px; }
+@media (min-width: 960px) {
+  .grid { grid-template-columns: 340px minmax(0, 1fr); align-items: start; }
+  .player-card { position: sticky; top: 16px; }
+}
+
+/* Header */
+.head { padding: 4px 4px 0; }
+.eyebrow { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.meta { margin-top: 6px; color: var(--ink-2); font-size: 13.5px; overflow-wrap: anywhere; }
+.meta span + span::before { content: "\00b7"; margin: 0 8px; color: var(--axis); }
+
+/* Counts strip: public counts in their own element, never inside the card */
+.counts {
+  margin: 14px 0 0; padding: 8px 12px; border: 1px dashed var(--axis); border-radius: 8px;
+  font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+
+/* Snippet card */
+.snippet { margin-top: 12px; }
+.snip { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.snip li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.snip-tag { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.snip-text { font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+.snip-text .time-btn { margin-left: 6px; }
+.snip-lines-key { margin-top: 4px; font-size: 12px; color: var(--muted); }
+.nw { white-space: nowrap; }
+.private { margin-top: 8px; display: inline-block; font-size: 12px; font-weight: 650; padding: 1px 10px; border-radius: 999px; border: 1px dashed var(--axis); color: var(--ink-2); }
+.snip-foot { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+
+/* Folds */
+.folds { margin-top: 14px; display: grid; gap: 8px; }
+details.fold { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+details.fold > summary {
+  cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 650; font-size: 15px;
+  display: flex; align-items: center; gap: 8px; border-radius: 12px;
+}
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "\25B8"; color: var(--muted); font-size: 13px; width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\25BE"; }
+details.fold > summary:hover { background: var(--surface-2); }
+.fold-body { padding: 0 16px 16px; min-width: 0; }
+.fold-body > .grid { margin-top: 4px; }
+.fold-body > p + p { margin-top: 10px; }
+.about p { max-width: 72ch; font-size: 14px; color: var(--ink-2); }
+.about p + p, .about .summary, .about .facts, .about .warn-list { margin-top: 10px; }
+.framing { font-size: 15px; line-height: 1.45; font-weight: 600; color: var(--ink) !important; }
+.facts { margin: 12px 0 0; display: grid; gap: 6px; }
+.facts div { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 8px; font-size: 13.5px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; color: var(--ink-2); overflow-wrap: anywhere; }
+.warn-list { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); }
+.warn-list li + li { margin-top: 2px; }
+.summary { padding-top: 10px; border-top: 1px solid var(--hair); }
+.summary h2 { margin-bottom: 4px; }
+.beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.beats li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; font-size: 14px; overflow-wrap: anywhere; }
+.beat-kind { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+
+/* Player */
+.panel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-bottom: 10px; }
+.player { margin-top: 10px; }
+.player video {
+  display: block; width: 100%; max-height: 62vh; background: #000; border-radius: 8px;
+}
+.no-video {
+  border: 1px dashed var(--axis); border-radius: 8px; padding: 16px; background: var(--surface-2);
+  color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere;
+}
+.no-video p + p { margin-top: 8px; }
+.transport { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.transport input[type="range"] { flex: 1 1 auto; min-width: 0; accent-color: var(--ink-2); }
+.btn {
+  appearance: none; border: 1px solid var(--border); background: var(--surface-2);
+  border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 13.5px; font-weight: 600;
+  min-height: 34px;
+}
+.btn:hover { background: var(--chip); }
+.clock { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.hint { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+
+/* Timeline and word strip SVG */
+.timeline, .wordstrip { width: 100%; position: relative; touch-action: manipulation; }
+.timeline svg, .wordstrip svg { display: block; overflow: visible; }
+.viz text { font-family: inherit; font-size: 11px; fill: var(--muted); }
+.viz .lane-name { font-size: 12px; font-weight: 650; fill: var(--ink); }
+.viz .lane-sub { font-size: 12px; fill: var(--ink-2); }
+.viz .lane-drift { font-size: 11px; fill: var(--muted); }
+.viz .lane-bg { fill: var(--surface-2); }
+.viz .zero { stroke: var(--axis); stroke-width: 1; }
+.viz .grid-x { stroke: var(--hair); stroke-width: 1; }
+.viz .ln { fill: none; stroke: var(--line); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.viz .flat { fill: var(--flat); }
+.viz .flat-bar { fill: var(--flat-solid); }
+.viz .pk-line { stroke: var(--accent); stroke-width: 1.5; opacity: 0.85; }
+.viz .pk-mark { fill: var(--accent); stroke: var(--surface); stroke-width: 2; paint-order: stroke; }
+.viz .hook { fill: none; stroke: var(--ink-2); stroke-width: 1.25; }
+.viz .track { fill: var(--hair); }
+.viz .f-black { fill: var(--flag-black); }
+.viz .f-silent { fill: var(--flag-silent); }
+.viz .f-edge { fill: url(#hatch-edge); }
+.viz .hit { fill: transparent; cursor: pointer; }
+.viz .hit:hover + .pk-mark, .viz .hit:hover + .flat-bar { opacity: 0.75; }
+.viz .over { fill: transparent; cursor: pointer; }
+.viz .cross { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.viz .ph-band { fill: var(--playhead); pointer-events: none; }
+.viz .ph-line { stroke: var(--playhead-line); stroke-width: 1.25; pointer-events: none; }
+.viz .w { fill: var(--word); }
+.viz .w-t0 { fill: var(--tint-0); }
+.viz .w-t1 { fill: var(--tint-1); }
+.viz .w-t2 { fill: var(--tint-2); }
+.viz .w-t3 { fill: var(--tint-3); }
+.viz .w-odd { fill: url(#hatch-word); }
+.viz .phrase { font-size: 11px; fill: var(--ink-2); }
+.viz .nolines { pointer-events: none; }
+
+.legend { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); }
+.legend li { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; flex: none; }
+.sw-line { width: 16px; height: 2px; background: var(--line); border-radius: 1px; }
+.sw-peak { width: 2px; height: 12px; background: var(--accent); }
+.sw-flat { width: 14px; height: 10px; background: var(--flat); border-bottom: 3px solid var(--flat-solid); }
+.sw-hook { width: 14px; height: 6px; border: 1.25px solid var(--ink-2); border-bottom: none; }
+.sw-black { width: 14px; height: 6px; background: var(--flag-black); border-radius: 2px; }
+.sw-silent { width: 14px; height: 6px; background: var(--flag-silent); border-radius: 2px; }
+.sw-edge, .sw-odd {
+  width: 14px; height: 8px; border-radius: 2px;
+  background: repeating-linear-gradient(45deg, var(--hair) 0 2px, var(--hatch) 2px 3.4px);
+}
+.sw-odd { background: repeating-linear-gradient(45deg, var(--word) 0 2px, var(--hatch) 2px 3.4px); }
+.sw-now { width: 12px; height: 12px; background: var(--playhead); border-left: 1.25px solid var(--playhead-line); }
+.sw-tint { width: 40px; height: 8px; border-radius: 2px; background: linear-gradient(90deg, var(--tint-0), var(--tint-3)); }
+
+details.howto { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); }
+details.howto summary { cursor: pointer; color: var(--ink); font-weight: 600; }
+details.howto p { margin-top: 8px; max-width: 72ch; }
+
+/* Word-hit caveats */
+.caveat { margin-top: 10px; font-size: 12.5px; color: var(--muted); max-width: 72ch; }
+
+/* Moments */
+.moments { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 12px; }
+.moment {
+  border: 1px solid var(--border); border-radius: 10px; padding: 14px; background: var(--surface);
+  display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr);
+}
+.moment.now { border-color: var(--playhead-line); }
+@media (min-width: 720px) {
+  .moment.has-thumb { grid-template-columns: minmax(0, 1fr) 150px; }
+}
+.moment-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.kind { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.kind-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.kind-dot.peak { background: var(--accent); width: 3px; height: 14px; border-radius: 1px; }
+.kind-dot.flat { background: var(--flat); border-bottom: 3px solid var(--flat-solid); }
+.kind-dot.hook { border: 1.25px solid var(--ink-2); border-bottom: none; height: 6px; border-radius: 0; }
+.kind-dot.word { background: var(--tint-2); }
+.time-btn {
+  appearance: none; border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px;
+  padding: 2px 10px; cursor: pointer; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600;
+}
+.time-btn:hover { background: var(--chip); }
+.moment-title { font-weight: 650; font-size: 15px; overflow-wrap: anywhere; }
+.moment-desc { margin-top: 6px; color: var(--ink-2); font-size: 14px; }
+.moment-desc li { margin-top: 2px; }
+.moment-desc ul { margin: 4px 0 0; padding-left: 18px; }
+.phrase-quote { font-style: italic; }
+.thumb { display: block; width: 100%; max-width: 150px; max-height: 200px; object-fit: contain; border-radius: 6px; background: #000; }
+.thumb-cap { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.note {
+  margin-top: 12px; padding: 12px; border-radius: 8px; background: var(--surface-2);
+  border-left: 3px solid var(--axis);
+}
+.note-by { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.note-text { margin-top: 4px; font-size: 14.5px; overflow-wrap: anywhere; }
+.note-meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.line-chip { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--chip); color: var(--chip-ink); }
+.idea { margin-top: 8px; font-size: 14px; overflow-wrap: anywhere; }
+.idea-k { font-weight: 650; margin-right: 6px; }
+.no-note { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.brain-btn { margin-top: 10px; }
+.other-notes { margin-top: 18px; }
+.other-notes h3 { font-size: 14px; }
+
+/* Footer */
+.foot { margin-top: 24px; padding: 16px 4px 0; border-top: 1px solid var(--hair); font-size: 12.5px; color: var(--muted); }
+.foot p + p { margin-top: 6px; }
+.foot .credit { color: var(--ink-2); font-size: 13px; }
+
+/* Tooltip and dialog */
+.tip {
+  position: fixed; z-index: 20; pointer-events: none; max-width: min(300px, calc(100vw - 24px));
+  background: var(--surface); color: var(--ink); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: var(--shadow); padding: 8px 10px; font-size: 12.5px; line-height: 1.45;
+}
+.tip .tip-t { font-weight: 650; font-variant-numeric: tabular-nums; }
+.tip .tip-row { display: flex; gap: 6px; align-items: baseline; }
+.tip .tip-key { width: 12px; height: 2px; background: var(--line); flex: none; transform: translateY(-3px); }
+.tip .tip-flag { color: var(--muted); }
+dialog {
+  border: none; border-radius: 12px; padding: 16px; max-width: min(92vw, 760px);
+  background: var(--surface); color: var(--ink); box-shadow: var(--shadow);
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+dialog img { display: block; max-width: 100%; height: auto; border-radius: 8px; background: #fff; }
+.dlg-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-bottom: 10px; }
+.dlg-cap { font-weight: 600; }
+.dlg-note { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+.hidden-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.error-box { padding: 16px; border: 1px solid var(--axis); border-radius: 8px; background: var(--surface); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<svg class="hidden-defs" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <pattern id="hatch-edge" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="5" height="5" style="fill: var(--hair)"></rect>
+      <rect width="1.4" height="5" style="fill: var(--hatch)"></rect>
+    </pattern>
+    <pattern id="hatch-word" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="4" height="4" style="fill: var(--word)"></rect>
+      <rect width="1.3" height="4" style="fill: var(--hatch)"></rect>
+    </pattern>
+  </defs>
+</svg>
+
+<div class="wrap" id="app">
+  <header class="head">
+    <p class="eyebrow">Predicted response report</p>
+    <h1 id="h-label">Loading</h1>
+    <p class="meta" id="h-meta"></p>
+    <p class="private" id="h-private" hidden>Private page: another creator's words. Don't share this file.</p>
+  </header>
+
+  <p class="counts" id="counts" aria-label="Public counts" hidden></p>
+
+  <section class="card snippet" id="snippet" aria-label="Snippet card">
+    <ul class="snip" id="snip-lines"></ul>
+    <p class="snip-foot" id="snip-foot"></p>
+    <p class="snip-lines-key" id="snip-key" hidden>The four lines: seeing, hearing, language and attention (predicted visual, auditory, language and attention-network response).</p>
+  </section>
+
+  <div class="folds">
+  <details class="fold" id="fold-beats" hidden>
+    <summary>Beats</summary>
+    <div class="fold-body"><ol class="beats" id="beats"></ol></div>
+  </details>
+
+  <details class="fold" id="fold-hits">
+    <summary>Transcript (hits only)</summary>
+    <div class="fold-body">
+      <p class="small muted">Phrases said while the predicted language line was high for this reel. Coarse timing: one value per second.</p>
+      <ol class="moments" id="hits"></ol>
+    </div>
+  </details>
+
+  <details class="fold" id="fold-lanes">
+  <summary>Full lanes</summary>
+  <div class="fold-body">
+  <div class="grid">
+    <section class="card player-card" aria-labelledby="p-player">
+      <div class="panel-head"><h2 id="p-player">Reel</h2><span class="small muted" id="p-player-sub"></span></div>
+      <div class="player" id="player" data-video-state="none">
+        <video id="video" controls playsinline preload="metadata" hidden></video>
+        <div class="no-video" id="no-video" hidden></div>
+      </div>
+      <div class="transport">
+        <button class="btn" id="play" type="button">Play</button>
+        <input id="scrub" type="range" min="0" max="1" step="0.1" value="0" aria-label="Position in the reel">
+        <span class="clock" id="clock">0:00</span>
+      </div>
+      <p class="hint">Click any lane, moment or word to jump to that second. The shaded band is the current second.</p>
+    </section>
+
+    <div class="stack">
+      <section class="card" aria-labelledby="p-timeline">
+        <div class="panel-head">
+          <h2 id="p-timeline">Second by second</h2>
+          <span class="small muted" id="t-scale"></span>
+        </div>
+        <div class="timeline viz" id="timeline" role="group" aria-label="Four predicted response lanes over time"></div>
+        <ul class="legend" aria-label="Timeline legend">
+          <li><span class="sw sw-line"></span>predicted response (middle line: this reel's average)</li>
+          <li><span class="sw sw-peak"></span>peak: high for this reel</li>
+          <li><span class="sw sw-flat"></span>flat stretch: low for this reel, not tested</li>
+          <li><span class="sw sw-hook"></span>hook window: first 3 seconds (0:00-0:02)</li>
+          <li><span class="sw sw-black"></span>black frames</li>
+          <li><span class="sw sw-silent"></span>silence</li>
+          <li><span class="sw sw-edge"></span>first and last 2 s: lower confidence</li>
+          <li><span class="sw sw-now"></span>current second</li>
+        </ul>
+        <details class="howto">
+          <summary>How to read the lanes</summary>
+          <p>Each lane is one predicted average-brain response line, smoothed over about 2 seconds. The middle line is this reel's own average for that line. Above it means higher than usual for this reel, below means lower. There are no units and nothing here is a rating.</p>
+          <p>Peaks and flat stretches come from all four lines together, after removing the slow drift across the reel. They locate moments to look at. They are not yet tested against any real retention graph, so treat them as a second opinion.</p>
+          <p>The model predicts an average brain, not your audience. One row is one second, already aligned by the model. Seconds with black frames are left out of peak finding, and the first and last 2 seconds are less reliable.</p>
+          <p>Times are whole seconds as the clock shows them, and a range includes its last second: 0:12-0:14 means 0:12, 0:13 and 0:14.</p>
+        </details>
+      </section>
+
+      <section class="card" aria-labelledby="p-words">
+        <div class="panel-head">
+          <h2 id="p-words">Words</h2>
+          <span class="small muted">same time axis as the lanes</span>
+        </div>
+        <div class="wordstrip viz" id="wordstrip" role="group" aria-label="Transcript words over time"></div>
+        <ul class="legend" aria-label="Word legend">
+          <li><span class="sw sw-tint"></span>word hit: language line high for this reel in that second (darker = higher)</li>
+          <li><span class="sw sw-odd"></span>possible ghost word or stretched timing (never a hit)</li>
+        </ul>
+        <p class="caveat">Timing is coarse: one row per second and a slow signal, so several words share a second. A hit only says the predicted language response was high in the second a phrase was spoken, nothing more. Words come from the audio only: on-screen captions are not in this strip, and song lyrics count as words. Transcription assumes English.</p>
+      </section>
+    </div>
+  </div>
+  </div>
+  </details>
+
+  <details class="fold" id="fold-moments">
+    <summary>All moments</summary>
+    <div class="fold-body">
+      <p class="small muted">Every moment is high or low for this reel only, and not yet tested against any retention graph. Ideas are things to test, not fixes.</p>
+      <ol class="moments" id="moments"></ol>
+      <div class="other-notes" id="other-notes" hidden>
+        <h3>Other notes</h3>
+        <div id="other-notes-body"></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="fold" id="fold-about">
+    <summary>About this data</summary>
+    <div class="fold-body about">
+      <p class="framing">Predicted average-brain response, second by second. An average brain, not your audience.</p>
+      <p>HIGH and FLAT are high or low for this reel only, against its own average, and not tested against any retention graph. HOOK uses facts and the hook shape only, never the predicted lines. TRY lines are things to test in your draft, not fixes.</p>
+      <p id="wall" hidden>Public counts (plays, likes, comments) and the predicted average-brain response are separate layers: they never share a line, a sort or a chart.</p>
+      <section class="summary" id="summary" hidden aria-labelledby="summary-h">
+        <h2 id="summary-h">Claude's read</h2>
+        <div id="summary-body"></div>
+      </section>
+      <dl class="facts">
+        <div><dt>Scale</dt><dd id="h-scale"></dd></div>
+        <div><dt>Timing</dt><dd id="h-offset"></dd></div>
+      </dl>
+      <ul class="warn-list" id="h-warnings" aria-label="Warnings"></ul>
+      <p class="small muted" id="f-versions"></p>
+    </div>
+  </details>
+  </div>
+
+  <footer class="foot">
+    <p class="credit">Predicted average-brain response from <a href="https://github.com/facebookresearch/tribev2" target="_blank" rel="noopener noreferrer">TRIBE v2</a> (Meta FAIR, <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>). <a href="https://www.llama.com/llama3_2/license/" target="_blank" rel="noopener noreferrer">Built with Llama</a>. Non-commercial use only. Not a view forecast.</p>
+    <p>Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright &copy; Meta Platforms, Inc. All Rights Reserved. This report is not made, endorsed or supported by Meta.</p>
+  </footer>
+</div>
+
+<dialog id="brain-dialog" aria-labelledby="brain-cap">
+  <div class="dlg-head">
+    <p class="dlg-cap" id="brain-cap"></p>
+    <button class="btn" type="button" id="brain-close">Close</button>
+  </div>
+  <img id="brain-img" alt="">
+  <p class="dlg-note">Left and right side of the average brain surface at that second. Colours show where the predicted response was higher. They are not labels for any feeling.</p>
+</dialog>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script type="application/json" id="data-report">__REPORT_JSON__</script>
+<script type="application/json" id="data-notes">__NOTES_JSON__</script>
+<script type="application/json" id="data-segments">__SEGMENTS_JSON__</script>
+<script type="application/json" id="data-flags">__FLAGS_JSON__</script>
+<script type="application/json" id="data-source">__SOURCE_JSON__</script>
+<script type="application/json" id="data-page">__PAGE_JSON__</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function readJSON(id) {
+    var el = $(id);
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); } catch (e) { return null; }
+  }
+
+  var R = readJSON('data-report');
+  var NOTES = readJSON('data-notes') || {};
+  var SEGMENTS = readJSON('data-segments') || [];
+  var SOURCE = readJSON('data-source') || {};
+  var PAGE = readJSON('data-page') || {};
+
+  function H(tag, cls, text, parent) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function S(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) { for (var k in attrs) { if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]); } }
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
+  function num(v) { return (typeof v === 'number' && isFinite(v)) ? v : null; }
+
+  if (!R) {
+    var app = $('app');
+    app.textContent = '';
+    H('p', 'error-box', 'This page could not read its report data.', app);
+    return;
+  }
+
+  var KEYS = ['seeing', 'hearing', 'language', 'attention'];
+  var SHORT = { seeing: 'Seeing', hearing: 'Hearing', language: 'Language', attention: 'Attention network', combined: 'Combined (locates moments only)' };
+  var timeS = R.time_s || [];
+  var ROWS = timeS.length;
+  var CLIP_S = num(R.clip && R.clip.seconds) || ROWS;
+  var LAST_ROW_T = ROWS ? (num(timeS[ROWS - 1]) || 0) : 0;
+  /* T_END is the drawing axis (covers the last row); PLAY_END is where the playhead stops (the clip's end, but always inside the last row). */
+  var T_END = Math.max(CLIP_S, ROWS ? LAST_ROW_T + 1 : 0, 1);
+  var PLAY_END = Math.min(T_END, Math.max(CLIP_S, ROWS ? LAST_ROW_T + 0.5 : 0.5));
+  var LAST_SEC = Math.max(0, Math.ceil(T_END - 1e-6) - 1);
+  var perSec = R.per_second || [];
+  var words = R.words || [];
+  var hits = R.word_hits || [];
+  var peaks = R.peaks || [];
+  var flats = R.flat_stretches || [];
+  var notes = (NOTES && NOTES.notes) || [];
+  var lines = R.lines || {};
+
+  /* ---------- formatting ---------- */
+  function fmt(t) {
+    var s = Math.max(0, Math.floor((t || 0) + 1e-6));
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+  /* One time convention everywhere (same as fmt_range in the scoring script and page_range in render.py):
+     the closed range of whole seconds a span touches, as the clock shows them.
+     Rows [9, 12) -> 0:09-0:11; a word span 32.991-34.051 -> 0:32-0:34; one second -> 0:20. */
+  function fmtRange(a, b) {
+    var fa = clamp(Math.floor((a || 0) + 1e-6), 0, LAST_SEC);
+    var fb = clamp(Math.ceil((b || 0) - 1e-6) - 1, fa, LAST_SEC);
+    return fb === fa ? fmt(fa) : fmt(fa) + '-' + fmt(fb);
+  }
+  function band(z) {
+    if (num(z) === null) return 'no value';
+    if (z >= 1) return 'well above this reel’s average';
+    if (z >= 0.5) return 'above this reel’s average';
+    if (z > -0.5) return 'near this reel’s average';
+    if (z > -1) return 'below this reel’s average';
+    return 'well below this reel’s average';
+  }
+  function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
+  function lineNames(keys) {
+    return (keys || []).map(function (k) { return SHORT[k] || k; }).join(', ');
+  }
+
+  /* ---------- word hits and word state ---------- */
+  var hitVals = hits.map(function (h) { return num(h.value) || 0; });
+  var hvMin = hitVals.length ? Math.min.apply(null, hitVals) : 0;
+  var hvMax = hitVals.length ? Math.max.apply(null, hitVals) : 0;
+  function tintStep(i) {
+    if (hvMax <= hvMin) return 2;
+    return clamp(Math.floor((hitVals[i] - hvMin) / (hvMax - hvMin) * 4), 0, 3);
+  }
+  var wordHit = words.map(function (w) {
+    if (w.ghost || w.stretched) return -1;
+    for (var i = 0; i < hits.length; i++) {
+      if (w.start >= hits[i].start - 1e-6 && w.stop <= hits[i].end + 1e-6) return i;
+    }
+    return -1;
+  });
+  function wordStatus(i) {
+    var w = words[i];
+    if (w.ghost && w.stretched) return 'possible ghost word, stretched timing';
+    if (w.ghost) return 'possible ghost word';
+    if (w.stretched) return 'stretched timing';
+    if (wordHit[i] >= 0) return 'word hit: language line high for this reel in this second';
+    return '';
+  }
+
+  /* ---------- header ---------- */
+  var label = R.label || R.job_id || 'Untitled reel';
+  $('h-label').textContent = label;
+  document.title = label + ' · Predicted response report';
+  var meta = $('h-meta');
+  if (SOURCE.owner) {
+    var srcSpan = H('span', '', '', meta);
+    srcSpan.appendChild(document.createTextNode(SOURCE.owner));
+    if (/^https?:\/\//i.test(SOURCE.source_url || '')) {
+      srcSpan.appendChild(document.createTextNode(' ('));
+      var a = H('a', '', 'original', srcSpan);
+      a.href = SOURCE.source_url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      srcSpan.appendChild(document.createTextNode(')'));
+    }
+  }
+  H('span', '', 'Clip ' + fmt(CLIP_S), meta);
+  if (PAGE.rendered) H('span', '', 'Rendered ' + PAGE.rendered, meta);
+  if (PAGE.swipe_href) {
+    var sw = H('a', '', 'swipe card', H('span', '', null, meta));
+    sw.href = PAGE.swipe_href;
+  }
+  if (PAGE.private) $('h-private').hidden = false;
+
+  /* ---------- snippet card: the counts strip sits above it in its own element ---------- */
+  var CARD = PAGE.card || null;
+  (function renderCard() {
+    var box = $('snip-lines');
+    if (!CARD || !CARD.lines || !CARD.lines.length) { $('snippet').hidden = true; return; }
+    CARD.lines.forEach(function (ln) {
+      var li = H('li', '', null, box);
+      li.setAttribute('data-tag', ln.tag);
+      H('span', 'snip-tag', ln.tag, li);
+      var body = H('p', 'snip-text', null, li);
+      body.appendChild(document.createTextNode(ln.text));
+      if (ln.time) {
+        if (num(ln.t) !== null) {
+          var b = H('button', 'time-btn', ln.time, body);
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Show ' + ln.time + ' in the full lanes');
+          b.addEventListener('click', function () { jump(ln.t); });
+        } else {
+          H('span', 'time-btn', ln.time, body);
+        }
+      }
+    });
+    var foot = $('snip-foot');
+    if (CARD.footnote) { foot.textContent = CARD.footnote; $('snip-key').hidden = false; } else foot.hidden = true;
+    if (CARD.counts && CARD.counts.text) {
+      /* every yyyy-mm-dd date stays on one line */
+      String(CARD.counts.text).split(/(\d{4}-\d{2}-\d{2})/).forEach(function (part, i) {
+        if (i % 2) H('span', 'nw', part, $('counts')); else if (part) $('counts').appendChild(document.createTextNode(part));
+      });
+      $('counts').hidden = false;
+      $('wall').hidden = false;
+    }
+  })();
+
+  /* ---------- about this data ---------- */
+  var scaleLabel = (R.scale && R.scale.label) || 'relative to this reel’s own average';
+  $('h-scale').textContent = cap(scaleLabel);
+  $('t-scale').textContent = cap(scaleLabel);
+  $('h-offset').textContent = cap(R.offset || '');
+  var warnList = $('h-warnings');
+  (R.warnings || []).forEach(function (w) {
+    var li = H('li', '', w && w.text ? cap(w.text) : String(w), warnList);
+    if (w && w.code) li.setAttribute('data-code', w.code);
+  });
+  if (!warnList.children.length) warnList.hidden = true;
+  var vparts = [];
+  if (R.scoring_version) vparts.push('scoring v' + R.scoring_version);
+  if (R.masks_version) vparts.push(R.masks_version);
+  if (R.job_id) vparts.push('job ' + R.job_id);
+  vparts.push('notes by ' + (NOTES.author || 'Claude'));
+  $('f-versions').textContent = vparts.join(' · ');
+
+  /* ---------- player and clock ---------- */
+  var video = $('video');
+  var player = $('player');
+  var playBtn = $('play');
+  var scrub = $('scrub');
+  var clockEl = $('clock');
+  var hasVideo = false;
+  var vt = 0, vplaying = false, vlast = 0, scrubbing = false, loopOn = false;
+  scrub.max = String(PLAY_END);
+
+  function showNoVideo(info) {
+    var box = $('no-video');
+    box.textContent = '';
+    var p1 = H('p', '', (info && info.text) || 'No video on this laptop.', box);
+    if (info && /^https?:\/\//i.test(info.url || '')) {
+      p1.appendChild(document.createTextNode(' '));
+      var l = H('a', '', info.url, p1);
+      l.href = info.url; l.target = '_blank'; l.rel = 'noopener noreferrer';
+    }
+    if (info && info.path) H('p', 'small', info.path, box);
+    H('p', 'small', 'Everything else still works: use Play or the slider to move the playhead.', box);
+    box.hidden = false;
+    video.hidden = true;
+    $('p-player-sub').textContent = 'no video';
+  }
+
+  if (PAGE.video_uri) {
+    hasVideo = true;
+    video.hidden = false;
+    player.setAttribute('data-video-state', 'loading');
+    video.addEventListener('loadedmetadata', function () { player.setAttribute('data-video-state', 'ready'); });
+    video.addEventListener('error', function () {
+      if (!hasVideo) return;
+      hasVideo = false;
+      player.setAttribute('data-video-state', 'error');
+      try { video.removeAttribute('src'); video.load(); } catch (e) { /* ignore */ }
+      showNoVideo({ text: 'This browser could not open the video file on this laptop.', path: PAGE.video_path || '' });
+      syncBtn();
+    });
+    video.src = PAGE.video_uri;
+  } else {
+    showNoVideo(PAGE.no_video);
+  }
+
+  function now() { return hasVideo ? (video.currentTime || 0) : vt; }
+  function playing() { return hasVideo ? (!video.paused && !video.ended) : vplaying; }
+  function syncBtn() { playBtn.textContent = playing() ? 'Pause' : 'Play'; }
+  function startLoop() { if (!loopOn) { loopOn = true; requestAnimationFrame(loop); } }
+  function loop(ts) {
+    if (!hasVideo && vplaying) {
+      if (vlast === null) vlast = ts;
+      var dt = Math.max(0, (ts - vlast) / 1000);
+      vlast = ts;
+      vt += dt;
+      if (vt >= PLAY_END) { vt = PLAY_END; vplaying = false; syncBtn(); }
+    }
+    update(now());
+    if (playing()) requestAnimationFrame(loop); else loopOn = false;
+  }
+  function seek(t) {
+    t = clamp(t, 0, PLAY_END);
+    if (hasVideo) {
+      var d = num(video.duration);
+      try { video.currentTime = d ? Math.min(t, Math.max(0, d - 0.05)) : t; } catch (e) { /* not ready yet */ }
+    } else {
+      vt = t;
+    }
+    update(t);
+  }
+  function play() {
+    if (hasVideo) {
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { /* blocked autoplay; user can press again */ });
+    } else {
+      if (vt >= PLAY_END - 0.01) vt = 0;
+      vplaying = true;
+      vlast = null; /* the first animation frame sets the start time */
+      startLoop();
+    }
+    syncBtn();
+  }
+  function pause() { if (hasVideo) video.pause(); else vplaying = false; syncBtn(); }
+  playBtn.addEventListener('click', function () { if (playing()) pause(); else play(); });
+  video.addEventListener('play', function () { syncBtn(); startLoop(); });
+  video.addEventListener('pause', syncBtn);
+  video.addEventListener('ended', syncBtn);
+  video.addEventListener('seeked', function () { update(now()); });
+  video.addEventListener('timeupdate', function () { if (!playing()) update(now()); });
+  scrub.addEventListener('input', function () { scrubbing = true; seek(parseFloat(scrub.value) || 0); });
+  scrub.addEventListener('change', function () { scrubbing = false; });
+  scrub.addEventListener('pointerup', function () { scrubbing = false; });
+  /* Keyboard: arrows move 1 s (Shift: 5 s), Page Up/Down 5 s, Home/End to the start and end. The slider keeps step 0.1 for dragging. */
+  scrub.addEventListener('keydown', function (ev) {
+    var t = now(), step = ev.shiftKey ? 5 : 1, nt = null;
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowUp') nt = Math.floor(t + 1e-6) + step;
+    else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowDown') nt = Math.ceil(t - 1e-6) - step;
+    else if (ev.key === 'PageUp') nt = Math.floor(t + 1e-6) + 5;
+    else if (ev.key === 'PageDown') nt = Math.ceil(t - 1e-6) - 5;
+    else if (ev.key === 'Home') nt = 0;
+    else if (ev.key === 'End') nt = PLAY_END;
+    if (nt === null) return;
+    ev.preventDefault();
+    scrubbing = false;
+    seek(clamp(nt, 0, PLAY_END));
+  });
+
+  /* A time on the card or in a fold opens Full lanes at that second. */
+  function jump(t) {
+    var fold = $('fold-lanes');
+    if (!fold.open) {
+      fold.open = true;
+      lastW = $('timeline').clientWidth;
+      renderAll();
+    }
+    seek(t);
+    /* Bring the lanes and their playhead into view (on a phone they sit below the player). */
+    var tl = $('timeline');
+    if (tl) {
+      var r = tl.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > window.innerHeight) tl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  /* ---------- tooltip ---------- */
+  var tip = $('tip');
+  function showTip(build, cx, cy) {
+    tip.textContent = '';
+    build(tip);
+    tip.hidden = false;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = cx + 14, y = cy + 14;
+    if (x + w > window.innerWidth - 8) x = Math.max(8, cx - w - 14);
+    if (y + h > window.innerHeight - 8) y = Math.max(8, cy - h - 14);
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.hidden = true; }
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  /* ---------- shared axis helpers ---------- */
+  function makeX(W) {
+    var padL = 6, padR = 8;
+    var span = W - padL - padR;
+    var f = function (t) { return padL + (t / T_END) * span; };
+    f.inv = function (px) { return clamp((px - padL) / span * T_END, 0, T_END - 1e-6); };
+    return f;
+  }
+  function tickStep(W) {
+    var steps = [1, 2, 5, 10, 15, 30, 60, 120];
+    for (var i = 0; i < steps.length; i++) { if ((W / T_END) * steps[i] >= 46) return steps[i]; }
+    return 300;
+  }
+  function drawAxis(svg, x, W, y0, gridTop) {
+    var step = tickStep(W);
+    for (var t = 0; t <= T_END + 1e-6; t += step) {
+      var px = x(t);
+      if (gridTop !== null) S('line', { 'class': 'grid-x', x1: px, x2: px, y1: gridTop, y2: y0 - 2 }, svg);
+      var anchor = t === 0 ? 'start' : (px > W - 20 ? 'end' : 'middle');
+      var tx = S('text', { x: px, y: y0 + 12, 'text-anchor': anchor }, svg);
+      tx.textContent = fmt(t);
+    }
+  }
+  function secOf(t) { return clamp(Math.floor(t), 0, Math.max(0, ROWS - 1)); }
+  function runs(pred) {
+    var out = [], start = -1;
+    for (var i = 0; i < perSec.length; i++) {
+      var on = !!pred(perSec[i]);
+      if (on && start < 0) start = i;
+      if (!on && start >= 0) { out.push([perSec[start].t, perSec[i - 1].t + 1]); start = -1; }
+    }
+    if (start >= 0) out.push([perSec[start].t, perSec[perSec.length - 1].t + 1]);
+    return out;
+  }
+  function hookRange() {
+    var r = runs(function (p) { return p.hook; });
+    if (r.length) return [r[0][0], r[r.length - 1][1]];
+    return [0, Math.min(3, T_END)];
+  }
+
+  /* ---------- per-second tooltip ---------- */
+  function wordsInSecond(s) {
+    var out = [];
+    for (var i = 0; i < words.length; i++) {
+      var rws = words[i].rows || [];
+      if (rws.indexOf(s) >= 0) out.push(words[i].text);
+    }
+    return out;
+  }
+  function secondTip(s) {
+    return function (box) {
+      var sg = SEGMENTS[s] || {};
+      H('div', 'tip-t', fmtRange(num(sg.start) !== null ? sg.start : s, num(sg.stop) !== null ? sg.stop : s + 1), box);
+      KEYS.forEach(function (k) {
+        if (!lines[k]) return;
+        var z = (lines[k].display_z || [])[s];
+        var row = H('div', 'tip-row', null, box);
+        H('span', 'tip-key', null, row);
+        H('span', '', SHORT[k] + ': ' + band(z), row);
+      });
+      var ps = perSec[s] || {};
+      var fl = [];
+      if (ps.hook) fl.push('hook window');
+      if (ps.black) fl.push('black frames');
+      if (ps.silent) fl.push('silence');
+      if (ps.edge) fl.push('edge second: lower confidence');
+      peaks.forEach(function (p) { if (p.t === s) fl.push('peak'); });
+      flats.forEach(function (f) { if (s >= f.start && s < f.end) fl.push('flat stretch ' + fmtRange(f.start, f.end)); });
+      if (fl.length) H('div', 'tip-flag', fl.join(' · '), box);
+      var ws = wordsInSecond(s);
+      if (ws.length) {
+        var txt = ws.join(' ');
+        if (txt.length > 90) txt = txt.slice(0, 88) + '…';
+        H('div', 'tip-flag', '“' + txt + '”', box);
+      }
+    };
+  }
+
+  /* ---------- timeline (panel 3) ---------- */
+  var TL = null;
+  function renderTimeline() {
+    var host = $('timeline');
+    host.textContent = '';
+    var W = Math.max(260, Math.floor(host.clientWidth));
+    var x = makeX(W);
+    var TOP = 32, LBL = 18, PLOT = 52, GAP = 12;
+    var laneTop = function (i) { return TOP + i * (LBL + PLOT + GAP); };
+    var railTop = laneTop(KEYS.length) + 2;
+    var RROW = 20;
+    var railRows = [
+      { name: 'Black frames', cls: 'f-black', key: 'black' },
+      { name: 'Silence', cls: 'f-silent', key: 'silent' },
+      { name: 'Edges: lower confidence', cls: 'f-edge', key: 'edge' }
+    ];
+    var axisTop = railTop + railRows.length * RROW + 4;
+    var Ht = axisTop + 18;
+
+    var svg = S('svg', { width: W, height: Ht, viewBox: '0 0 ' + W + ' ' + Ht, role: 'img', 'aria-label': 'Predicted response lanes. Use the moments list below for the same information as text.' }, host);
+
+    var yMax = 2.5;
+    KEYS.forEach(function (k) {
+      (lines[k] && lines[k].display_z || []).forEach(function (z) { if (num(z) !== null) yMax = Math.max(yMax, Math.abs(z)); });
+    });
+    yMax = Math.ceil(yMax * 2) / 2 + 0.25;
+
+    var gBack = S('g', { 'class': 'nolines' }, svg);
+    drawAxis(gBack, x, W, axisTop, TOP);
+
+    /* lanes */
+    KEYS.forEach(function (k, i) {
+      var top = laneTop(i);
+      var pTop = top + LBL;
+      var mid = pTop + PLOT / 2;
+      var y = function (z) { return mid - (z / yMax) * (PLOT / 2 - 2); };
+      S('rect', { 'class': 'lane-bg', x: x(0), y: pTop, width: x(T_END) - x(0), height: PLOT, rx: 4 }, gBack);
+      flats.forEach(function (f) {
+        S('rect', { 'class': 'flat', x: x(f.start), y: pTop, width: Math.max(1, x(f.end) - x(f.start)), height: PLOT }, gBack);
+      });
+      S('line', { 'class': 'zero', x1: x(0), x2: x(T_END), y1: mid, y2: mid }, gBack);
+      peaks.forEach(function (p) {
+        S('line', { 'class': 'pk-line', x1: x(p.t + 0.5), x2: x(p.t + 0.5), y1: pTop, y2: pTop + PLOT }, gBack);
+      });
+      var L = lines[k] || {};
+      var name = S('text', { 'class': 'lane-name', x: x(0), y: top + 13 }, gBack);
+      name.textContent = SHORT[k];
+      var sub = S('tspan', { 'class': 'lane-sub', dx: 6 }, name);
+      sub.textContent = L.label ? '· ' + L.label : '';
+      if (L.trend) {
+        var dr = S('text', { 'class': 'lane-drift', x: x(T_END), y: top + 13, 'text-anchor': 'end' }, gBack);
+        dr.textContent = 'drift across reel: ' + L.trend;
+        try {
+          if (name.getComputedTextLength() + x(0) + 12 > x(T_END) - dr.getComputedTextLength()) dr.setAttribute('display', 'none');
+        } catch (e) { /* layout not ready */ }
+      }
+      try { if (name.getComputedTextLength() > x(T_END) - x(0) - 4) sub.textContent = ''; } catch (e) { /* layout not ready */ }
+      var zs = L.display_z || [];
+      var d = '', pen = false;
+      for (var r = 0; r < zs.length; r++) {
+        var z = num(zs[r]);
+        if (z === null) { pen = false; continue; }
+        var px = x((num(timeS[r]) !== null ? timeS[r] : r) + 0.5);
+        d += (pen ? 'L' : 'M') + px.toFixed(1) + ' ' + y(z).toFixed(1);
+        pen = true;
+      }
+      if (d) S('path', { 'class': 'ln', d: d }, gBack);
+    });
+
+    /* rail */
+    railRows.forEach(function (rr, i) {
+      var top = railTop + i * RROW;
+      var t = S('text', { x: x(0), y: top + 9 }, gBack);
+      t.textContent = rr.name;
+      S('rect', { 'class': 'track', x: x(0), y: top + 12, width: x(T_END) - x(0), height: 6, rx: 2 }, gBack);
+      runs(function (p) { return p[rr.key]; }).forEach(function (run) {
+        S('rect', { 'class': rr.cls, x: x(run[0]), y: top + 12, width: Math.max(1.5, x(run[1]) - x(run[0])), height: 6, rx: 2 }, gBack);
+      });
+    });
+
+    /* playhead and crosshair */
+    var phBand = S('rect', { 'class': 'ph-band', x: x(0), y: 0, width: 0, height: axisTop }, svg);
+    var phLine = S('line', { 'class': 'ph-line', x1: x(0), x2: x(0), y1: 0, y2: axisTop }, svg);
+    var cross = S('line', { 'class': 'cross', x1: -10, x2: -10, y1: TOP, y2: axisTop, visibility: 'hidden' }, svg);
+
+    /* lane overlay: hover readout and click to seek */
+    var over = S('rect', { 'class': 'over', x: 0, y: TOP - 4, width: W, height: axisTop - TOP + 4 }, svg);
+    function at(ev) { var rc = svg.getBoundingClientRect(); return x.inv(ev.clientX - rc.left); }
+    over.addEventListener('pointermove', function (ev) {
+      var s = secOf(at(ev));
+      var cx = x(s + 0.5);
+      cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+      showTip(secondTip(s), ev.clientX, ev.clientY);
+    });
+    over.addEventListener('pointerleave', function () { cross.setAttribute('visibility', 'hidden'); hideTip(); });
+    over.addEventListener('click', function (ev) { seek(secOf(at(ev))); });
+
+    /* top strip: hook bracket, flat bars and peak marks (each seeks to its own start) */
+    var hr = hookRange();
+    var hx0 = x(hr[0]) + 0.5, hx1 = x(hr[1]) - 0.5;
+    S('path', { 'class': 'hook', d: 'M' + hx0 + ' 12 V5 H' + hx1 + ' V12' }, svg);
+    var hl = S('text', { x: hx1 + 5, y: 11 }, svg);
+    hl.textContent = 'hook ' + fmtRange(hr[0], hr[1]);
+    var hookHit = S('rect', { 'class': 'hit', x: hx0 - 4, y: 0, width: (hx1 - hx0) + 8, height: 14 }, svg);
+    hookHit.addEventListener('click', function () { seek(hr[0]); });
+    hookHit.addEventListener('pointermove', function (ev) {
+      showTip(function (b) { H('div', 'tip-t', 'Hook window ' + fmtRange(hr[0], hr[1]) + ' (first ' + Math.round(hr[1] - hr[0]) + ' seconds)', b); H('div', 'tip-flag', '3 data points, edge seconds: lower confidence', b); }, ev.clientX, ev.clientY);
+    });
+    hookHit.addEventListener('pointerleave', hideTip);
+
+    flats.forEach(function (f) {
+      var fx0 = x(f.start), fw = Math.max(2, x(f.end) - x(f.start));
+      var h = S('rect', { 'class': 'hit', x: fx0, y: 15, width: fw, height: 14 }, svg);
+      S('rect', { 'class': 'flat-bar', x: fx0, y: 20, width: fw, height: 5, rx: 2, 'pointer-events': 'none' }, svg);
+      h.addEventListener('click', function () { seek(f.start); });
+      h.addEventListener('pointermove', function (ev) {
+        showTip(function (b) {
+          H('div', 'tip-t', 'Flat stretch ' + fmtRange(f.start, f.end), b);
+          H('div', '', 'Low for this reel, not tested against retention.', b);
+          if (f.driving_lines && f.driving_lines.length) H('div', 'tip-flag', 'Driven by: ' + lineNames(f.driving_lines), b);
+        }, ev.clientX, ev.clientY);
+      });
+      h.addEventListener('pointerleave', hideTip);
+    });
+    peaks.forEach(function (p) {
+      var cx = x(p.t + 0.5);
+      var h = S('rect', { 'class': 'hit', x: cx - 12, y: 13, width: 24, height: 18 }, svg);
+      S('path', { 'class': 'pk-mark', d: 'M' + (cx - 5) + ' 17 H' + (cx + 5) + ' L' + cx + ' 27 Z', 'pointer-events': 'none' }, svg);
+      h.addEventListener('click', function () { seek(p.t); });
+      h.addEventListener('pointermove', function (ev) {
+        showTip(function (b) {
+          H('div', 'tip-t', 'Peak at ' + fmt(p.t), b);
+          H('div', '', 'High for this reel, not tested against retention.', b);
+          if (p.driving_lines && p.driving_lines.length) H('div', 'tip-flag', 'Driven by: ' + lineNames(p.driving_lines), b);
+        }, ev.clientX, ev.clientY);
+      });
+      h.addEventListener('pointerleave', hideTip);
+    });
+
+    TL = { x: x, band: phBand, line: phLine };
+  }
+
+  /* ---------- word strip (panel 4) ---------- */
+  var WS = null;
+  function nearestWord(t) {
+    var best = -1, bd = 1e9;
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i];
+      var dd = t < w.start ? w.start - t : (t > w.stop ? t - w.stop : 0);
+      if (dd < bd) { bd = dd; best = i; }
+    }
+    return bd <= 0.6 ? best : -1;
+  }
+  function renderWordStrip() {
+    var host = $('wordstrip');
+    host.textContent = '';
+    var W = Math.max(260, Math.floor(host.clientWidth));
+    var x = makeX(W);
+    var LBL = 16, BY = 20, BH = 14, axisTop = BY + BH + 6, Ht = axisTop + 18;
+    var svg = S('svg', { width: W, height: Ht, viewBox: '0 0 ' + W + ' ' + Ht, role: 'img', 'aria-label': 'Words on the time axis. The transcript below has the same words as text.' }, host);
+    var g = S('g', { 'class': 'nolines' }, svg);
+    drawAxis(g, x, W, axisTop, null);
+    S('rect', { 'class': 'track', x: x(0), y: BY + BH / 2 - 1, width: x(T_END) - x(0), height: 2 }, g);
+    if (!words.length) {
+      var t0 = S('text', { x: x(0), y: BY - 4 }, g);
+      t0.textContent = 'No transcript words in this reel.';
+    }
+    words.forEach(function (w, i) {
+      var x0 = x(w.start), x1 = x(Math.max(w.stop, w.start));
+      var cls = 'w';
+      if (w.ghost || w.stretched) cls = 'w-odd';
+      else if (wordHit[i] >= 0) cls = 'w-t' + tintStep(wordHit[i]);
+      S('rect', { 'class': cls, x: x0, y: BY, width: Math.max(2, x1 - x0 - 0.5), height: BH, rx: 1.5 }, g);
+    });
+    /* phrase labels for hits, highest value first, so the strongest phrase always gets its label;
+       a label that would overlap one already placed is skipped */
+    var order = hits.map(function (h, i) { return i; }).sort(function (a, b) {
+      return ((num(hits[b].value) || 0) - (num(hits[a].value) || 0)) || (hits[a].start - hits[b].start);
+    });
+    var placed = [];
+    order.forEach(function (i) {
+      var h = hits[i];
+      var txt = String(h.phrase || '');
+      if (txt.length > 26) txt = txt.slice(0, 25) + '…';
+      var lx = Math.max(x(0), x(h.start));
+      var t = S('text', { 'class': 'phrase', x: lx, y: LBL - 3 }, g);
+      t.textContent = '“' + txt + '”';
+      var wlen = 0;
+      try { wlen = t.getComputedTextLength(); } catch (e) { wlen = 0; }
+      if (!wlen) wlen = (txt.length + 2) * 6;
+      if (lx + wlen > W - 2) { lx = Math.max(x(0), W - 2 - wlen); t.setAttribute('x', lx); }
+      var clash = lx + wlen > W - 2 || placed.some(function (p) { return lx < p[1] + 6 && lx + wlen > p[0] - 6; });
+      if (clash) { g.removeChild(t); return; }
+      placed.push([lx, lx + wlen]);
+    });
+    var phBand = S('rect', { 'class': 'ph-band', x: 0, y: 0, width: 0, height: axisTop }, svg);
+    var phLine = S('line', { 'class': 'ph-line', x1: 0, x2: 0, y1: 0, y2: axisTop }, svg);
+    var over = S('rect', { 'class': 'over', x: 0, y: 0, width: W, height: axisTop }, svg);
+    function at(ev) { var rc = svg.getBoundingClientRect(); return x.inv(ev.clientX - rc.left); }
+    over.addEventListener('pointermove', function (ev) {
+      var t = at(ev);
+      var i = nearestWord(t);
+      showTip(function (b) {
+        if (i < 0) { H('div', 'tip-t', fmt(t), b); H('div', 'tip-flag', 'no word here', b); return; }
+        var w = words[i];
+        H('div', 'tip-t', fmt(w.start), b);
+        H('div', '', '“' + w.text + '”', b);
+        var st = wordStatus(i);
+        if (st) H('div', 'tip-flag', st, b);
+        if (wordHit[i] >= 0) H('div', 'tip-flag', 'phrase: “' + hits[wordHit[i]].phrase + '”', b);
+      }, ev.clientX, ev.clientY);
+    });
+    over.addEventListener('pointerleave', hideTip);
+    over.addEventListener('click', function (ev) {
+      var t = at(ev);
+      var i = nearestWord(t);
+      seek(i >= 0 ? words[i].start : secOf(t));
+    });
+    WS = { x: x, band: phBand, line: phLine };
+  }
+
+  /* ---------- beats (from the swipe file, when the reel is in it) ---------- */
+  (function renderBeats() {
+    var beats = PAGE.beats || [];
+    if (!beats.length) return;
+    var ol = $('beats');
+    beats.forEach(function (b) {
+      var li = H('li', '', null, ol);
+      var tb = H('button', 'time-btn', fmtRange(b.start, b.end), li);
+      tb.type = 'button';
+      tb.setAttribute('aria-label', 'Show ' + fmtRange(b.start, b.end) + ' in the full lanes');
+      tb.addEventListener('click', function () { jump(b.start); });
+      if (b.kind) H('span', 'beat-kind', b.kind, li);
+      H('span', '', (b.name || '') + (b.status === 'accepted' ? '' : ' (suggested)'), li);
+    });
+    $('fold-beats').hidden = false;
+  })();
+
+  /* ---------- notes: a note under a moment shares the moment's time button ---------- */
+  function noteBlock(n, parent, withTime) {
+    var d = H('div', 'note', null, parent);
+    H('p', 'note-by', 'Claude’s note', d);
+    H('p', 'note-text', n.text, d);
+    var m = H('div', 'note-meta', null, d);
+    if (withTime) {
+      var tb = H('button', 'time-btn', fmtRange(n.t_start, n.t_end), m);
+      tb.type = 'button';
+      tb.setAttribute('aria-label', 'Jump to ' + fmt(n.t_start));
+      tb.addEventListener('click', function () { jump(n.t_start); });
+    }
+    (n.lines || []).forEach(function (k) { H('span', 'line-chip', SHORT[k] || k, m); });
+    if (n.idea_to_test) {
+      var idea = H('p', 'idea', null, d);
+      H('span', 'idea-k', 'Idea to test:', idea);
+      idea.appendChild(document.createTextNode(String(n.idea_to_test).replace(/^Test:\s*/, '')));
+    }
+    return d;
+  }
+  var summaries = notes.filter(function (n) { return n.kind === 'summary'; });
+  if (summaries.length) {
+    var sb = $('summary-body');
+    summaries.forEach(function (n) { noteBlock(n, sb, false); });
+    $('summary').hidden = false;
+  }
+
+  /* ---------- moments: word hits fold into Transcript, the rest into All moments ---------- */
+  var moments = [];
+  if (R.hook_0_3s) { var hr0 = hookRange(); moments.push({ kind: 'hook', a: hr0[0], b: hr0[1], d: R.hook_0_3s }); }
+  flats.forEach(function (f) { moments.push({ kind: 'flat', a: f.start, b: f.end, d: f }); });
+  peaks.forEach(function (p) { moments.push({ kind: 'peak', a: p.t, b: p.t + 1, d: p }); });
+  hits.forEach(function (h) { moments.push({ kind: 'word', a: h.start, b: Math.max(h.end, h.start + 0.01), d: h }); });
+  var kindOrder = { hook: 0, flat: 1, peak: 2, word: 3 };
+  moments.sort(function (m1, m2) { return (m1.a - m2.a) || (kindOrder[m1.kind] - kindOrder[m2.kind]); });
+
+  var usedNotes = {};
+  moments.forEach(function (m) {
+    var best = null, bo = 0;
+    notes.forEach(function (n) {
+      if (n.kind !== m.kind) return;
+      var o = Math.min(m.b, n.t_end) - Math.max(m.a, n.t_start);
+      if (o > bo + 1e-9) { bo = o; best = n; }
+    });
+    m.note = best;
+    if (best) usedNotes[best.id] = true;
+  });
+
+  var topPeakT = (R.brain_picture && num(R.brain_picture.t) !== null) ? R.brain_picture.t : null;
+  var momentEls = [];
+  var list = $('moments');
+  var hitList = $('hits');
+  moments.forEach(function (m) {
+    var li = H('li', 'moment', null, m.kind === 'word' ? hitList : list);
+    li.setAttribute('data-a', m.a);
+    li.setAttribute('data-b', m.b);
+    var body = H('div', '', null, li);
+    var head = H('div', 'moment-head', null, body);
+    H('span', 'kind-dot ' + m.kind, null, head);
+    var kindTxt = { hook: 'Hook window', flat: 'Flat stretch', peak: 'Peak', word: 'Word hit' }[m.kind];
+    H('span', 'kind', kindTxt, head);
+    var tb = H('button', 'time-btn', m.kind === 'peak' ? fmt(m.a) : fmtRange(m.a, m.b), head);
+    tb.type = 'button';
+    tb.setAttribute('aria-label', 'Jump to ' + fmt(m.a));
+    tb.addEventListener('click', function () { jump(m.a); });
+
+    var desc = H('div', 'moment-desc', null, body);
+    var thumbKey = null;
+    if (m.kind === 'hook') {
+      H('p', 'moment-title', 'First three seconds', desc);
+      H('p', '', 'Unsmoothed lines, relative to this reel’s own average. Only 3 data points and edge seconds, so lower confidence.', desc);
+      var ul = H('ul', '', null, desc);
+      KEYS.forEach(function (k) { if (num(m.d[k]) !== null) H('li', '', SHORT[k] + ': ' + band(m.d[k]), ul); });
+    } else if (m.kind === 'flat') {
+      H('p', 'moment-title', 'Lower than usual for this reel', desc);
+      H('p', '', 'Low for this reel, not tested against any retention graph.', desc);
+      var ul2 = H('ul', '', null, desc);
+      if (m.d.driving_lines && m.d.driving_lines.length) H('li', '', 'Driven by: ' + lineNames(m.d.driving_lines), ul2);
+      if (m.d.overlaps_black) H('li', '', 'Overlaps black frames', ul2);
+      if (m.d.edge) H('li', '', 'Touches the first or last 2 seconds: lower confidence', ul2);
+      if (!ul2.children.length) desc.removeChild(ul2);
+      thumbKey = 'flat:' + m.d.start + '-' + m.d.end;
+    } else if (m.kind === 'peak') {
+      H('p', 'moment-title', 'Higher than usual for this reel', desc);
+      H('p', '', 'High for this reel, not tested against any retention graph.', desc);
+      var ul3 = H('ul', '', null, desc);
+      if (m.d.driving_lines && m.d.driving_lines.length) H('li', '', 'Driven by: ' + lineNames(m.d.driving_lines), ul3);
+      if (m.d.edge) H('li', '', 'Edge second: lower confidence', ul3);
+      if (!ul3.children.length) desc.removeChild(ul3);
+      thumbKey = 'peak:' + m.d.t;
+      if (PAGE.brain_img && topPeakT !== null && m.d.t === topPeakT) {
+        var bb = H('button', 'btn brain-btn', 'Brain picture at ' + fmt(m.d.t), desc);
+        bb.type = 'button';
+        bb.addEventListener('click', openBrain);
+      }
+    } else if (m.kind === 'word') {
+      var tt = H('p', 'moment-title', null, desc);
+      H('span', 'phrase-quote', '“' + m.d.phrase + '”', tt);
+    }
+    if (m.note) noteBlock(m.note, body, false);
+    else if (m.kind !== 'word') H('p', 'no-note', 'No Claude note for this moment.', body);
+
+    if (thumbKey && PAGE.thumbs && PAGE.thumbs[thumbKey]) {
+      li.className += ' has-thumb';
+      var fig = H('div', '', null, li);
+      var img = H('img', 'thumb', null, fig);
+      img.alt = 'Frame at ' + fmt(m.kind === 'flat' ? (m.a + m.b) / 2 : m.a);
+      img.src = PAGE.thumbs[thumbKey];
+      img.loading = 'lazy';
+      H('p', 'thumb-cap', 'Frame at ' + fmt(m.kind === 'flat' ? (m.a + m.b) / 2 : m.a), fig);
+    }
+    momentEls.push({ el: li, a: m.a, b: m.b });
+  });
+  if (!list.children.length) H('li', 'no-note', 'No moments were flagged for this reel.', list);
+  if (!hitList.children.length) H('li', 'no-note', 'No word hits in this reel.', hitList);
+
+  var others = notes.filter(function (n) { return n.kind !== 'summary' && !usedNotes[n.id]; });
+  if (others.length) {
+    var ob = $('other-notes-body');
+    others.sort(function (n1, n2) { return n1.t_start - n2.t_start; }).forEach(function (n) { noteBlock(n, ob, true); });
+    $('other-notes').hidden = false;
+  }
+
+  /* ---------- brain picture popup ---------- */
+  var dlg = $('brain-dialog');
+  function openBrain() {
+    if (!PAGE.brain_img || !R.brain_picture) return;
+    var sides = (R.brain_picture.sides || ['left', 'right']).join(' and ');
+    $('brain-cap').textContent = 'Predicted average-brain response at ' + fmt(R.brain_picture.t) + ' (' + sides + ' side)';
+    var img = $('brain-img');
+    img.src = PAGE.brain_img;
+    img.alt = 'Predicted average-brain response at ' + fmt(R.brain_picture.t) + ', ' + sides + ' side';
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  function closeBrain() { if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
+  $('brain-close').addEventListener('click', closeBrain);
+  dlg.addEventListener('click', function (ev) { if (ev.target === dlg) closeBrain(); });
+
+  /* ---------- playhead sync ---------- */
+  var lastMoments = null;
+  function update(t) {
+    t = clamp(t || 0, 0, PLAY_END);
+    var s = secOf(t);
+    [TL, WS].forEach(function (v) {
+      if (!v) return;
+      v.band.setAttribute('x', v.x(s));
+      v.band.setAttribute('width', Math.max(1, v.x(s + 1) - v.x(s)));
+      var lx = v.x(t);
+      v.line.setAttribute('x1', lx);
+      v.line.setAttribute('x2', lx);
+    });
+    if (!scrubbing) scrub.value = String(t);
+    clockEl.textContent = fmt(t) + ' / ' + fmt(PLAY_END);
+    /* checked on every update (under 15 moments), so a word hit that starts mid-second lights up on time */
+    var active = '';
+    momentEls.forEach(function (m, i) { if (t >= m.a && t < m.b) active += i + ','; });
+    if (active !== lastMoments) {
+      momentEls.forEach(function (m) { m.el.classList.toggle('now', t >= m.a && t < m.b); });
+      lastMoments = active;
+    }
+  }
+
+  function renderAll() {
+    renderTimeline();
+    renderWordStrip();
+    lastMoments = null;
+    update(now());
+  }
+  var lastW = 0, rt = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () {
+      var w = $('timeline').clientWidth;
+      if (w !== lastW) { lastW = w; renderAll(); }
+    }, 120);
+  });
+  /* Full lanes starts folded: draw again at the real width when it opens. */
+  $('fold-lanes').addEventListener('toggle', function () {
+    var w = $('timeline').clientWidth;
+    if ($('fold-lanes').open && w !== lastW) { lastW = w; renderAll(); }
+  });
+  lastW = $('timeline').clientWidth;
+  renderAll();
+  syncBtn();
+  document.documentElement.setAttribute('data-rendered', 'ok');
+})();
+</script>
+</body>
+</html>

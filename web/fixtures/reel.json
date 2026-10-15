@@ -1,0 +1,118 @@
+{
+ "v": 1,
+ "rendered": "2026-10-09",
+ "shortcode": "DEMO0000001",
+ "owner": "demo_creator_a",
+ "url": "https://www.instagram.com/reel/DEMO0000001/",
+ "posted": "2026-09-20",
+ "card": {
+  "mode": "tribe",
+  "counts": {
+   "text": "@demo_creator_a · 0:42 · 61,200 plays · 4.9x own median (18 reels) · thin baseline · as of 2026-10-01",
+   "shortcode": "DEMO0000001"
+  },
+  "lines": [
+   {
+    "tag": "HOOK",
+    "time": "0:00",
+    "t": 0,
+    "text": "cold open question · text on screen at start: yes · first word at"
+   },
+   {
+    "tag": "HIGH",
+    "time": "0:21",
+    "t": 21,
+    "text": "seeing, language and attention lines high for this reel"
+   },
+   {
+    "tag": "FLAT",
+    "time": "0:30-0:33",
+    "t": 30,
+    "text": "hearing line low for this reel",
+    "edge": false
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: in your draft, give the demo beat about 22 seconds, like this reel's two-step walkthrough."
+   },
+   {
+    "tag": "TRY",
+    "time": null,
+    "t": null,
+    "text": "Test: open your draft with the same hook shape (cold open question), in your own words."
+   }
+  ],
+  "footnote": "HIGH/FLAT: predicted average-brain response, vs this reel's own average."
+ },
+ "discount": null,
+ "recreate": "/script new from-DEMO0000001",
+ "beats": [
+  {
+   "chip": "0:00-0:02",
+   "kind": "hook",
+   "name": "cold open question",
+   "suggested": false
+  },
+  {
+   "chip": "0:03-0:11",
+   "kind": "setup",
+   "name": "whiteboard sketch",
+   "suggested": false
+  },
+  {
+   "chip": "0:12-0:33",
+   "kind": "demo",
+   "name": "two-step walkthrough",
+   "suggested": false
+  },
+  {
+   "chip": "0:34-0:39",
+   "kind": "payoff",
+   "name": "quick recap",
+   "suggested": true
+  },
+  {
+   "chip": "0:40-0:41",
+   "kind": "cta",
+   "name": "follow ask",
+   "suggested": false
+  }
+ ],
+ "beats_empty": "No beats tagged yet. Claude suggests them, and you accept them with python -m strategist.reel accept DEMO0000001 beats.",
+ "tribe": {
+  "job_id": "20261001-101500-0a1b2c3d",
+  "run_date": "2026-10-01",
+  "missing": false
+ },
+ "stamps": {
+  "counts": "counts from Apify, as of 2026-10-01",
+  "shape": "shape suggested by Claude, accepted by you: 7 of 8 labels",
+  "brain": "TRIBE run 2026-10-01",
+  "page": "page made by strategist.hosted on 2026-10-09"
+ },
+ "facts": [
+  {
+   "label": "Length",
+   "value": "0:42"
+  },
+  {
+   "label": "First word",
+   "value": "at 0:00"
+  },
+  {
+   "label": "Pace",
+   "value": "about 3 words a second"
+  },
+  {
+   "label": "Call to action",
+   "value": "follow at about 0:40"
+  },
+  {
+   "label": "Text at 0:00",
+   "value": "yes"
+  }
+ ],
+ "local_cmd": "python -m strategist.render reel DEMO0000001 --open"
+}
