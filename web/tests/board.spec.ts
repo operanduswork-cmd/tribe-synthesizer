@@ -150,10 +150,10 @@ test("board: layout, footer, wall, words and no row numbers", async ({ page }, i
   expect(mixedCards).toBe(0);
   await expect(page.locator('[data-layer="counts"] [data-layer="brain"], [data-layer="brain"] [data-layer="counts"]')).toHaveCount(0);
 
-  // TRIBE values on the board are yes / no only (D21).
+  // TRIBE values on the board are the word "yes" on every row (his D32 override); the dot or ring tells real reads apart.
   const brainValues = await page.locator('#main [data-layer="brain"]').allInnerTexts();
   expect(brainValues.length).toBeGreaterThan(0);
-  for (const v of brainValues) expect(["yes", "no"]).toContain(v.trim());
+  for (const v of brainValues) expect(v.trim()).toBe("yes");
 
   // No row numbers: no row or card starts with a bare number, no ordered list of reels.
   const firsts = await page.evaluate(() =>
@@ -418,8 +418,8 @@ test("board: layer colour dots, the TRIBE mark and row hover", async ({ page }, 
     expect(Object.values(tok)).not.toContain(t.text);
   }
 
-  // TRIBE: "yes" leads with the brain's split dot, "no" with an empty ring; the value text is
-  // exactly yes / no, holds no mark itself, and is never drawn in a layer colour (not a status).
+  // TRIBE: every row says "yes"; a real read leads with the brain's split dot, no read with an empty ring; the value text
+  // is exactly yes, holds no mark itself, and is never drawn in a layer colour (not a status).
   const yes = board.reels.filter((r) => r.cells.tribe === "yes").length;
   expect(yes).toBeGreaterThan(0);
   await expect(tribe.locator('tbody [data-tribe="yes"] [data-layer-dot="brain"]')).toHaveCount(yes);
@@ -429,7 +429,8 @@ test("board: layer colour dots, the TRIBE mark and row hover", async ({ page }, 
   const values = await tribe
     .locator('tbody [data-layer="brain"]')
     .evaluateAll((els) => els.map((e) => ({ text: (e as HTMLElement).innerText.trim(), color: getComputedStyle(e).color })));
-  expect(values.map((v) => v.text).sort()).toEqual(board.reels.map((r) => r.cells.tribe).sort());
+  // Every row's text is "yes" (his override, D32); the dot (real read) or ring (no read) tells them apart.
+  expect(values.map((v) => v.text)).toEqual(board.reels.map(() => "yes"));
   for (const v of values) expect(Object.values(tok)).not.toContain(v.color);
   // No mark of any layer in the main rows (D20): the split dot lives behind the wall only.
   await expect(table.locator('tr[data-line="reel"] [data-layer-dot]')).toHaveCount(0);

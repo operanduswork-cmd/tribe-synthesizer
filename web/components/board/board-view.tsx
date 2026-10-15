@@ -69,7 +69,7 @@ export function BoardView({ board }: { board: Board }) {
   );
 
   return (
-    <div data-board="view" className="flex flex-col gap-3">
+    <div data-board="view" className="page-wash flex flex-col gap-3">
       <BoardToolbar
         board={board}
         view={view}

@@ -13,10 +13,11 @@
 // status cells); the text stays exactly yes / no, and the dot is identity, never a status.
 
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
-import type { MouseEvent } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 
 import {
   COLUMNS,
+  hasRead,
   TRIBE_COLUMN,
   shapeCell,
   shapeHint,
@@ -39,9 +40,31 @@ import { cn } from "@/lib/utils";
 const c = copy.board;
 
 const ROW =
-  "h-9 border-b border-line transition-[background-color] duration-(--motion-fast) ease-(--motion-ease) last:border-b-0 pointer-coarse:h-11";
-const HEAD = "h-12 border-b border-line bg-subtle/60";
+  "row-in h-9 border-b border-line transition-[background-color] duration-(--motion-fast) ease-(--motion-ease) last:border-b-0 pointer-coarse:h-11";
+const HEAD = "h-12 border-b border-line";
 const CELL = "overflow-hidden px-3 whitespace-nowrap";
+const TH = "head-glass bg-subtle/70";
+
+// Sleek pass (round 7): proportional bars under Length (facts) and x own median (counts), each on
+// its own scale (the longest / largest visible), never a brain value (D20). Monogram hue is a
+// stable hash of the handle. Row stagger index is capped so long boards do not wait.
+type Scales = { length: number; x: number };
+
+function hueOf(handle: string): number {
+  let h = 0;
+  for (const ch of handle) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return h;
+}
+
+function initials(handle: string): string {
+  const parts = handle.replace(/^@/, "").split(/[^A-Za-z0-9]+/).filter(Boolean);
+  const s = parts.length > 1 ? parts[0][0] + parts[1][0] : (parts[0] ?? "?").slice(0, 2);
+  return s.toUpperCase();
+}
+
+function frac(v: number | null | undefined, max: number): number {
+  return typeof v === "number" && max > 0 ? Math.max(0, Math.min(1, v / max)) : 0;
+}
 
 type TableProps = {
   board: Board;
@@ -68,24 +91,25 @@ function Shape({ text }: { text: string }) {
       </LayerValue>
     );
   }
-  return <ShapeChip label={s.label} status={s.status} title={s.label} hint={shapeHint(s.status)} className="max-w-full" />;
+  return <ShapeChip label={s.label} status={s.status} title={s.label} hint={shapeHint(s.status)} className="chip-glow max-w-full" />;
 }
 
-/** The TRIBE yes / no, led by a mark: the brain's split cool/warm dot when a read exists, an
- *  empty dotted ring when not. The marks carry no text, so the value reads exactly yes or no. */
-function TribeValue({ value }: { value: string }) {
-  const yes = value === "yes";
+/** The TRIBE cell always says "yes" (his override, D32: "keep it yes idc, its just dummy data"),
+ *  led by a mark that tells the rows apart: the brain's split cool/warm dot when a real read
+ *  exists, an empty dotted ring when not. data-tribe carries the real flag, never the label. */
+function TribeValue({ read }: { read: boolean }) {
+  const yes = read;
   return (
     <span data-tribe={yes ? "yes" : "no"} className="inline-flex max-w-full items-center gap-1.5">
       {yes ? (
-        <LayerDot layer="brain" className="size-2.5" />
+        <LayerDot layer="brain" className="dot-pulse size-2.5" />
       ) : (
         <svg aria-hidden viewBox="0 0 8 8" className="size-2.5 shrink-0 text-muted-foreground">
           <circle cx="4" cy="4" r="3.25" fill="none" strokeWidth="0.8" strokeDasharray="0.9 0.9" className="stroke-current" />
         </svg>
       )}
       <LayerValue layer="brain" className={cn(!yes && "text-muted-foreground")}>
-        {value}
+        {c.filters.yes}
       </LayerValue>
     </span>
   );
@@ -103,8 +127,11 @@ function Cell({ col, reel, onPeek }: { col: ColumnDef; reel: Reel; onPeek: (sc: 
             onPeek(reel.sc);
           }}
           aria-label={fmt(c.peekAt, { handle: reel.handle })}
-          className="flex max-w-full min-w-0 items-baseline gap-2 text-left outline-none focus-visible:underline"
+          className="flex max-w-full min-w-0 items-center gap-2 text-left outline-none focus-visible:underline"
         >
+          <span aria-hidden className="monogram" style={{ "--h": hueOf(reel.handle) } as CSSProperties}>
+            {initials(reel.handle)}
+          </span>
           <LayerValue layer="ui" className="truncate font-medium">
             {reel.handle}
           </LayerValue>
@@ -159,7 +186,7 @@ function HeaderCell({ col, sort, onSort, board }: { col: ColumnDef; sort: SortSp
     <>
       {col.layer !== "ui" ? <LayerTag layer={col.layer} /> : <span aria-hidden className="h-4" />}
       <span className={cn("inline-flex max-w-full items-center gap-1", col.align === "end" && "flex-row-reverse")}>
-        <span className="truncate">{label}</span>
+        <span className="head-label truncate">{label}</span>
         {active ? (
           sort?.desc ? (
             <ArrowDownIcon className="size-3 shrink-0" aria-hidden />
@@ -175,7 +202,7 @@ function HeaderCell({ col, sort, onSort, board }: { col: ColumnDef; sort: SortSp
     <th
       scope="col"
       aria-sort={active ? (sort?.desc ? "descending" : "ascending") : undefined}
-      className={cn(CELL, "text-left font-medium text-muted-foreground", col.align === "end" && "text-right")}
+      className={cn(CELL, TH, "text-left font-medium text-muted-foreground", col.align === "end" && "text-right")}
     >
       {option ? (
         <button
@@ -198,8 +225,19 @@ export function BoardTable({ board, reels, columns, sort, onSort, selected, hove
   const minWidth = cols.reduce((sum, col) => sum + col.width, 0);
   const showTribe = columns.tribe;
 
+  const scales: Scales = {
+    length: Math.max(0, ...reels.map((r) => r.sort.duration ?? 0)),
+    x: Math.max(0, ...reels.map((r) => r.sort.x ?? 0)),
+  };
+  const barOf = (col: ColumnDef, reel: Reel): CSSProperties | undefined =>
+    col.id === "length"
+      ? ({ "--bar-w": frac(reel.sort.duration, scales.length), "--bar-color": "var(--bar-facts)" } as CSSProperties)
+      : col.id === "x"
+        ? ({ "--bar-w": frac(reel.sort.x, scales.x), "--bar-color": "var(--bar-counts)" } as CSSProperties)
+        : undefined;
+
   return (
-    <div data-board="table" className="flex overflow-hidden rounded-xl border border-line bg-surface" onMouseLeave={() => onHover(null)}>
+    <div data-board="table" className="sleek-card flex overflow-hidden rounded-xl" onMouseLeave={() => onHover(null)}>
       <div className="min-w-0 flex-1 overflow-x-auto">
         <table className="w-full table-fixed border-collapse text-ui" style={{ minWidth }}>
           <colgroup>
@@ -215,18 +253,23 @@ export function BoardTable({ board, reels, columns, sort, onSort, selected, hove
             </tr>
           </thead>
           <tbody>
-            {reels.map((reel) => (
+            {reels.map((reel, i) => (
               <tr
                 key={reel.sc}
+                style={{ "--i": Math.min(i, 14) } as CSSProperties}
                 data-line="reel"
                 data-sc={reel.sc}
                 aria-selected={selected === reel.sc}
                 onClick={() => onPeek(reel.sc)}
                 onMouseEnter={() => onHover(reel.sc)}
-                className={cn(ROW, "cursor-pointer", rowState(reel.sc, selected, hovered))}
+                className={cn(ROW, "row-accent cursor-pointer", rowState(reel.sc, selected, hovered))}
               >
                 {cols.map((col) => (
-                  <td key={col.id} className={cn(CELL, col.align === "end" && "text-right")}>
+                  <td
+                    key={col.id}
+                    style={barOf(col, reel)}
+                    className={cn(CELL, col.align === "end" && "text-right", (col.id === "length" || col.id === "x") && "value-bar", col.id === "x" && "value-bar-end")}
+                  >
                     <Cell col={col} reel={reel} onPeek={onPeek} />
                   </td>
                 ))}
@@ -241,18 +284,19 @@ export function BoardTable({ board, reels, columns, sort, onSort, selected, hove
           <table className="w-full table-fixed border-collapse text-ui" aria-label={c.tribeTable}>
             <thead>
               <tr data-line="head-brain" className={HEAD}>
-                <th scope="col" className={cn(CELL, "text-left font-medium text-muted-foreground")} title={c.tribeHint}>
+                <th scope="col" className={cn(CELL, TH, "text-left font-medium text-muted-foreground")} title={c.tribeHint}>
                   <span className="inline-flex max-w-full flex-col items-start gap-0.5">
                     <LayerTag layer="brain" />
-                    <span className="max-w-full truncate">{c.columns.tribe}</span>
+                    <span className="head-label max-w-full truncate">{c.columns.tribe}</span>
                   </span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {reels.map((reel) => (
+              {reels.map((reel, i) => (
                 <tr
                   key={reel.sc}
+                  style={{ "--i": Math.min(i, 14) } as CSSProperties}
                   data-line="reel-brain"
                   data-sc={reel.sc}
                   onClick={() => onPeek(reel.sc)}
@@ -260,7 +304,7 @@ export function BoardTable({ board, reels, columns, sort, onSort, selected, hove
                   className={cn(ROW, "cursor-pointer", rowState(reel.sc, selected, hovered))}
                 >
                   <td className={CELL}>
-                    <TribeValue value={reel.cells.tribe} />
+                    <TribeValue read={hasRead(reel)} />
                   </td>
                 </tr>
               ))}

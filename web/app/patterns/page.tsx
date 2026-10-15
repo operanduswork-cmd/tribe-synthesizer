@@ -21,6 +21,7 @@ export default function PatternsPage() {
   return (
     <>
       <PageHeader
+        className="page-wash"
         title={copy.pages.patterns.title}
         actions={<JobButton kind="patterns.build" label={copy.patterns.rebuild} icon={<HammerIcon />} />}
       />

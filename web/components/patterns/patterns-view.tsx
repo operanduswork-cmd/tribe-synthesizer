@@ -102,7 +102,7 @@ export function PatternsView({ page }: { page: PatternsPage }) {
               {copy.patterns.lead.note}
             </InfoHint>
           </div>
-          <ul className="flex flex-col divide-y divide-line rounded-xl border border-line bg-surface">
+          <ul className="flex flex-col divide-y divide-line sleek-card rounded-xl">
             {page.lead.map((l) => {
               const lp = page.patterns.find((p) => p.anchor === l.anchor);
               const go = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -172,7 +172,7 @@ export function PatternsView({ page }: { page: PatternsPage }) {
 
           {/* overflow-clip, not hidden: hidden would make the card a scroll box and the key
               row below would stop sticking under the top bar. */}
-          <section data-layer="ui" data-pattern-list className="overflow-clip rounded-xl border border-line bg-surface">
+          <section data-layer="ui" data-pattern-list className="overflow-clip sleek-card rounded-xl">
             {/* The dot key stays over the list while it scrolls (Copilot Categories' column
                 header), with the one (i) about the groups at its end. One row at every width:
                 from 640px it is the column header (Pattern | Outliers Normal | chevron). */}

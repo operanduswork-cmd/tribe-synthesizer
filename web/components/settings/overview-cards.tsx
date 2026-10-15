@@ -32,7 +32,7 @@ function Card({ title, hint, aside, index = 0, children, className }: CardProps)
   return (
     <section
       data-layer="ui"
-      className={cn("flex min-w-0 animate-appear flex-col gap-3 rounded-xl border border-line bg-surface p-4", className)}
+      className={cn("flex min-w-0 animate-appear flex-col gap-3 sleek-card rounded-xl p-4", className)}
       style={{ animationDelay: `calc(${index} * var(--motion-stagger))` }}
     >
       <div className="flex items-center justify-between gap-2">

@@ -764,6 +764,13 @@
   "export": {
     "title": "Export",
     "button": "Download JSON",
+    "previewTitle": "Preview",
+    "stats": "{kb} KB, {reels} reels, {brain} brain reads",
+    "copy": "Copy JSON",
+    "copied": "Copied",
+    "showAll": "Show all {lines} lines",
+    "showLess": "Show first {lines} lines",
+    "unavailable": "The preview is not available.",
     "framing": "predicted average-brain response",
     "note": "Made {date} from the hosted pages. Counts, shape tags, patterns and brain output sit under separate keys. Brain numbers are one reel each, in fixed atlas order, never compared across reels.",
     "licence": "TRIBE v2, CC BY-NC 4.0, Meta FAIR",

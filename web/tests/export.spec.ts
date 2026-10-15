@@ -133,3 +133,49 @@ test("export: /import redirects to /export", async ({ page }) => {
   await expect(page).toHaveURL(/\/export$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(en.pages.export.title);
 });
+
+test("export: the preview shows exactly the downloaded JSON, copy works, no page scroll", async ({ page, request, context }, info) => {
+  test.setTimeout(90_000);
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => undefined);
+  const res = await request.get("/export/data");
+  const downloaded = await res.text();
+  await page.goto("/export");
+  await page.waitForLoadState("networkidle");
+
+  const pre = page.locator("[data-export-json]");
+  await expect(pre).toBeVisible();
+  const toggle = page.locator("[data-export-toggle]");
+  if (await toggle.count()) {
+    await toggle.click();
+    await expect(pre.locator("> span").last()).toBeAttached();
+  }
+  const shown = await pre.evaluate((el) => Array.from(el.children).map((c) => c.textContent ?? "").join("\n"));
+  expect(JSON.parse(shown)).toEqual(JSON.parse(downloaded));
+  expect(shown.split("\n")[1].startsWith("  \""), "2-space indent").toBe(true);
+
+  // One stats line: size, reels and brain reads.
+  const body = JSON.parse(downloaded) as { reels: unknown[]; brain: unknown[] };
+  await expect(page.locator("[data-export-stats]")).toContainText(`${body.reels.length} reels, ${body.brain.length} brain reads`);
+
+  // The panel scrolls inside itself; the page never scrolls sideways.
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow, "no horizontal page scroll").toBeLessThanOrEqual(0);
+
+  const copyBtn = page.locator("[data-export-copy]");
+  const b = await copyBtn.boundingBox();
+  expect(b!.height, "44px tap target").toBeGreaterThanOrEqual(43.5);
+  await expect(copyBtn).toHaveAccessibleName(en.export.copy);
+  // Retry the click: the first one can land before the page has hydrated.
+  await expect(async () => {
+    await copyBtn.click();
+    await expect(copyBtn).toHaveText(en.export.copied, { timeout: 2000 });
+  }).toPass({ timeout: 40_000 });
+  if (info.project.name !== "phone") {
+    const clip = await page.evaluate(() => navigator.clipboard.readText()).catch(() => null);
+    if (clip !== null) expect(JSON.parse(clip)).toEqual(JSON.parse(downloaded));
+  }
+
+  // Still no banned fields in what is on screen.
+  const keys = keysOf(JSON.parse(shown));
+  for (const k of ["words", "transcript", "caption", "captions", "still", "stills", "video", "video_url"]) expect(keys.has(k)).toBe(false);
+});

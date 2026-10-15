@@ -26,7 +26,7 @@ export const metadata: Metadata = { title: copy.pages.jobs.title };
 
 export default function JobsPage() {
   return (
-    <div data-page="jobs" className="mx-auto w-full max-w-[1400px]">
+    <div data-page="jobs" className="page-wash mx-auto w-full max-w-[1400px]">
       <Suspense
         fallback={
           <>
@@ -76,7 +76,7 @@ async function JobsContent() {
             {copy.settings.queue.title}
           </h2>
           {jobs.length ? (
-            <div className="overflow-hidden rounded-xl border border-line bg-surface">
+            <div className="sleek-card overflow-hidden rounded-xl">
               <JobListHeader />
               <QueueGroup title={copy.settings.queue.live} jobs={live} empty={copy.settings.queue.liveEmpty} />
               {recent.length ? <QueueGroup title={copy.settings.queue.recent} jobs={recent} /> : null}

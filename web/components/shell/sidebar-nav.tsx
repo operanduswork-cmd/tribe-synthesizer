@@ -27,7 +27,7 @@ export function NavList({ activePath }: { activePath: string | null }) {
               className={cn(
                 "group/nav relative flex h-9 items-center gap-2.5 rounded-md px-2 text-ui text-muted-foreground pointer-coarse:h-11",
                 "transition-colors duration-(--motion-fast) ease-(--motion-ease) hover:bg-subtle hover:text-foreground",
-                active && "bg-subtle font-medium text-foreground",
+                active && "bg-subtle font-medium text-foreground shadow-[inset_0_0_0_1px_var(--surface-edge)]",
               )}
             >
               {active ? (

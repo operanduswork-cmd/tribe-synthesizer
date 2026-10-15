@@ -39,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside
         data-layer="ui"
         data-shell="sidebar"
-        className="sticky top-0 hidden h-dvh w-sidebar shrink-0 flex-col gap-3 border-r border-line bg-sidebar px-3 py-3 md:flex"
+        className="sticky top-0 hidden h-dvh w-sidebar shrink-0 flex-col gap-3 border-r border-line bg-sidebar bg-gradient-to-b from-[var(--surface-glow)] to-transparent to-30% px-3 py-3 md:flex"
       >
         <AppMark className="h-6 px-2" />
         <FindButton />
@@ -58,7 +58,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header
           data-layer="ui"
           data-shell="topbar"
-          className="sticky top-0 z-30 flex h-topbar shrink-0 items-center gap-3 border-b border-line bg-canvas/95 px-4 backdrop-blur [view-transition-name:shell-topbar] md:px-6"
+          className="sticky top-0 z-30 flex h-topbar shrink-0 items-center gap-3 border-b border-line bg-canvas/95 px-4 shadow-[0_1px_0_0_var(--surface-glow)] backdrop-blur [view-transition-name:shell-topbar] md:px-6"
         >
           <div className="flex min-w-0 flex-1 flex-col justify-center">
             <Suspense fallback={<AppMark className="md:hidden" />}>
