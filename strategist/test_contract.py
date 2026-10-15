@@ -46,7 +46,7 @@ JOB_KINDS = {"reel.accept": (1, False, 0), "reel.reject": (1, False, 0), "reel.d
              "coach.new_draft": (2, False, 0), "coach.this_but": (2, False, 0), "coach.replace": (2, False, 0),
              "coach.tag_shapes": (2, False, 0), "reel.add_link": (1, True, 0.006),
              "reel.add_handle": (1, True, 0.1), "tribe.lanes": (3, True, 0.10)}
-REAL_NAMES = ("demo_creator_a", "demo_creator_b", "demo_creator_c")
+REAL_NAMES = ()  # none in the public copy; real names come from the private swipe folder
 UUID = "0b9f3c1e-2a4d-4c6b-8e7f-1a2b3c4d5e6f"
 
 
@@ -556,11 +556,11 @@ class SqlTests(unittest.TestCase):
         # the contract regex and the SQL CHECKs agree on sample keys
         kind_rules = {"frames": lambda k: k.endswith("/frames.i8"), "mesh": lambda k: k.startswith("shared/fsaverage5-inflated-"),
                       "atlas": lambda k: k.startswith("shared/atlas-")}
-        good = ["tribe/20260101-000000-demo0000/frames.i8", "shared/fsaverage5-inflated-v1.bin", "shared/atlas-v1.bin",
+        good = ["tribe/20260101-000000-0badcafe/frames.i8", "shared/fsaverage5-inflated-v1.bin", "shared/atlas-v1.bin",
                 "shared/atlas-v999.bin"]
-        bad = ["tribe/20260101-000000-demo0000/numbers.csv", "tribe/20260101-000000-demo0000/peak.png",
+        bad = ["tribe/20260101-000000-0badcafe/numbers.csv", "tribe/20260101-000000-0badcafe/peak.png",
                "tribe/20261008-182653-68B712E3/frames.i8", "shared/atlas-v1000.bin", "shared/atlas-v1.bin\n",
-               "tribe/../shared/atlas-v1.bin", "shared/mesh-v1.bin", "tribe/20260101-000000-demo0000+x/frames.i8",
+               "tribe/../shared/atlas-v1.bin", "shared/mesh-v1.bin", "tribe/20260101-000000-0badcafe+x/frames.i8",
                "C:/Users/someone/frames.i8", ""]
         for key in good:
             self.assertTrue(re.fullmatch(c["key_pattern"], key), key)

@@ -66,6 +66,12 @@ Only upload videos you have the right to use. Not medical advice.
 Predicted average-brain response from TRIBE v2 (Meta FAIR, CC BY-NC 4.0). Built with Llama. Non-commercial use only. Not a view forecast.
 ```
 
+### E. Report footer (the offline pages and the `/reel` and `/script` skills)
+
+```
+Predicted average-brain response from TRIBE v2 (Meta FAIR, CC BY-NC 4.0). Built with Llama. Non-commercial use only. Not a view forecast.
+```
+
 ## Checklist before you share anything publicly
 
 Public means a web page anyone can reach, a public repo, or sharing the tool with others.
