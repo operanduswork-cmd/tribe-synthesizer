@@ -5,7 +5,7 @@
 // all" toggle, scrolls inside its own box so the page never scrolls sideways, a Copy button, one
 // stats line and the Download link beside it. Syntax tint uses existing tokens only.
 
-import { CheckIcon, CopyIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -37,6 +37,7 @@ function Line({ text }: { text: string }) {
 }
 
 export function JsonPreview({ text, reels, brain }: { text: string; reels: number; brain: number }) {
+  const [open, setOpen] = useState(false);
   const [all, setAll] = useState(false);
   const [copied, setCopied] = useState(false);
   const lines = useMemo(() => text.split("\n"), [text]);
@@ -79,6 +80,16 @@ export function JsonPreview({ text, reels, brain }: { text: string; reels: numbe
           {copied ? <CheckIcon aria-hidden className="size-4" /> : <CopyIcon aria-hidden className="size-4" />}
           {copied ? copy.export.copied : copy.export.copy}
         </button>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          data-export-open=""
+          className={btn}
+        >
+          {open ? <EyeOffIcon aria-hidden className="size-4" /> : <EyeIcon aria-hidden className="size-4" />}
+          {open ? copy.export.hidePreview : copy.export.showPreview}
+        </button>
         <a
           href="/export/data"
           download
@@ -88,6 +99,7 @@ export function JsonPreview({ text, reels, brain }: { text: string; reels: numbe
           {copy.export.button}
         </a>
       </div>
+      {open ? (
       <pre
         data-export-json=""
         tabIndex={0}
@@ -100,7 +112,8 @@ export function JsonPreview({ text, reels, brain }: { text: string; reels: numbe
           </span>
         ))}
       </pre>
-      {lines.length > PREVIEW_LINES ? (
+      ) : null}
+      {open && lines.length > PREVIEW_LINES ? (
         <button
           type="button"
           data-export-toggle=""

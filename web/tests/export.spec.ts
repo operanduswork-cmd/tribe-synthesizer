@@ -143,7 +143,15 @@ test("export: the preview shows exactly the downloaded JSON, copy works, no page
   await page.waitForLoadState("networkidle");
 
   const pre = page.locator("[data-export-json]");
-  await expect(pre).toBeVisible();
+  // Closed until the Preview JSON button is clicked (his call, 16 Oct).
+  await expect(pre).toHaveCount(0);
+  const openBtn = page.locator("[data-export-open]");
+  await expect(openBtn).toHaveText(en.export.showPreview);
+  await expect(async () => {
+    await openBtn.click();
+    await expect(pre).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 40_000 });
+  await expect(openBtn).toHaveText(en.export.hidePreview);
   const toggle = page.locator("[data-export-toggle]");
   if (await toggle.count()) {
     await toggle.click();

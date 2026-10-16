@@ -423,8 +423,8 @@ test("board: layer colour dots, the TRIBE mark and row hover", async ({ page }, 
   const yes = board.reels.filter((r) => r.cells.tribe === "yes").length;
   expect(yes).toBeGreaterThan(0);
   await expect(tribe.locator('tbody [data-tribe="yes"] [data-layer-dot="brain"]')).toHaveCount(yes);
-  await expect(tribe.locator('tbody [data-tribe="no"] [data-layer-dot]')).toHaveCount(0);
-  await expect(tribe.locator('tbody [data-tribe="no"] svg')).toHaveCount(board.reels.length - yes);
+  // His call (16 Oct): every row carries the same filled split dot; data-tribe still holds the real flag.
+  await expect(tribe.locator('tbody [data-tribe="no"] [data-layer-dot="brain"]')).toHaveCount(board.reels.length - yes);
   await expect(tribe.locator('[data-layer="brain"] svg')).toHaveCount(0);
   const values = await tribe
     .locator('tbody [data-layer="brain"]')
@@ -434,7 +434,7 @@ test("board: layer colour dots, the TRIBE mark and row hover", async ({ page }, 
   for (const v of values) expect(Object.values(tok)).not.toContain(v.color);
   // No mark of any layer in the main rows (D20): the split dot lives behind the wall only.
   await expect(table.locator('tr[data-line="reel"] [data-layer-dot]')).toHaveCount(0);
-  await expect(tribe.locator('tr[data-line="reel-brain"] [data-layer-dot="brain"]')).toHaveCount(yes);
+  await expect(tribe.locator('tr[data-line="reel-brain"] [data-layer-dot="brain"]')).toHaveCount(board.reels.length);
 
   // Hover changes the background only: both halves of the row light up together, and the row
   // keeps its place and its 36px height (no lift, no grow).

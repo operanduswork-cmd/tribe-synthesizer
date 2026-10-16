@@ -814,7 +814,13 @@ def build_card(report, notes, events, segments, swipe_reel=None) -> dict:
     skip_flat = False
     if tribe:
         peak, flat = top_peak(report), preferred_flat(report)
-        lines += [_high_line(report, peak, last_sec), _flat_line(report, flat, last_sec)]
+        high = _high_line(report, peak, last_sec)
+        if high.get("time") and high["time"] == lines[0].get("time"):
+            # The peak is the first word's own second: each time appears once, so the HIGH line
+            # drops its chip and says so in words (no quote, which would repeat the chip's second).
+            base = f"{_lines_phrase(peak.get('driving_lines'))} high for this reel"
+            high = {"tag": "HIGH", "time": None, "t": peak["t"], "text": base + " · same second as the first word"}
+        lines += [high, _flat_line(report, flat, last_sec)]
         # An edge flat stretch that holds the reel's call to action is no "trailing off".
         cta_t = ((((swipe_reel or {}).get("facts") or {}).get("cta")) or {}).get("t")
         skip_flat = bool(flat and flat.get("edge") and _finite(cta_t)

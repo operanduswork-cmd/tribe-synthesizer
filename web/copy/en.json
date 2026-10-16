@@ -765,6 +765,8 @@
     "title": "Export",
     "button": "Download JSON",
     "previewTitle": "Preview",
+    "showPreview": "Preview JSON",
+    "hidePreview": "Hide preview",
     "stats": "{kb} KB, {reels} reels, {brain} brain reads",
     "copy": "Copy JSON",
     "copied": "Copied",

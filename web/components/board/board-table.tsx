@@ -94,23 +94,14 @@ function Shape({ text }: { text: string }) {
   return <ShapeChip label={s.label} status={s.status} title={s.label} hint={shapeHint(s.status)} className="chip-glow max-w-full" />;
 }
 
-/** The TRIBE cell always says "yes" (his override, D32: "keep it yes idc, its just dummy data"),
- *  led by a mark that tells the rows apart: the brain's split cool/warm dot when a real read
- *  exists, an empty dotted ring when not. data-tribe carries the real flag, never the label. */
+/** The TRIBE cell always says "yes" (his override, D32), led by the brain's filled split cool/warm
+ *  dot on EVERY row (his call, 16 Oct: the unread rows look the same as the read ones). data-tribe
+ *  carries the real flag, never the label; the pin and the filter use hasRead, not this mark. */
 function TribeValue({ read }: { read: boolean }) {
-  const yes = read;
   return (
-    <span data-tribe={yes ? "yes" : "no"} className="inline-flex max-w-full items-center gap-1.5">
-      {yes ? (
-        <LayerDot layer="brain" className="dot-pulse size-2.5" />
-      ) : (
-        <svg aria-hidden viewBox="0 0 8 8" className="size-2.5 shrink-0 text-muted-foreground">
-          <circle cx="4" cy="4" r="3.25" fill="none" strokeWidth="0.8" strokeDasharray="0.9 0.9" className="stroke-current" />
-        </svg>
-      )}
-      <LayerValue layer="brain" className={cn(!yes && "text-muted-foreground")}>
-        {c.filters.yes}
-      </LayerValue>
+    <span data-tribe={read ? "yes" : "no"} className="inline-flex max-w-full items-center gap-1.5">
+      <LayerDot layer="brain" className={cn("size-2.5", read && "dot-pulse")} />
+      <LayerValue layer="brain">{c.filters.yes}</LayerValue>
     </span>
   );
 }
