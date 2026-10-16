@@ -128,12 +128,6 @@ test("export: the download is one JSON file with separate top-level keys", async
   void page;
 });
 
-test("export: /import redirects to /export", async ({ page }) => {
-  await page.goto("/import");
-  await expect(page).toHaveURL(/\/export$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(en.pages.export.title);
-});
-
 test("export: the preview shows exactly the downloaded JSON, copy works, no page scroll", async ({ page, request, context }, info) => {
   test.setTimeout(90_000);
   await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => undefined);

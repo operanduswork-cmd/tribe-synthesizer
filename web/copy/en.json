@@ -116,6 +116,9 @@
     },
     "jobs": {
       "title": "Jobs"
+    },
+    "import": {
+      "title": "Import"
     }
   },
   "layers": {
@@ -778,6 +781,65 @@
     "licence": "TRIBE v2, CC BY-NC 4.0, Meta FAIR",
     "hintLabel": "About the export",
     "hint": "One file: the board's counts and shape tags, the patterns, and the predicted average-brain response per second for each reel with a read. Counts and brain numbers sit under separate keys. No words, captions, stills or video."
+  },
+  "import": {
+    "title": "Import",
+    "demoTag": "Demo",
+    "intro": "Paste reel links. See the shape of the results.",
+    "placeholder": "Paste reel links here, one per line",
+    "run": "Run demo",
+    "clear": "Clear",
+    "download": "Download demo JSON",
+    "noLinks": "No reel links found. Paste links like instagram.com/reel/CODE.",
+    "cap": "Showing the first {n} links.",
+    "banner": "Demo output: made-up numbers. No job runs, nothing is fetched and nothing is spent.",
+    "reel": "Reel {code}",
+    "factsTitle": "Facts",
+    "countsTitle": "Counts",
+    "shapeTitle": "Shape",
+    "brainTitle": "Predicted average-brain response",
+    "duration": "Length",
+    "firstWord": "First word at",
+    "speech": "Speech",
+    "speechYes": "yes",
+    "plays": "Plays",
+    "likes": "Likes",
+    "comments": "Comments",
+    "hook": "Hook",
+    "format": "Format",
+    "cta": "Call to action",
+    "peak": "Highest second for this reel: {time}",
+    "brainNote": "One scale for this reel only, in fixed network order. An average brain, not your audience.",
+    "hintLabel": "About the import demo",
+    "hint": "A preview of how real results will look. The numbers are made up from the link, so the same link always shows the same demo. Counts, shape and brain output stay in separate boxes and are never compared across reels.",
+    "networks": [
+      "Visual",
+      "Somatomotor",
+      "Dorsal attention",
+      "Ventral attention",
+      "Limbic",
+      "Frontoparietal",
+      "Default"
+    ],
+    "hooks": [
+      "question open",
+      "bold claim",
+      "story start",
+      "list promise",
+      "myth bust"
+    ],
+    "formats": [
+      "talking head",
+      "talking head with captions",
+      "voiceover on b-roll"
+    ],
+    "ctas": [
+      "none",
+      "comment keyword",
+      "shop link",
+      "follow"
+    ],
+    "exportLink": "Import demo"
   },
   "settings": {
     "runner": {

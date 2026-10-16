@@ -6,6 +6,7 @@
 // stats line and the Download link beside it. Syntax tint uses existing tokens only.
 
 import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -90,6 +91,9 @@ export function JsonPreview({ text, reels, brain }: { text: string; reels: numbe
           {open ? <EyeOffIcon aria-hidden className="size-4" /> : <EyeIcon aria-hidden className="size-4" />}
           {open ? copy.export.hidePreview : copy.export.showPreview}
         </button>
+        <Link href="/import" data-export-import="" className={btn}>
+          {copy.import.exportLink}
+        </Link>
         <a
           href="/export/data"
           download
