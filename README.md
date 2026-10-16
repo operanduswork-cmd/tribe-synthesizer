@@ -2,6 +2,8 @@
 
 A free, educational toolkit for studying short-form video with Meta FAIR's TRIBE v2 brain-response model.
 
+Made by Operandus. Free and non-commercial.
+
 It does two things:
 
 1. **Outlier board.** Collect public reels from creators you choose, compare each reel's plays to that creator's own median, and list the outliers (2x or more). It shows counts and hook shapes. It is a swipe file, not a ranking.
