@@ -17,6 +17,7 @@ const PAGES = [
   "/board",
   "/patterns",
   "/export",
+  "/import",
   "/settings/jobs",
   "/reels/DEMO0000001",
   "/reels/DEMO0000002",
@@ -205,7 +206,7 @@ test("palette opens with the keyboard and goes to a page", async ({ page }, info
 test("nav: Board, Patterns, Export, Settings, in that order, and no Script lab", async ({ page }, info) => {
   await page.goto("/board");
   const nav = page.locator(info.project.name === "laptop" ? '[data-shell="sidebar"]' : '[data-shell="tabbar"]');
-  await expect(nav.locator("a[href]:not([data-app-mark])")).toHaveText([en.nav.board, en.nav.patterns, en.nav.export, en.nav.settings]);
+  await expect(nav.locator("a[href]:not([data-app-mark])")).toHaveText([en.nav.board, en.nav.patterns, en.nav.export, en.nav.import, en.nav.settings]);
   await expect(nav.locator('a[href^="/lab"]')).toHaveCount(0);
 });
 
@@ -215,6 +216,7 @@ const TOP_LEVEL = [
   { path: "/board", h1: en.pages.board.title },
   { path: "/patterns", h1: en.pages.patterns.title },
   { path: "/export", h1: en.pages.export.title },
+  { path: "/import", h1: en.pages.import.title },
   { path: "/settings/jobs", h1: en.pages.jobs.title },
 ];
 
@@ -372,7 +374,7 @@ test("route change under reduced motion: the page swaps at once", async ({ page 
 
 // Round 5: a one-click sun/moon toggle in the top bar, on every top-level page.
 test.describe("theme toggle", () => {
-  const TOP_LEVEL = ["/board", "/patterns", "/export", "/settings/jobs"];
+  const TOP_LEVEL = ["/board", "/patterns", "/export", "/import", "/settings/jobs"];
   const toggle = (page: Page) => page.locator('[data-shell="topbar"] [data-theme-toggle]');
 
   for (const path of TOP_LEVEL) {

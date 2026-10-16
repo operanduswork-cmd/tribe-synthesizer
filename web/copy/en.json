@@ -18,6 +18,7 @@
     "board": "Board",
     "patterns": "Patterns",
     "export": "Export",
+    "import": "Import",
     "settings": "Settings",
     "jobs": "Jobs",
     "crumbs": "Breadcrumb",
